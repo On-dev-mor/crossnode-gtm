@@ -7,9 +7,9 @@
   "description": "Crossnode GTM — open-source, AI-native GTM operating system. CLI-first engine for lead finding, enrichment, qualification, and campaign orchestration.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Othmane-Khadri/crossnode-gtm.git"
+    "url": "https://github.com/On-dev-mor/crossnode-gtm.git"
   },
-  "homepage": "https://github.com/Othmane-Khadri/crossnode-gtm",
+  "homepage": "https://github.com/On-dev-mor/crossnode-gtm",
   "author": "Othmane Khadri",
   "keywords": [
     "gtm",
