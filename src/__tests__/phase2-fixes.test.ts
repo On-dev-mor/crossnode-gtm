@@ -23,7 +23,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-phase2-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-phase2-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
@@ -81,7 +81,7 @@ describe('Item 17 — `.env` template upgrade does not lose user data', () => {
     expect(outcome.mode).toBe('created')
 
     const content = readFileSync(envPath, 'utf-8')
-    expect(content).toContain('# YALC GTM-OS — Provider API Keys')
+    expect(content).toContain('# Crossnode GTM — Provider API Keys')
     expect(content).toContain('ENCRYPTION_KEY=enc')
     expect(content).toContain('# ANTHROPIC_API_KEY=')
     expect(content).toContain('# BREVO_MCP=')

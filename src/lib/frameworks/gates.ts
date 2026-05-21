@@ -54,7 +54,7 @@ export function parseSentinel<T extends object>(raw: T): T {
   const v = (raw as { _v?: unknown })._v
   if (v === undefined) return raw
   if (typeof v === 'number' && v === CURRENT_SENTINEL_VERSION) return raw
-  throw new Error(`Unknown sentinel version ${String(v)}. Upgrade YALC.`)
+  throw new Error(`Unknown sentinel version ${String(v)}. Upgrade Crossnode GTM.`)
 }
 
 /** Stamp the current schema version onto a record about to be written. */

@@ -56,9 +56,9 @@ response:
 smoke_test:
   input:
     contact:
-      email: yalc-smoke@example.com
-      firstname: YALC
+      email: crossnode-smoke@example.com
+      firstname: Crossnode GTM
       lastname: Smoke
-      company: YALC
+      company: Crossnode GTM
   expectNonEmpty:
     - contactId

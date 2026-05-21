@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm adapters:list` — show every adapter the registry can resolve,
+ * `crossnode-gtm adapters:list` — show every adapter the registry can resolve,
  * grouped by capability, with each provider's source (built-in vs.
  * declarative manifest path) and resolution priority. Useful for
  * confirming a freshly-installed declarative manifest actually loaded.

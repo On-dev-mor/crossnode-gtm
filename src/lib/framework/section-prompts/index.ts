@@ -59,7 +59,7 @@ function contextBlock(input: SectionPromptInput): string {
  */
 const CONFIDENCE_INSTRUCTION =
   'After your section output, append a final line in the exact form ' +
-  '`__yalc_confidence: <0-10>` where the integer is YOUR own rating of ' +
+  '`__crossnode_confidence: <0-10>` where the integer is YOUR own rating of ' +
   'how grounded this output is in the provided context. 10 = directly ' +
   'extracted from rich source material. 5 = reasonable inference. 0 = ' +
   'mostly fabricated. Default to 5 if you are uncertain. Do not wrap the ' +
@@ -120,7 +120,7 @@ export function buildPositioningPrompt(input: SectionPromptInput): string {
 
 export function buildQualificationPrompt(input: SectionPromptInput): string {
   return [
-    'Generate qualification rules as a markdown document. Lead with one-line regex patterns (one per line) for headline matches, then a short bullet list of disqualifiers, then a section of soft signals to look for. Match the existing format YALC writes today.',
+    'Generate qualification rules as a markdown document. Lead with one-line regex patterns (one per line) for headline matches, then a short bullet list of disqualifiers, then a section of soft signals to look for. Match the existing format Crossnode GTM writes today.',
     contextBlock(input),
     rawBlock(input),
     hintBlock(input),
@@ -187,7 +187,7 @@ export async function runSectionPrompt(
 }
 
 /**
- * Parse + strip the `__yalc_confidence: <n>` self-rating line emitted by
+ * Parse + strip the `__crossnode_confidence: <n>` self-rating line emitted by
  * each section prompt (0.8.F). Returns the cleaned body plus the rating.
  *
  * Tolerant by design: if the field is absent, malformed, or out of range
@@ -196,11 +196,11 @@ export async function runSectionPrompt(
  */
 export function parseConfidenceField(raw: string): { body: string; rating: number | null } {
   if (!raw) return { body: raw, rating: null }
-  // Match the LAST `__yalc_confidence: <n>` line in the body — the prompt
+  // Match the LAST `__crossnode_confidence: <n>` line in the body — the prompt
   // asks for it at the very end, but a careless model may emit it earlier
   // and we still want to honor it. Allow either an integer or a single
   // decimal place; clamp to [0, 10] before returning.
-  const re = /^[ \t]*__yalc_confidence[ \t]*:[ \t]*(\d+(?:\.\d+)?)[ \t]*\r?$/gim
+  const re = /^[ \t]*__crossnode_confidence[ \t]*:[ \t]*(\d+(?:\.\d+)?)[ \t]*\r?$/gim
   let lastMatch: RegExpExecArray | null = null
   let m: RegExpExecArray | null
   while ((m = re.exec(raw)) !== null) {
@@ -212,7 +212,7 @@ export function parseConfidenceField(raw: string): { body: string; rating: numbe
   // Strip every confidence line (defensively — model may emit duplicates)
   // plus any blank lines left behind so the cleaned body is tidy.
   const stripped = raw
-    .replace(/^[ \t]*__yalc_confidence[ \t]*:[ \t]*\d+(?:\.\d+)?[ \t]*\r?$/gim, '')
+    .replace(/^[ \t]*__crossnode_confidence[ \t]*:[ \t]*\d+(?:\.\d+)?[ \t]*\r?$/gim, '')
     .replace(/\n{3,}/g, '\n\n')
     .trimEnd()
   return { body: stripped, rating }

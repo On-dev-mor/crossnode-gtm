@@ -30,7 +30,7 @@ describe('CapabilityRegistry', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-cap-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-cap-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
   })
@@ -161,7 +161,7 @@ describe('CapabilityRegistry', () => {
   })
 
   it('respects HOME isolation — a config.yaml under a different HOME is not read', async () => {
-    const otherHome = join(tmpdir(), `yalc-cap-other-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    const otherHome = join(tmpdir(), `crossnode-cap-other-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(join(otherHome, '.gtm-os'), { recursive: true })
     writeFileSync(
       join(otherHome, '.gtm-os', 'config.yaml'),

@@ -6,7 +6,7 @@
 #
 # PDL's bulk enrich endpoint takes up to 100 person requests in a single
 # call and returns an array of `{status, data:{...person}}` rows. We map
-# each row's `data.work_email` and `data.mobile_phone` onto YALC's
+# each row's `data.work_email` and `data.mobile_phone` onto Crossnode GTM's
 # people-enrich `results[].email` / `results[].phone` shape so this
 # provider is a drop-in alternative to FullEnrich.
 #

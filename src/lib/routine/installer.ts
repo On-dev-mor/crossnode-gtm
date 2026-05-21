@@ -12,7 +12,7 @@
  * "you installed this routine on YYYY-MM-DD" in the SPA without re-deriving.
  *
  * The sidecar holds the full Routine cast to YAML plus a `routine_meta:`
- * block (`installed_at`, YALC version, frameworks skipped via `--only`).
+ * block (`installed_at`, Crossnode GTM version, frameworks skipped via `--only`).
  * It is *not* the source of truth for installed frameworks — that remains
  * `~/.gtm-os/frameworks/installed/<name>.json`. The sidecar is advisory;
  * deleting it has no functional effect.
@@ -84,7 +84,7 @@ function readPriorRoutine(): { sidecar: Record<string, unknown> | null; warning:
     if (typeof v !== 'number' || v !== 1) {
       return {
         sidecar: null,
-        warning: `Existing routine.yaml version ${String(v)} is unknown to this YALC build — ignoring (no migration available).`,
+        warning: `Existing routine.yaml version ${String(v)} is unknown to this Crossnode GTM build — ignoring (no migration available).`,
       }
     }
     return { sidecar: obj, warning: null }
@@ -104,7 +104,7 @@ function writeSidecar(routine: Routine): void {
     ...routine,
     routine_meta: {
       installed_at: new Date().toISOString(),
-      yalc_version: process.env.YALC_VERSION ?? 'dev',
+      crossnode_gtm_version: process.env.CROSSNODE_GTM_VERSION ?? 'dev',
     },
   }
   writeFileSync(routineSidecarPath(), yaml.dump(payload), 'utf-8')

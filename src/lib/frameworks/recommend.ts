@@ -85,7 +85,7 @@ export function checkRequires(
       return {
         framework: framework.name,
         rule: 'context_fields',
-        detail: 'company_context.yaml not found — run yalc-gtm start first',
+        detail: 'company_context.yaml not found — run crossnode-gtm start first',
       }
     }
     const missing = r.context_fields.filter((path) => !contextFieldHasValue(env.context!, path))

@@ -20,7 +20,7 @@ let warnSpy: ReturnType<typeof vi.spyOn>
 let captured: string[]
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-keys-noleak-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-keys-noleak-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   captured = []

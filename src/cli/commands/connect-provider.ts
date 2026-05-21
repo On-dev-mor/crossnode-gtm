@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm connect-provider <name>` — legacy alias for `keys:connect`.
+ * `crossnode-gtm connect-provider <name>` — legacy alias for `keys:connect`.
  *
  * 0.8.E shipped this command as the primary surface for adding a provider.
  * 0.9.D inverts the headline UX: the agnostic flow ("tell us about your
@@ -24,7 +24,7 @@
  *     `configs/providers/_user/<name>.yaml`.
  *   - In non-TTY mode emit a JSON instruction blob the orchestrator can act on.
  *
- * For new flows, prefer `yalc-gtm keys:connect [<provider>] --open` — it
+ * For new flows, prefer `crossnode-gtm keys:connect [<provider>] --open` — it
  * opens the SPA form, polls the same sentinel, and never echoes keys to chat.
  */
 
@@ -278,7 +278,7 @@ export function writeCustomProviderYaml(input: CustomProviderInput): string {
     capabilities_supported: [],
     install_steps: [
       'Open ~/.gtm-os/.env and set the env vars listed above.',
-      `Re-run: yalc-gtm connect-provider ${input.id}`,
+      `Re-run: crossnode-gtm connect-provider ${input.id}`,
     ],
     test_query: null,
   }
@@ -377,12 +377,12 @@ export async function runConnectProvider(
     }
     const written = writeCustomProviderYaml(custom)
     console.log(`\n  Wrote custom-provider yaml: ${written}`)
-    console.log(`  Re-run: yalc-gtm connect-provider ${custom.id}`)
+    console.log(`  Re-run: crossnode-gtm connect-provider ${custom.id}`)
     return {
       providerId: custom.id,
       installStatus: 'custom_provider_created',
       exitCode: 0,
-      nextAction: `yalc-gtm connect-provider ${custom.id}`,
+      nextAction: `crossnode-gtm connect-provider ${custom.id}`,
       issues: [],
     }
   }
@@ -486,13 +486,13 @@ export async function runConnectProvider(
     console.log(`  capabilities.${cap.id}.priority = [${merged.join(', ')}]`)
   }
 
-  console.log(`\n  Connected. Run \`yalc-gtm framework:recommend\` to see what new frameworks are now available.`)
+  console.log(`\n  Connected. Run \`crossnode-gtm framework:recommend\` to see what new frameworks are now available.`)
 
   return {
     providerId: knowledge.id,
     installStatus: 'configured',
     exitCode: 0,
-    nextAction: 'yalc-gtm framework:recommend',
+    nextAction: 'crossnode-gtm framework:recommend',
     issues,
   }
 }

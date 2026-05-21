@@ -1,6 +1,6 @@
 ---
 name: build-routine
-description: "Auto-derive a complete sales routine — installed frameworks, schedules, and default dashboard — from your archetype, available providers, and rich context, then install it on confirmation. Hybrid runtime: the proposal is import-direct (~700ms median, deterministic rule-based), the install is shell-out (writes to ~/.gtm-os/routine.yaml + config.yaml). Use when the user says 'build my sales routine', 'show me what YALC would auto-configure', 'propose a routine for me', 'set up a sales routine', or 'auto-derive my routine'. Side-effecting on install only — propose is read-only."
+description: "Auto-derive a complete sales routine — installed frameworks, schedules, and default dashboard — from your archetype, available providers, and rich context, then install it on confirmation. Hybrid runtime: the proposal is import-direct (~700ms median, deterministic rule-based), the install is shell-out (writes to ~/.gtm-os/routine.yaml + config.yaml). Use when the user says 'build my sales routine', 'show me what Crossnode GTM would auto-configure', 'propose a routine for me', 'set up a sales routine', or 'auto-derive my routine'. Side-effecting on install only — propose is read-only."
 version: 1.0.0
 ---
 
@@ -13,13 +13,13 @@ I'll propose a complete sales routine — frameworks, schedules, dashboard pin �
 Use this skill when the user says:
 
 - "build my sales routine"
-- "show me what YALC would auto-configure"
+- "show me what Crossnode GTM would auto-configure"
 - "propose a routine for me"
 - "set up a sales routine"
 - "auto-derive my routine"
 
 **NOT this skill** (use `setup` instead):
-- "set up YALC" / "/setup" — that's the full onboarding flow. This skill is the routine step inside it (or after it), not the whole onboarding.
+- "set up Crossnode GTM" / "/setup" — that's the full onboarding flow. This skill is the routine step inside it (or after it), not the whole onboarding.
 
 **NOT this skill** (use `launch-linkedin-campaign` instead):
 - "launch a campaign" — that's per-result-set outreach. This skill installs the framework that makes campaigns possible.
@@ -47,7 +47,7 @@ Use this skill when the user says:
 test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
 ```
 
-If `BLOCKED`, stop and tell the user to finish `yalc-gtm start` first.
+If `BLOCKED`, stop and tell the user to finish `crossnode-gtm start` first.
 
 ## Workflow
 
@@ -59,10 +59,10 @@ Routine generation is deterministic. Skip to Step 1.
 
 Per `docs/skills-architecture.md`, the propose step is import-direct because routine generation is pure (rule-based, no I/O after input gathering) and chained shell-outs cost ~2.6s per the benchmark.
 
-Generate `/tmp/yalc-skill-build-routine-propose.mjs` from the gtm-os root:
+Generate `/tmp/crossnode-skill-build-routine-propose.mjs` from the gtm-os root:
 
 ```bash
-cd ~/Desktop/gtm-os && cat > /tmp/yalc-skill-build-routine-propose.mjs <<'RUNNEREOF'
+cd ~/Desktop/gtm-os && cat > /tmp/crossnode-skill-build-routine-propose.mjs <<'RUNNEREOF'
 import { generateRoutine } from `${process.env.PWD}/src/lib/routine/generator.ts`
 import { gatherEnvironment, loadCompanyContext } from `${process.env.PWD}/src/lib/frameworks/recommend.ts`
 import { readArchetypePreference } from `${process.env.PWD}/src/lib/config/archetype-pref.ts`
@@ -96,7 +96,7 @@ RUNNEREOF
 Run it:
 
 ```bash
-cd ~/Desktop/gtm-os && npx tsx /tmp/yalc-skill-build-routine-propose.mjs
+cd ~/Desktop/gtm-os && npx tsx /tmp/crossnode-skill-build-routine-propose.mjs
 ```
 
 If the import-direct runner errors (e.g., a generator signature changed), fall back:
@@ -149,7 +149,7 @@ The CLI prints per-entry status (installed, already-installed, skipped because d
 
 > "Routine installed. Next moves:
 > (a) Qualify your existing leads via `qualify-leads`?
-> (b) Open the dashboard via `yalc-gtm dashboard`?
+> (b) Open the dashboard via `crossnode-gtm dashboard`?
 > (c) Lock an outbound hypothesis (Step 10 of setup) so outreach-campaign-builder un-defers?"
 
 ## Failure surfacing — verbatim

@@ -108,23 +108,25 @@ export class NotionService {
     databaseId: string,
     leads: Record<string, unknown>[],
     titleField = 'Name',
-  ): Promise<{ created: number; failed: number }> {
+  ): Promise<{ created: number; failed: number; pageIds: string[] }> {
     const BATCH_SIZE = 40
     let created = 0
     let failed = 0
+    const pageIds: string[] = []
 
     for (let i = 0; i < leads.length; i += BATCH_SIZE) {
       const batch = leads.slice(i, i + BATCH_SIZE)
       const results = await Promise.allSettled(
         batch.map(lead => {
+          const title = String(lead.name ?? lead.company_name ?? 'Unknown').trim() || 'Unknown'
           const properties: Record<string, unknown> = {
             [titleField]: {
-              title: [{ text: { content: String(lead.company_name ?? lead.name ?? 'Unknown') } }],
+              title: [{ text: { content: title } }],
             },
           }
-          // Map standard fields to Notion properties
           if (lead.website) {
-            properties['Website'] = { url: String(lead.website) }
+            const url = String(lead.website)
+            properties['Website'] = url.startsWith('http') ? { url } : { url: `https://${url}` }
           }
           if (lead.industry) {
             properties['Industry'] = { rich_text: [{ text: { content: String(lead.industry) } }] }
@@ -139,12 +141,45 @@ export class NotionService {
         }),
       )
       for (const r of results) {
-        if (r.status === 'fulfilled') created++
-        else failed++
+        if (r.status === 'fulfilled') {
+          created++
+          pageIds.push((r.value as { id: string }).id)
+        } else {
+          failed++
+          pageIds.push('')
+        }
       }
     }
 
-    return { created, failed }
+    return { created, failed, pageIds }
+  }
+
+  async bulkCreateWithProperties(
+    databaseId: string,
+    propertySets: Record<string, unknown>[],
+  ): Promise<{ created: number; failed: number; pageIds: string[] }> {
+    const BATCH_SIZE = 40
+    let created = 0
+    let failed = 0
+    const pageIds: string[] = []
+
+    for (let i = 0; i < propertySets.length; i += BATCH_SIZE) {
+      const batch = propertySets.slice(i, i + BATCH_SIZE)
+      const results = await Promise.allSettled(
+        batch.map(properties => this.createPage(databaseId, properties)),
+      )
+      for (const r of results) {
+        if (r.status === 'fulfilled') {
+          created++
+          pageIds.push((r.value as { id: string }).id)
+        } else {
+          failed++
+          pageIds.push('')
+        }
+      }
+    }
+
+    return { created, failed, pageIds }
   }
 }
 

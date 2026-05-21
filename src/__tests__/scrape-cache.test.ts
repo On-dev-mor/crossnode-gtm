@@ -13,7 +13,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-cache-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-cache-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

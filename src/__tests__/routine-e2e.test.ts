@@ -27,7 +27,7 @@ let prevHome: string | undefined
 
 beforeEach(() => {
   prevHome = process.env.HOME
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-routine-e2e-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-routine-e2e-'))
   process.env.HOME = TMP
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
 })
@@ -156,7 +156,7 @@ describe('routine generator — full setup flow E2E', () => {
     // Pre-write a config.yaml with unrelated keys.
     const cfgPath = join(TMP, '.gtm-os', 'config.yaml')
     const existing = {
-      notion: { campaigns_ds: 'abc', leads_ds: 'def', variants_ds: 'ghi', parent_page: 'xyz' },
+      notion: { campaigns_ds: 'abc', leads_ds: 'def', prospects_ds: 'hij', variants_ds: 'ghi', parent_page: 'xyz' },
       archetype: 'a',
     }
     require('node:fs').writeFileSync(cfgPath, yaml.dump(existing), 'utf-8')

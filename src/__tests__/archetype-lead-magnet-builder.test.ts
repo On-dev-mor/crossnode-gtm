@@ -32,7 +32,7 @@ describe('archetype D — lead-magnet-builder', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-archD-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-archD-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
   })

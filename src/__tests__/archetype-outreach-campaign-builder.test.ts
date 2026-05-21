@@ -34,7 +34,7 @@ describe('archetype C — outreach-campaign-builder', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-archC-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-archC-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
   })

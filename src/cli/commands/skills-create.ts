@@ -96,7 +96,7 @@ async function runSkillsCreateInner(): Promise<void> {
       const content = renderSkillFile({ name, description, category, capability, draft })
       writeFileSync(filePath, content)
       console.log(`\nSkill created: ${filePath}`)
-      console.log(`Run it: yalc-gtm skills:run md:${name} --input ...`)
+      console.log(`Run it: crossnode-gtm skills:run md:${name} --input ...`)
       return
     }
 

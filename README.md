@@ -1,71 +1,71 @@
-# YALC — The Open-Source GTM Operating System
+# Crossnode GTM — The Open-Source GTM Operating System
 
-![CI](https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system/actions/workflows/ci.yml/badge.svg)
-[![npm version](https://img.shields.io/npm/v/yalc-gtm-os.svg)](https://www.npmjs.com/package/yalc-gtm-os)
+![CI](https://github.com/Othmane-Khadri/crossnode-gtm/actions/workflows/ci.yml/badge.svg)
+[![npm version](https://img.shields.io/npm/v/crossnode-gtm.svg)](https://www.npmjs.com/package/crossnode-gtm)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/Node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 
 > AI plans your campaigns, qualifies your leads, and learns from every interaction.
 
-YALC is an open-source, AI-native operating system for running any GTM campaign. CLI-first. Intelligence compounds from every interaction.
+Crossnode GTM is an open-source, AI-native operating system for running any GTM campaign. CLI-first. Intelligence compounds from every interaction.
 
 ## Quick start
 
 Node.js 20 or higher required ([nodejs.org](https://nodejs.org/)).
 
-### Option A — Drive YALC from your IDE (recommended)
+### Option A — Drive Crossnode GTM from your IDE (recommended)
 Open this repo in Cursor or VS Code with the Claude Code extension installed.
 In the chat panel, paste this repo URL or just say "let's start".
-Claude will introduce YALC, check your prerequisites, and walk you through setup.
+Claude will introduce Crossnode GTM, check your prerequisites, and walk you through setup.
 
 ### Option B — Use the CLI directly
 ```bash
-npm i -g yalc-gtm-os
-yalc-gtm start
+npm i -g crossnode-gtm
+crossnode-gtm start
 ```
 
 That is the whole installation. The `start` command writes its config to `~/.gtm-os/`, asks for your company website URL, then opens the browser at `/setup/review` so you can confirm the inferred framework. No long terminal interview by default.
 
-YALC is a CLI; there's no public Node API to import.
+Crossnode GTM is a CLI; there's no public Node API to import.
 
 ### Updating
 
 ```bash
-npm update -g yalc-gtm-os
+npm update -g crossnode-gtm
 ```
 
 ### From source (contributors)
 
-If you want to hack on YALC itself, clone the repo and link locally:
+If you want to hack on Crossnode GTM itself, clone the repo and link locally:
 
 ```bash
-git clone https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system.git
-cd YALC-the-GTM-operating-system
+git clone https://github.com/Othmane-Khadri/crossnode-gtm.git
+cd crossnode-gtm
 corepack enable && corepack prepare pnpm@latest --activate
 pnpm install
 pnpm link --global
 ```
 
-If `pnpm link --global` fails with `ERR_PNPM_NO_GLOBAL_BIN_DIR` (or you are on Windows), run YALC in-repo with `pnpm cli start` instead.
+If `pnpm link --global` fails with `ERR_PNPM_NO_GLOBAL_BIN_DIR` (or you are on Windows), run Crossnode GTM in-repo with `pnpm cli start` instead.
 
-What `yalc-gtm start` does:
+What `crossnode-gtm start` does:
 
 1. Prompts you for your company website URL (one question, that is it).
 2. Scaffolds `~/.gtm-os/` and writes a `.env` template the first time it runs.
 3. Scrapes the website, runs synthesis, and stages a draft framework into `_preview/`.
 4. Spawns a local dashboard server on port 3847 and opens `http://localhost:3847/setup/review` in your browser so you can confirm or edit each section before committing.
 
-High-confidence sections auto-commit; low-confidence ones queue at `/setup/review` for your sign-off. You can re-run any section from the SPA or via `yalc-gtm start --regenerate <section>`.
+High-confidence sections auto-commit; low-confidence ones queue at `/setup/review` for your sign-off. You can re-run any section from the SPA or via `crossnode-gtm start --regenerate <section>`.
 
-If you do not have an `ANTHROPIC_API_KEY` set, the framework synthesis steps are skipped — you can add the key later and re-run `yalc-gtm onboard` then `yalc-gtm configure`. Inside Claude Code, the parent session provides the LLM + WebFetch, so no Anthropic / Firecrawl keys are required.
+If you do not have an `ANTHROPIC_API_KEY` set, the framework synthesis steps are skipped — you can add the key later and re-run `crossnode-gtm onboard` then `crossnode-gtm configure`. Inside Claude Code, the parent session provides the LLM + WebFetch, so no Anthropic / Firecrawl keys are required.
 
 ### Prefer a terminal interview?
 
 If you would rather walk through the legacy 4-step terminal interview instead of opening the browser, pass `--review-in-chat`:
 
 ```bash
-yalc-gtm start --review-in-chat
+crossnode-gtm start --review-in-chat
 ```
 
 ### Non-Interactive Setup
@@ -73,7 +73,7 @@ yalc-gtm start --review-in-chat
 For CI or automation, set your keys in `~/.gtm-os/.env` (or `.env.local` in your project) and run:
 
 ```bash
-yalc-gtm start --non-interactive
+crossnode-gtm start --non-interactive
 ```
 
 A minimal env file looks like:
@@ -97,32 +97,32 @@ ENCRYPTION_KEY=$(openssl rand -hex 32)
 - **Rate limiting** — DB-backed token bucket on all external sends
 - **Outbound validation** — every message checked before send, hard blocks on violations
 - **Background agents** — launchd-integrated for automated campaign tracking
-- **Natural language orchestration** — describe what you want, YALC plans the workflow
+- **Natural language orchestration** — describe what you want, Crossnode GTM plans the workflow
 - **Swappable email providers** — Instantly built in, plus drop-in MCP templates for Brevo, Mailgun, and SendGrid (`provider:add --mcp <name>` then `email:send --provider <name>`)
 
 <!-- ## Demo
-![YALC Demo](demo.gif)
+![Crossnode GTM Demo](demo.gif)
 Demo GIF will be added here -->
 
-## Using YALC from Claude Code (IDE or Terminal)
+## Using Crossnode GTM from Claude Code (IDE or Terminal)
 
-YALC works the same whether you run it from a coding IDE (VS Code, Cursor) or a standalone terminal. The CLI uses the same interactive prompts in both.
+Crossnode GTM works the same whether you run it from a coding IDE (VS Code, Cursor) or a standalone terminal. The CLI uses the same interactive prompts in both.
 
 **IDE (VS Code / Cursor with Claude Code extension):**
-You can ask Claude Code to run commands for you. For the initial setup, it's better to run `yalc-gtm start` yourself in the integrated terminal so you can answer the interactive prompts. After that, Claude Code can run any YALC command on your behalf — qualifying leads, creating campaigns, tracking results.
+You can ask Claude Code to run commands for you. For the initial setup, it's better to run `crossnode-gtm start` yourself in the integrated terminal so you can answer the interactive prompts. After that, Claude Code can run any Crossnode GTM command on your behalf — qualifying leads, creating campaigns, tracking results.
 
 If your `ANTHROPIC_API_KEY` is already in your environment (common in Claude Code sessions), the `start` command detects it automatically and skips the prompt.
 
 **Terminal (standalone):**
 Run commands directly. The interactive prompts work as expected in any terminal emulator.
 
-### Running YALC inside Claude Code (no extra keys required)
+### Running Crossnode GTM inside Claude Code (no extra keys required)
 
-When YALC detects a parent Claude Code session — via `CLAUDECODE`, `CLAUDE_CODE_ENTRYPOINT`, or `CLAUDE_CODE_SSE_PORT` env vars set by Claude Code itself — both the **Anthropic** and **Firecrawl** keys become **optional**:
+When Crossnode GTM detects a parent Claude Code session — via `CLAUDECODE`, `CLAUDE_CODE_ENTRYPOINT`, or `CLAUDE_CODE_SSE_PORT` env vars set by Claude Code itself — both the **Anthropic** and **Firecrawl** keys become **optional**:
 
 - The parent CC session already provides LLM reasoning, so a separate Anthropic API key isn't needed for ad-hoc planning, qualification, or personalization (just ask Claude Code).
 - Claude Code's built-in `WebFetch` tool covers single-URL scrapes, so Firecrawl is only needed for JS-rendered pages, multi-page crawls, or web search.
-- Claude Code's `WebSearch` is also honored when onboarding needs to discover a company URL — if you skip the website prompt, YALC asks the parent CC session to run a `WebSearch` for `"<company> official website"` instead of calling Firecrawl.
+- Claude Code's `WebSearch` is also honored when onboarding needs to discover a company URL — if you skip the website prompt, Crossnode GTM asks the parent CC session to run a `WebSearch` for `"<company> official website"` instead of calling Firecrawl.
 
 **What works in Claude Code mode with zero provider keys:**
 
@@ -138,8 +138,8 @@ When YALC detects a parent Claude Code session — via `CLAUDECODE`, `CLAUDE_COD
 
 **When you DO still want an Anthropic key:**
 
-- Running YALC standalone (no parent CC session)
-- Running YALC under cron, launchd, CI, or any unattended scheduler
+- Running Crossnode GTM standalone (no parent CC session)
+- Running Crossnode GTM under cron, launchd, CI, or any unattended scheduler
 - You want the qualifier / personalizer / orchestrator to run autonomously without you babysitting it from a CC chat
 
 **Web-fetch provider override** — set `WEB_FETCH_PROVIDER` in `.env.local`:
@@ -197,7 +197,7 @@ When talking to Claude Code, reference these locations directly:
 
 ## Providers
 
-YALC ships providers in two forms: **built-in TypeScript adapters** (compiled into the package) and **bundled declarative manifests** (YAML under `configs/adapters/`). Both surface through the same capability registry. Run `yalc-gtm adapters:list` for the live view.
+Crossnode GTM ships providers in two forms: **built-in TypeScript adapters** (compiled into the package) and **bundled declarative manifests** (YAML under `configs/adapters/`). Both surface through the same capability registry. Run `crossnode-gtm adapters:list` for the live view.
 
 ### Built-in TypeScript adapters
 
@@ -228,7 +228,7 @@ Counts at this commit: 20 built-in TypeScript adapters across 18 capabilities; 4
 
 ## Skills
 
-YALC ships skills across three distinct runtime systems. See [CONTRIBUTING.md](CONTRIBUTING.md#skills) for the full distinction.
+Crossnode GTM ships skills across three distinct runtime systems. See [CONTRIBUTING.md](CONTRIBUTING.md#skills) for the full distinction.
 
 ### Bundled Claude Code skills (`.claude/skills/`)
 
@@ -278,7 +278,7 @@ Loaded at runtime by `orchestrate` and surfaced via `skills:list`.
 
 ## Configuration
 
-YALC uses `~/.gtm-os/config.yaml` for persistent configuration:
+Crossnode GTM uses `~/.gtm-os/config.yaml` for persistent configuration:
 
 ```yaml
 notion:
@@ -309,7 +309,7 @@ memory:
 
 ### Env file precedence
 
-YALC loads `~/.gtm-os/.env` automatically on every run (followed by `.env.local` in the current working directory as a fallback). Variables already present in your shell environment win — `~/.gtm-os/.env` only fills in keys that aren't already set. To stop using a provider, remove its line from `~/.gtm-os/.env` rather than `unset`-ing it in your terminal, since the file is reloaded on the next invocation.
+Crossnode GTM loads `~/.gtm-os/.env` automatically on every run (followed by `.env.local` in the current working directory as a fallback). Variables already present in your shell environment win — `~/.gtm-os/.env` only fills in keys that aren't already set. To stop using a provider, remove its line from `~/.gtm-os/.env` rather than `unset`-ing it in your terminal, since the file is reloaded on the next invocation.
 
 ## Key Design Decisions
 
@@ -352,27 +352,27 @@ agent:install           Install agent as launchd service
 agent:list              List agents with last run status
 ```
 
-The listing above covers the common commands. The full surface also includes the `crm:*` (CRM sync and import), `email:*` (send, accounts, status), `provider:*`, `memory:*`, `context:*`, `pipeline:*`, `skills:*`, and `tenant:*` families, plus `configure`, `doctor`, `update`, `personalize`, `competitive-intel`, `test-run`, and `campaign:schedule`. Run `yalc-gtm --help` for the complete list.
+The listing above covers the common commands. The full surface also includes the `crm:*` (CRM sync and import), `email:*` (send, accounts, status), `provider:*`, `memory:*`, `context:*`, `pipeline:*`, `skills:*`, and `tenant:*` families, plus `configure`, `doctor`, `update`, `personalize`, `competitive-intel`, `test-run`, and `campaign:schedule`. Run `crossnode-gtm --help` for the complete list.
 
 All commands that send or write support `--dry-run`. See [Command Reference](docs/commands.md) for full details, flags, and examples.
 
 ### Common after-setup recipes
 
 ```bash
-# Easiest: describe what you want in natural language and let YALC plan the work
-yalc-gtm orchestrate "find 10 SaaS CTOs matching my ICP and qualify them"
+# Easiest: describe what you want in natural language and let Crossnode GTM plan the work
+crossnode-gtm orchestrate "find 10 SaaS CTOs matching my ICP and qualify them"
 
 # Create a campaign
-yalc-gtm campaign:create --title "Q2 Outbound" --hypothesis "VP Eng responds to pain-point messaging"
+crossnode-gtm campaign:create --title "Q2 Outbound" --hypothesis "VP Eng responds to pain-point messaging"
 
 # Track campaign progress
-yalc-gtm campaign:track --dry-run
+crossnode-gtm campaign:track --dry-run
 
 # Or qualify a lead list you already have (CSV or JSON)
-yalc-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run
+crossnode-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run
 
 # Send via a non-default email provider (e.g. Brevo via the MCP template)
-yalc-gtm email:send --provider brevo --to lead@example.com --body "Hi there"
+crossnode-gtm email:send --provider brevo --to lead@example.com --body "Hi there"
 ```
 
 ## License

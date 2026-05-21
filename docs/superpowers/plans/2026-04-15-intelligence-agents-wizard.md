@@ -482,7 +482,7 @@ export async function runAgentCreate(): Promise<void> {
   writeFileSync(filePath, yamlStr)
 
   console.log(`\n✓ Agent written to ${filePath}`)
-  console.log(`\nRun it now:  yalc-gtm agent:run --agent ${id}`)
+  console.log(`\nRun it now:  crossnode-gtm agent:run --agent ${id}`)
 
   // 8. Offer install
   const doInstall = await confirm({ message: 'Install as launchd service now?', default: false })
@@ -678,8 +678,8 @@ export async function runSetupWizard(): Promise<void> {
 
   // 9. Next steps
   console.log('\n── Next Steps ──')
-  console.log('  yalc-gtm onboard --linkedin <your-linkedin-url> --website <your-website-url>')
-  console.log('  yalc-gtm doctor')
+  console.log('  crossnode-gtm onboard --linkedin <your-linkedin-url> --website <your-website-url>')
+  console.log('  crossnode-gtm doctor')
   console.log('')
 }
 
@@ -778,12 +778,12 @@ Expected: All existing tests pass
 
 - [ ] **Step 3: Smoke test setup wizard**
 
-Run: `yalc-gtm setup --help`
+Run: `crossnode-gtm setup --help`
 Expected: Shows `--wizard` option in help output
 
 - [ ] **Step 4: Smoke test agent:create**
 
-Run: `yalc-gtm agent:create --help`
+Run: `crossnode-gtm agent:create --help`
 Expected: Shows command description
 
 - [ ] **Step 5: Push to both remotes**

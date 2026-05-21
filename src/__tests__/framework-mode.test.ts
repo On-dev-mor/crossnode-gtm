@@ -106,7 +106,7 @@ describe('framework install — launchd yaml side-effect (HOME-isolated)', () =>
   beforeEach(() => {
     prevHome = process.env.HOME
     prevCwd = process.cwd()
-    tempHome = join(tmpdir(), `yalc-mode-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-mode-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     bundledFwDir = join(prevCwd, 'configs', 'frameworks')

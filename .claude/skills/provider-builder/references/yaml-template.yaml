@@ -1,7 +1,7 @@
-# YALC declarative adapter manifest — blank template.
+# Crossnode GTM declarative adapter manifest — blank template.
 #
 # Replace every <TODO_*> placeholder with vendor-specific values. Save as
-# /tmp/yalc-builder/<capability>-<provider>.yaml during drafting; the
+# /tmp/crossnode-builder/<capability>-<provider>.yaml during drafting; the
 # provider-builder skill moves the file to ~/.gtm-os/adapters/ only after
 # `pnpm cli adapters:smoke <path>` exits 0.
 #

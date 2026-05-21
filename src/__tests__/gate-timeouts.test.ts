@@ -9,7 +9,7 @@
  *     `"timeout: <N>h elapsed without action"`, and removes the awaiting
  *     sentinel. Idempotent — re-running produces a single Rejected record.
  *   - `resolveGateTimeoutHours()` precedence: framework manifest field >
- *     `YALC_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h fallback.
+ *     `CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h fallback.
  *   - `isGateStale(record, timeoutHours, now)` returns true at >= 80% of
  *     the timeout window, false below.
  */
@@ -75,11 +75,11 @@ describe('gate timeouts (D1)', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    prevEnvDefault = process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
-    delete process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
+    prevEnvDefault = process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
+    delete process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
     tempHome = join(
       tmpdir(),
-      `yalc-timeout-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      `crossnode-timeout-${Date.now()}-${Math.random().toString(36).slice(2)}`,
     )
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
@@ -88,9 +88,9 @@ describe('gate timeouts (D1)', () => {
   afterEach(() => {
     process.env.HOME = prevHome
     if (prevEnvDefault === undefined) {
-      delete process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
+      delete process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
     } else {
-      process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS = prevEnvDefault
+      process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS = prevEnvDefault
     }
     if (existsSync(tempHome)) rmSync(tempHome, { recursive: true, force: true })
   })
@@ -116,12 +116,12 @@ describe('gate timeouts (D1)', () => {
   })
 
   it('resolveGateTimeoutHours: env override beats 72h default', () => {
-    process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS = '24'
+    process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS = '24'
     expect(resolveGateTimeoutHours(undefined)).toBe(24)
   })
 
   it('resolveGateTimeoutHours: manifest field beats env override', () => {
-    process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS = '24'
+    process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS = '24'
     expect(resolveGateTimeoutHours(48)).toBe(48)
   })
 
@@ -130,7 +130,7 @@ describe('gate timeouts (D1)', () => {
   })
 
   it('resolveGateTimeoutHours: ignores invalid env values', () => {
-    process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS = 'banana'
+    process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS = 'banana'
     expect(resolveGateTimeoutHours(undefined)).toBe(72)
   })
 

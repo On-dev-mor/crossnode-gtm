@@ -41,7 +41,7 @@ describe('runSmoke', () => {
   let dir: string
   let prevKey: string | undefined
   beforeEach(() => {
-    dir = join(tmpdir(), `yalc-smoke-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    dir = join(tmpdir(), `crossnode-smoke-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(dir, { recursive: true })
     prevKey = process.env.APOLLO_API_KEY
     process.env.APOLLO_API_KEY = 'k'

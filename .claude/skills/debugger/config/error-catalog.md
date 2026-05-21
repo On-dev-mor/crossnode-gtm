@@ -230,7 +230,7 @@ Known errors organized by diagnostic layer. Each entry maps an error pattern to 
 **Root cause:** User hasn't completed onboarding.
 **Diagnostic:** `test -f gtm-os.yaml`
 **Auto-fix:**
-1. Run `yalc-gtm onboard` — this asks 5 questions and creates the file.
+1. Run `crossnode-gtm onboard` — this asks 5 questions and creates the file.
 **Approval level:** Standard
 **Severity:** Blocking — framework context injection fails
 
@@ -263,7 +263,7 @@ Known errors organized by diagnostic layer. Each entry maps an error pattern to 
 **Diagnostic:** Check `onboarding_complete` field in `gtm-os.yaml`
 **Auto-fix:**
 1. If the file has real company data → set `onboarding_complete: true`
-2. If the file is mostly empty → run `yalc-gtm onboard`
+2. If the file is mostly empty → run `crossnode-gtm onboard`
 **Approval level:** Standard
 **Severity:** Degraded — system works but with poor context
 

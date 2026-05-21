@@ -2,7 +2,7 @@
  * Trigger-now helper for `mode: on-demand` frameworks (D4).
  *
  * Owns the shared execution path used by `POST /api/today/trigger/:framework`
- * and the `yalc-gtm trigger <name>` CLI. Keeping the logic here means the
+ * and the `crossnode-gtm trigger <name>` CLI. Keeping the logic here means the
  * /today route handler stays small (so D3 + C5 can land alongside without
  * stepping on the same lines), and the CLI command is a thin shell.
  *

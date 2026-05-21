@@ -43,12 +43,12 @@ export function defaultAdaptersDir(): string {
 }
 
 /**
- * Package-bundled declarative adapters that ship with YALC.
+ * Package-bundled declarative adapters that ship with Crossnode GTM.
  *
  * Location: `<repo-root>/configs/adapters/`. Computed relative to this
  * source file so the path resolves the same in dev (running from
  * `src/`), in tests (vitest under `src/lib/...`), and once installed as
- * an npm package (`node_modules/yalc-gtm-os/configs/adapters`). The
+ * an npm package (`node_modules/crossnode-gtm/configs/adapters`). The
  * `configs/` directory is whitelisted in `package.json -> files`.
  */
 export function bundledAdaptersDir(): string {
@@ -133,7 +133,7 @@ export interface LoadAllOptions extends CompileOptions {
  * user-installed directory, in that order. Order matters: the registry
  * integration relies on user manifests landing AFTER bundled ones via
  * `bucket.set()` last-write semantics, so a user-installed manifest can
- * override one shipped by YALC for the same `(capability, provider)`
+ * override one shipped by Crossnode GTM for the same `(capability, provider)`
  * pair.
  *
  * Errors from either root are merged; a bad bundled manifest does not

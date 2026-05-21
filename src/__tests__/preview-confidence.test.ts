@@ -7,7 +7,7 @@ import { join } from 'node:path'
  * Tests for the 0.8.F preview confidence layer:
  *   1. `computeConfidence` heuristic — bounds + 0.4/0.4/0.2 weighting.
  *   2. Per-section confidence written into `_preview/_meta.json`.
- *   3. `__yalc_confidence` self-rating parsing + stripping.
+ *   3. `__crossnode_confidence` self-rating parsing + stripping.
  *   4. `has_metadata_anchors` derived from auto-extract output.
  *
  * Tests stub HOME so synthesis writes into a sandboxed `_preview/` and never
@@ -17,7 +17,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-confidence-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-confidence-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   // Force the stub-body code path — keeps these tests deterministic and
@@ -124,7 +124,7 @@ describe('synthesis writes per-section confidence to _meta.json', () => {
   })
 })
 
-describe('__yalc_confidence field handling', () => {
+describe('__crossnode_confidence field handling', () => {
   it('records the LLM self-rating when the model emits a valid value', async () => {
     process.env.ANTHROPIC_API_KEY = 'test-key'
     vi.doMock('../lib/framework/section-prompts/index.js', async () => {
@@ -133,7 +133,7 @@ describe('__yalc_confidence field handling', () => {
       )
       return {
         ...actual,
-        runSectionPrompt: vi.fn(async () => 'a: 1\n__yalc_confidence: 8\n'),
+        runSectionPrompt: vi.fn(async () => 'a: 1\n__crossnode_confidence: 8\n'),
       }
     })
 
@@ -190,7 +190,7 @@ describe('__yalc_confidence field handling', () => {
       )
       return {
         ...actual,
-        runSectionPrompt: vi.fn(async () => 'company:\n  name: TestCo\n__yalc_confidence: 7\n'),
+        runSectionPrompt: vi.fn(async () => 'company:\n  name: TestCo\n__crossnode_confidence: 7\n'),
       }
     })
 
@@ -205,18 +205,18 @@ describe('__yalc_confidence field handling', () => {
     })
 
     const body = readFileSync(previewPath('framework.yaml'), 'utf-8')
-    expect(body).not.toContain('__yalc_confidence')
+    expect(body).not.toContain('__crossnode_confidence')
     expect(body).toContain('TestCo')
   })
 
   it('parseConfidenceField is tolerant of malformed values', async () => {
     const { parseConfidenceField } = await import('../lib/framework/section-prompts/index')
     expect(parseConfidenceField('hello world').rating).toBeNull()
-    expect(parseConfidenceField('body\n__yalc_confidence: not-a-number\n').rating).toBeNull()
+    expect(parseConfidenceField('body\n__crossnode_confidence: not-a-number\n').rating).toBeNull()
     // Out-of-range values clamp to [0, 10].
-    expect(parseConfidenceField('body\n__yalc_confidence: 99\n').rating).toBe(10)
+    expect(parseConfidenceField('body\n__crossnode_confidence: 99\n').rating).toBe(10)
     // Decimal ratings preserved.
-    expect(parseConfidenceField('body\n__yalc_confidence: 7.5\n').rating).toBe(7.5)
+    expect(parseConfidenceField('body\n__crossnode_confidence: 7.5\n').rating).toBe(7.5)
   })
 })
 

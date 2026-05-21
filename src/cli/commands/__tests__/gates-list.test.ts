@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm gates:list`.
+ * Tests for `crossnode-gtm gates:list`.
  *
  * Mirrors the adapters:list test pattern: HOME-isolated tmpdir, seed an
  * awaiting-gate sentinel under `~/.gtm-os/agents/`, and assert the row /
@@ -46,11 +46,11 @@ describe('gates:list CLI', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    prevEnv = process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
-    delete process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
+    prevEnv = process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
+    delete process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
     tempHome = join(
       tmpdir(),
-      `yalc-gates-list-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      `crossnode-gates-list-${Date.now()}-${Math.random().toString(36).slice(2)}`,
     )
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
@@ -58,8 +58,8 @@ describe('gates:list CLI', () => {
 
   afterEach(() => {
     process.env.HOME = prevHome
-    if (prevEnv === undefined) delete process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
-    else process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS = prevEnv
+    if (prevEnv === undefined) delete process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
+    else process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS = prevEnv
     if (existsSync(tempHome)) rmSync(tempHome, { recursive: true, force: true })
   })
 

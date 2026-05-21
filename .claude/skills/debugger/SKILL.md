@@ -209,9 +209,9 @@ test -f ~/.gtm-os/config.yaml && echo "OK: User config exists" || echo "FAIL: Us
 ```
 
 **Auto-fix actions:**
-- Missing `gtm-os.yaml` → "Run `yalc-gtm onboard` to create your GTM framework. This asks 5 questions about your business."
+- Missing `gtm-os.yaml` → "Run `crossnode-gtm onboard` to create your GTM framework. This asks 5 questions about your business."
 - Invalid YAML → Show the syntax error location and offer to fix it
-- `onboarding_complete: false` → "Run `yalc-gtm onboard` to complete setup."
+- `onboarding_complete: false` → "Run `crossnode-gtm onboard` to complete setup."
 - Missing user config → "I'll create `~/.gtm-os/config.yaml` with defaults. Approve?"
 
 ### Step 4: Layer 4 — Provider Connectivity (1 API call)

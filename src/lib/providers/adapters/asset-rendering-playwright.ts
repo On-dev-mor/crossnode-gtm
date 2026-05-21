@@ -23,7 +23,7 @@ import { dirname, join } from 'node:path'
  * NOTE: this replaces the dynamic-Function trampoline in the previous
  * asset-rendering stub. Modern bundlers and tsx/Node both honour
  * `import()` of a module string at runtime — the Function-trick was only
- * ever a workaround for older toolchains. Eslint and the YALC bundler
+ * ever a workaround for older toolchains. Eslint and the Crossnode GTM bundler
  * are happy without it.
  */
 
@@ -154,7 +154,7 @@ export const assetRenderingPlaywrightAdapter: CapabilityAdapter = {
     const content = (raw.content ?? '').toString()
     const filename = (raw.filename ?? `asset-${Date.now()}.html`).replace(/[^a-zA-Z0-9._-]/g, '_')
     const format = raw.format ?? 'html'
-    const title = raw.title ?? 'YALC asset'
+    const title = raw.title ?? 'Crossnode GTM asset'
 
     if (!content) {
       return {

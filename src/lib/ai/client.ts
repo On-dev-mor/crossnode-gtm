@@ -30,7 +30,7 @@ export function getAnthropicClient(): Anthropic {
           'This command needs an LLM. Two options:\n' +
           '  1. Add ANTHROPIC_API_KEY to ~/.gtm-os/.env (or .env.local in your project) and re-run.\n' +
           '  2. Reformulate this request as a prompt to your parent Claude Code session.\n' +
-          '     Example: instead of `yalc-gtm orchestrate "..."`, ask Claude Code\n' +
+          '     Example: instead of `crossnode-gtm orchestrate "..."`, ask Claude Code\n' +
           '     to plan the workflow and then run the deterministic CLI steps\n' +
           '     (leads:import, campaign:create --title/--hypothesis, notion:sync, ...).'
         )

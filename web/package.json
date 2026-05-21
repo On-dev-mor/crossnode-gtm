@@ -1,9 +1,9 @@
 {
-  "name": "yalc-gtm-os-web",
+  "name": "crossnode-gtm-web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "YALC GTM-OS web SPA (React + Vite + Tailwind + shadcn/ui)",
+  "description": "Crossnode GTM web SPA (React + Vite + Tailwind + shadcn/ui)",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b --noEmit && vite build",

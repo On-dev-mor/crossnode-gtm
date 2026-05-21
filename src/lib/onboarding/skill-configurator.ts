@@ -176,7 +176,7 @@ Output ONLY the YAML, no explanations.`,
   console.log('[configure] Goals block left as TODO — fill in `~/.gtm-os/config.yaml` after first month of outbound.')
 
   console.log('\n── Configuration Complete ──')
-  console.log('Files staged in preview (commit with `yalc-gtm start --commit-preview`):')
+  console.log('Files staged in preview (commit with `crossnode-gtm start --commit-preview`):')
   console.log('  - qualification_rules.md')
   console.log('  - campaign_templates.yaml')
   if (queries.length > 0) console.log('  - search_queries.txt')

@@ -165,7 +165,7 @@ async function runAgentCreateInner(): Promise<void> {
   writeFileSync(filePath, yamlStr)
 
   console.log(`\n✓ Agent written to ${filePath}`)
-  console.log(`\nRun it now:  yalc-gtm agent:run --agent ${id}`)
+  console.log(`\nRun it now:  crossnode-gtm agent:run --agent ${id}`)
 
   // 8. Offer install
   const doInstall = await confirm({ message: 'Install as launchd service now?', default: false })

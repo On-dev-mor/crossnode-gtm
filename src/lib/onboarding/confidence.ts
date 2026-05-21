@@ -35,7 +35,7 @@ export function computeConfidence(signals: ConfidenceSignals): number {
 }
 
 /**
- * Default LLM self-rating when the model didn't emit `__yalc_confidence`
+ * Default LLM self-rating when the model didn't emit `__crossnode_confidence`
  * (or emitted a malformed value). Picked to land mid-range so a missing
  * field never becomes a confident signal in either direction.
  */

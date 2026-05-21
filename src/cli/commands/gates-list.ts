@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm gates:list` — show every awaiting human-gate sentinel with
+ * `crossnode-gtm gates:list` — show every awaiting human-gate sentinel with
  * framework, gate id, age, time-until-timeout, and stale/fresh status.
  *
  * Mirrors the `adapters:list` style: human table by default, `--json` for

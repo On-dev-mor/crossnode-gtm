@@ -25,7 +25,7 @@ response:
 describe('loadDeclarativeManifests', () => {
   let dir: string
   beforeEach(() => {
-    dir = join(tmpdir(), `yalc-decl-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    dir = join(tmpdir(), `crossnode-decl-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(dir, { recursive: true })
     resetDeclarativeLoaderCache()
   })

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 
-// YALC GTM-OS web SPA build.
+// Crossnode GTM web SPA build.
 // Output is consumed by the Hono server at runtime via static-file mount;
 // see src/lib/server/index.ts for the mount + SPA fallback logic.
 export default defineConfig({

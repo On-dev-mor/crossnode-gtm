@@ -17,7 +17,7 @@ let prevHome: string | undefined
 
 beforeEach(() => {
   prevHome = process.env.HOME
-  tempHome = join(tmpdir(), `yalc-connectcli-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+  tempHome = join(tmpdir(), `crossnode-connectcli-${Date.now()}-${Math.random().toString(36).slice(2)}`)
   mkdirSync(tempHome, { recursive: true })
   mkdirSync(join(tempHome, '.gtm-os'), { recursive: true })
   process.env.HOME = tempHome

@@ -211,9 +211,9 @@ async function pushLeadsToNotion(config: GTMOSConfig): Promise<void> {
 
 async function pullNotionEdits(config: GTMOSConfig): Promise<void> {
   // Pull manual status changes from Notion (e.g., user moves lead to Demo_Booked)
-  const leadsDbId = config.notion.leads_ds
-  if (!leadsDbId) {
-    console.log('[sync] No leads_ds configured, skipping pull')
+  const prospectsDbId = config.notion.prospects_ds
+  if (!prospectsDbId) {
+    console.log('[sync] No prospects_ds configured, skipping pull')
     return
   }
 
@@ -227,7 +227,7 @@ async function pullNotionEdits(config: GTMOSConfig): Promise<void> {
 
   // Query Notion for pages that may have been manually updated
   // We check lifecycle status for manual changes (e.g., Demo_Booked, Deal_Created)
-  const notionPages = await notionService.queryDatabase(leadsDbId)
+  const notionPages = await notionService.queryDatabase(prospectsDbId)
   let pulled = 0
 
   for (const page of notionPages) {

@@ -41,7 +41,7 @@ describe('archetype A — competitor-audience-mining', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-archA-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-archA-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
   })

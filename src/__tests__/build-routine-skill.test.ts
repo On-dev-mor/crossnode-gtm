@@ -9,7 +9,7 @@ const SKILL_DIR = join(process.cwd(), '.claude', 'skills', 'build-routine')
 
 const TRIGGER_PHRASES = [
   'build my sales routine',
-  'show me what YALC would auto-configure',
+  'show me what Crossnode GTM would auto-configure',
   'propose a routine for me',
   'set up a sales routine',
   'auto-derive my routine',
@@ -69,8 +69,8 @@ describe('build-routine skill', () => {
 
   it('description trigger phrases do not collide with sibling skills', () => {
     const FORBIDDEN = [
-      'is YALC working',
-      'set up YALC',
+      'is Crossnode GTM working',
+      'set up Crossnode GTM',
       'list adapters',
       'qualify these leads',
       'add a new provider',

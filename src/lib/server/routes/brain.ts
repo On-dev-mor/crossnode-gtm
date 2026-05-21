@@ -207,7 +207,7 @@ brainRoutes.get('/context', (c) => {
     return c.json(
       {
         error: 'no_brain',
-        message: `No context at ${root}. Run \`yalc-gtm start\` first.`,
+        message: `No context at ${root}. Run \`crossnode-gtm start\` first.`,
       },
       404,
     )

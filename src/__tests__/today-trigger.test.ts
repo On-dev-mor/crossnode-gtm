@@ -1,5 +1,5 @@
 /**
- * Tests for `POST /api/today/trigger/:framework` and the `yalc-gtm trigger`
+ * Tests for `POST /api/today/trigger/:framework` and the `crossnode-gtm trigger`
  * CLI command (D4).
  *
  * Trigger-now is the on-demand counterpart to `/api/today/retry/:framework`:
@@ -71,7 +71,7 @@ function writeFrameworkYaml(name: string, body: string): string {
 beforeEach(() => {
   prevHome = process.env.HOME
   prevCwd = process.cwd()
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-trigger-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-trigger-'))
   process.env.HOME = TMP
   frameworkPath = null
 })
@@ -179,7 +179,7 @@ describe('POST /api/today/trigger/:framework', () => {
   })
 })
 
-describe('yalc-gtm trigger CLI command', () => {
+describe('crossnode-gtm trigger CLI command', () => {
   it('returns the new run id for an on-demand framework', async () => {
     const name = `trigger-cli-${Date.now()}-${Math.floor(Math.random() * 1e6)}`
     frameworkPath = writeFrameworkYaml(name, onDemandYaml(name))

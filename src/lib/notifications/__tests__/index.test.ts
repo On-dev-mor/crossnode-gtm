@@ -55,17 +55,17 @@ describe('notifications dispatcher', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    prevWebhook = process.env.YALC_SLACK_WEBHOOK_URL
-    prevBase = process.env.YALC_BASE_URL
+    prevWebhook = process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
+    prevBase = process.env.CROSSNODE_GTM_BASE_URL
     tempHome = join(
       tmpdir(),
-      `yalc-notify-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      `crossnode-notify-${Date.now()}-${Math.random().toString(36).slice(2)}`,
     )
     mkdirSync(tempHome, { recursive: true })
     mkdirSync(join(tempHome, '.gtm-os'), { recursive: true })
     process.env.HOME = tempHome
-    delete process.env.YALC_SLACK_WEBHOOK_URL
-    delete process.env.YALC_BASE_URL
+    delete process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
+    delete process.env.CROSSNODE_GTM_BASE_URL
     slackSender = vi.fn().mockResolvedValue(undefined)
     desktopSender = vi.fn().mockResolvedValue(undefined)
     __resetIdempotencyForTests()
@@ -73,10 +73,10 @@ describe('notifications dispatcher', () => {
 
   afterEach(() => {
     process.env.HOME = prevHome
-    if (prevWebhook === undefined) delete process.env.YALC_SLACK_WEBHOOK_URL
-    else process.env.YALC_SLACK_WEBHOOK_URL = prevWebhook
-    if (prevBase === undefined) delete process.env.YALC_BASE_URL
-    else process.env.YALC_BASE_URL = prevBase
+    if (prevWebhook === undefined) delete process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
+    else process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL = prevWebhook
+    if (prevBase === undefined) delete process.env.CROSSNODE_GTM_BASE_URL
+    else process.env.CROSSNODE_GTM_BASE_URL = prevBase
     if (existsSync(tempHome)) rmSync(tempHome, { recursive: true, force: true })
   })
 
@@ -90,7 +90,7 @@ describe('notifications dispatcher', () => {
 
   it('dispatches only to enabled channels', async () => {
     writeConfig({ slack: true, desktop: false })
-    process.env.YALC_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
+    process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
     await notifyAwaitingGate(baseRecord, {
       slackSender,
       desktopSender,
@@ -102,7 +102,7 @@ describe('notifications dispatcher', () => {
 
   it('skips slack when no webhook URL configured (env missing)', async () => {
     writeConfig({ slack: true, desktop: false })
-    delete process.env.YALC_SLACK_WEBHOOK_URL
+    delete process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
     await notifyAwaitingGate(baseRecord, {
       slackSender,
       desktopSender,
@@ -184,7 +184,7 @@ describe('notifications dispatcher', () => {
 
   it('continues to fire other channels if one throws', async () => {
     writeConfig({ slack: true, desktop: true })
-    process.env.YALC_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
+    process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
     slackSender.mockRejectedValue(new Error('slack failed'))
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     await notifyAwaitingGate(baseRecord, {

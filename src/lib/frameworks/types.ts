@@ -169,7 +169,7 @@ export interface FrameworkDefinition {
    * action, the runner auto-rejects it with reason
    * `"timeout: <N>h elapsed without action"`.
    *
-   * Precedence: this field > `YALC_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h default.
+   * Precedence: this field > `CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h default.
    */
   gate_timeout_hours?: number
   output: FrameworkOutput

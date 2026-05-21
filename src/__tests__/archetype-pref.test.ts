@@ -16,7 +16,7 @@ import { readArchetypePreference } from '../lib/config/archetype-pref'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-archetype-pref-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-archetype-pref-'))
 })
 
 afterEach(() => {

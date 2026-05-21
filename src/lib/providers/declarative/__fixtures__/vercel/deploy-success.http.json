@@ -2,8 +2,8 @@
   "status": 200,
   "body": {
     "id": "dpl_abc123xyz",
-    "url": "yalc-smoke-abc123.vercel.app",
-    "name": "yalc-smoke",
+    "url": "crossnode-smoke-abc123.vercel.app",
+    "name": "crossnode-smoke",
     "readyState": "READY",
     "status": "READY",
     "createdAt": 1714478400000,

@@ -84,8 +84,8 @@ response:
     messagePath: $.error.message
 smoke_test:
   input:
-    html: "<!doctype html><h1>yalc-smoke</h1>"
-    slug: "yalc-smoke"
+    html: "<!doctype html><h1>crossnode-smoke</h1>"
+    slug: "crossnode-smoke"
   expectNonEmpty:
     - url
     - deploymentId

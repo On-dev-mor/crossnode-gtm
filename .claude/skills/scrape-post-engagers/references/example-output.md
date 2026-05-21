@@ -22,7 +22,7 @@ npx tsx src/cli/index.ts leads:scrape-post \
   Result set: rs_2026_04_30_engagers_a1b2
   Output: /Users/othmane/.gtm-os/data/result-sets/rs_2026_04_30_engagers_a1b2.json
 
-Next: yalc-gtm leads:qualify --result-set rs_2026_04_30_engagers_a1b2
+Next: crossnode-gtm leads:qualify --result-set rs_2026_04_30_engagers_a1b2
 ```
 
 ## Skill summary rendered to user

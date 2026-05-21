@@ -145,7 +145,7 @@ describe('validateStepOutput unit', () => {
 describe('output_schema in markdown frontmatter (load-time)', () => {
   let tmpDir: string
   beforeEach(() => {
-    tmpDir = join(tmpdir(), `yalc-md-schema-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tmpDir = join(tmpdir(), `crossnode-md-schema-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tmpDir, { recursive: true })
   })
   afterEach(() => {
@@ -247,7 +247,7 @@ describe('framework runner: output_schema enforcement', () => {
   beforeEach(() => {
     prevHome = process.env.HOME
     prevCwd = process.cwd()
-    tempHome = join(tmpdir(), `yalc-schema-runner-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-schema-runner-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     frameworkName = `schema-test-${Date.now()}-${Math.floor(Math.random() * 1e6)}`

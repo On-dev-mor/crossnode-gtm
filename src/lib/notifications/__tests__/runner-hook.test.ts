@@ -29,7 +29,7 @@ describe('notifyStaleAwaitingGates (runner hook)', () => {
     prevHome = process.env.HOME
     tempHome = join(
       tmpdir(),
-      `yalc-stalehook-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      `crossnode-stalehook-${Date.now()}-${Math.random().toString(36).slice(2)}`,
     )
     mkdirSync(tempHome, { recursive: true })
     mkdirSync(join(tempHome, '.gtm-os'), { recursive: true })

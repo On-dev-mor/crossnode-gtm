@@ -200,7 +200,7 @@ export function createApp() {
 .container{text-align:center;max-width:420px}h1{font-size:2.4rem;margin-bottom:.5rem;font-weight:700}
 p{color:rgba(26,26,26,0.65);margin-bottom:2rem}a{display:block;padding:1rem;margin:.5rem 0;background:#fff;border:1px solid rgba(26,26,26,0.12);border-radius:14px;color:#C9506E;text-decoration:none;font-weight:600}
 a:hover{box-shadow:0 8px 24px rgba(201,80,110,0.08)}</style></head>
-<body><div class="container"><h1>YALC</h1><p>Run <code>pnpm build:web</code> to load the full SPA.</p>
+<body><div class="container"><h1>Crossnode GTM</h1><p>Run <code>pnpm build:web</code> to load the full SPA.</p>
 <a href="/campaigns">Campaign Dashboard</a>
 <a href="/review">Lead Review Dashboard</a>
 <a href="/frameworks">Frameworks</a>
@@ -227,7 +227,7 @@ export function startServer(port = 3847) {
     if (err.code === 'EADDRINUSE') {
       console.error(`\nPort ${port} is already in use.`)
       console.error(`Either stop the existing process (lsof -i :${port}) or run with a different port:`)
-      console.error(`  yalc-gtm start --port ${port + 1}`)
+      console.error(`  crossnode-gtm start --port ${port + 1}`)
       process.exit(1)
     }
     console.error(`Server error: ${err.message}`)

@@ -34,7 +34,7 @@ knowledge yaml is present. Bundled knowledge ships for ~10 providers as
 suggestions; the user can pick from them but is not constrained to them.
 
 Whenever possible, prefer the SPA at `http://localhost:3847/keys/connect`
-(invoked via `yalc-gtm keys:connect [<provider>] --open`) — it lets the
+(invoked via `crossnode-gtm keys:connect [<provider>] --open`) — it lets the
 user paste keys without surfacing them in the chat transcript.
 
 **Provider knowledge yaml (from `configs/providers/{{provider_name}}.yaml`):**
@@ -49,7 +49,7 @@ If `knowledge_yaml_content` is empty, fall through to the
 1. Ask whether the provider is MCP-based or REST-based.
 2. For MCP — collect `command`, `args` (comma-separated) and any required env vars (k=v list).
 3. For REST — collect required env vars only.
-4. Tell the user the new entry will be persisted to `configs/providers/_user/{{provider_name}}.yaml` and that they will then run `yalc-gtm connect-provider {{provider_name}}` again to finish wiring.
+4. Tell the user the new entry will be persisted to `configs/providers/_user/{{provider_name}}.yaml` and that they will then run `crossnode-gtm connect-provider {{provider_name}}` again to finish wiring.
 
 When `knowledge_yaml_content` IS present:
 
@@ -74,7 +74,7 @@ Status guidance:
 
 - `pending_keys` — happy path on first call: knowledge resolved, env vars listed, awaiting the user.
 - `configured` — only when the orchestrator already confirmed `keys done` AND the test_query came back OK.
-- `custom_provider_created` — when `knowledge_yaml_content` was empty and you walked through the custom flow; the next action is "re-run `yalc-gtm connect-provider {{provider_name}}`".
+- `custom_provider_created` — when `knowledge_yaml_content` was empty and you walked through the custom flow; the next action is "re-run `crossnode-gtm connect-provider {{provider_name}}`".
 - `failed` — only when the provider name is unknown AND the user declined to create a custom entry. Fill `issues` with a single-line reason.
 
 Never invent capabilities the yaml doesn't list. Never fabricate `test_query` shapes — re-use what the yaml provides.

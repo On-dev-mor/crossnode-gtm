@@ -54,11 +54,11 @@ response:
     messagePath: $.message
 smoke_test:
   input:
-    campaignName: YALC smoke campaign
-    subject: Hello from YALC
+    campaignName: Crossnode GTM smoke campaign
+    subject: Hello from Crossnode GTM
     sender:
-      name: YALC
-      email: noreply@yalc.test
+      name: Crossnode GTM
+      email: noreply@crossnode.test
     htmlContent: "<p>Hello world</p>"
     listIds: [1]
   expectNonEmpty:

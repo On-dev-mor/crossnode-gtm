@@ -10,7 +10,7 @@ export class ProviderNotFoundError extends Error {
     } else {
       availList = available.join(', ')
     }
-    const tail = stepType ? '. Run: yalc-gtm provider:list to see what is installed.' : '.'
+    const tail = stepType ? '. Run: crossnode-gtm provider:list to see what is installed.' : '.'
     const msg = suggestion
       ? `Provider '${provider}' not found. Available: ${availList}. Did you mean '${suggestion}'?`
       : `Provider '${provider}' not found. Available: ${availList}${tail}`

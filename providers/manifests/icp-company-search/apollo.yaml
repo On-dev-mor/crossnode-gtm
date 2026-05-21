@@ -6,7 +6,7 @@
 #
 # Apollo's company search endpoint returns a paginated list of companies
 # matching keyword, location, and headcount filters. We map each result
-# row onto YALC's `icp-company-search` `companies[]` shape so Apollo is a
+# row onto Crossnode GTM's `icp-company-search` `companies[]` shape so Apollo is a
 # drop-in alternative to the built-in Crustdata adapter.
 #
 # v1 manifest scope:

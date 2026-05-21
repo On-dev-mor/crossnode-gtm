@@ -1,15 +1,15 @@
 {
-  "name": "yalc-gtm-os",
+  "name": "crossnode-gtm",
   "version": "0.13.4",
   "private": false,
   "type": "module",
   "license": "MIT",
-  "description": "YALC — open-source, AI-native GTM operating system. CLI-first engine for lead finding, enrichment, qualification, and campaign orchestration.",
+  "description": "Crossnode GTM — open-source, AI-native GTM operating system. CLI-first engine for lead finding, enrichment, qualification, and campaign orchestration.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system.git"
+    "url": "https://github.com/Othmane-Khadri/crossnode-gtm.git"
   },
-  "homepage": "https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system",
+  "homepage": "https://github.com/Othmane-Khadri/crossnode-gtm",
   "author": "Othmane Khadri",
   "keywords": [
     "gtm",
@@ -23,7 +23,7 @@
     "qualification"
   ],
   "bin": {
-    "yalc-gtm": "./bin/yalc-gtm.mjs"
+    "crossnode-gtm": "./bin/crossnode-gtm.mjs"
   },
   "files": [
     "bin",

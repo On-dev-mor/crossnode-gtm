@@ -33,7 +33,7 @@ describe('sentinel _v versioning', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-sent-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-sent-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     mkdirSync(join(tempHome, '.gtm-os', 'agents', `${framework}.runs`), { recursive: true })
@@ -83,7 +83,7 @@ describe('sentinel _v versioning', () => {
     expect((parsed as { _v?: number })._v).toBe(2)
   })
 
-  it('parseSentinel throws "Unknown sentinel version N. Upgrade YALC." for unknown _v', () => {
+  it('parseSentinel throws "Unknown sentinel version N. Upgrade Crossnode GTM." for unknown _v', () => {
     const v999 = {
       _v: 999,
       run_id: runId,
@@ -97,7 +97,7 @@ describe('sentinel _v versioning', () => {
       inputs: {},
       created_at: '2026-04-30T00:00:00Z',
     }
-    expect(() => parseSentinel(v999)).toThrow(/Unknown sentinel version 999\. Upgrade YALC\./)
+    expect(() => parseSentinel(v999)).toThrow(/Unknown sentinel version 999\. Upgrade Crossnode GTM\./)
   })
 
   it('readAwaitingGate round-trips a v1 sentinel without _v field on disk', () => {
@@ -174,6 +174,6 @@ describe('sentinel _v versioning', () => {
       created_at: '2026-04-30T00:00:00Z',
     }
     writeFileSync(awaitingGatePath(framework, runId), JSON.stringify(bad, null, 2), 'utf-8')
-    expect(() => readGateState(framework, runId)).toThrow(/Unknown sentinel version 7\. Upgrade YALC\./)
+    expect(() => readGateState(framework, runId)).toThrow(/Unknown sentinel version 7\. Upgrade Crossnode GTM\./)
   })
 })

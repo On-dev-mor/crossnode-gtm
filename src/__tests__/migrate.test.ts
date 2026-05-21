@@ -13,7 +13,7 @@ import yaml from 'js-yaml'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-migrate-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-migrate-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })

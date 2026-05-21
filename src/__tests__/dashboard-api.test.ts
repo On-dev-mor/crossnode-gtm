@@ -50,7 +50,7 @@ function seedAwaitingGate(
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-dashboard-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-dashboard-api-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

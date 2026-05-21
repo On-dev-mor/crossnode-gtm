@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm dashboard --archetype <a|b|c|d>` (C3).
+ * Tests for `crossnode-gtm dashboard --archetype <a|b|c|d>` (C3).
  *
  * The flag opens the archetype-specific SPA route. Without it, the existing
  * route resolution rules (no context.yaml → /setup/review, present → /today,
@@ -14,7 +14,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-dashboard-archetype-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-dashboard-archetype-'))
 })
 
 afterEach(() => {

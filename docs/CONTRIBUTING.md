@@ -6,7 +6,7 @@ day-to-day contributor setup, see the top-level
 
 ## Publishing to npm
 
-YALC ships as `yalc-gtm-os` on npm. Releases happen on the `v*` git tag
+Crossnode GTM ships as `crossnode-gtm` on npm. Releases happen on the `v*` git tag
 once CI is green. The CI publish step needs an automation token in the
 repo's GitHub Actions secrets.
 
@@ -16,7 +16,7 @@ repo's GitHub Actions secrets.
 2. Open https://www.npmjs.com/settings/<your-username>/tokens.
 3. Click **Generate New Token → Granular Access Token** (or **Automation**
    for a classic token).
-4. Scope it to the `yalc-gtm-os` package, **Read and write** permission,
+4. Scope it to the `crossnode-gtm` package, **Read and write** permission,
    no expiration (or 1 year).
 5. Copy the token. **Never paste the token into chat, code, or commit
    messages.** This is the same hard rule as every other secret in the
@@ -60,6 +60,6 @@ Before tagging a release:
    `.env*` files, no `/Users/` paths, no fixtures, and that
    `.claude/skills/`, `configs/frameworks/`, and `configs/skills/` are
    present.
-4. `yalc-gtm doctor` runs from a sandbox HOME without errors.
+4. `crossnode-gtm doctor` runs from a sandbox HOME without errors.
 5. Bump `package.json` `version`. Commit. Tag with `v<version>`.
 6. Push the tag (and only the tag) to trigger CI publish.

@@ -94,7 +94,7 @@ let frameworkPath: string
 beforeEach(() => {
   prevHome = process.env.HOME
   prevCwd = process.cwd()
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-gates-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-gates-api-'))
   process.env.HOME = TMP
   frameworkName = `gates-api-${Date.now()}-${Math.floor(Math.random() * 1e6)}`
   frameworkPath = join(prevCwd, 'configs', 'frameworks', `${frameworkName}.yaml`)

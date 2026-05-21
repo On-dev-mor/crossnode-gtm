@@ -88,7 +88,7 @@ The CLI prints a final block of the form:
   Result set: <id>
   Output: <path>
 
-Next: yalc-gtm leads:qualify --result-set <id>
+Next: crossnode-gtm leads:qualify --result-set <id>
 ```
 
 Capture the result set id, total count, reactor count, commenter count, and output path.

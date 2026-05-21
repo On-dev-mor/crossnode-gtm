@@ -2,13 +2,13 @@
 
 > **Tip:** you can run any of these commands by asking Claude Code in your IDE — see [Quick start in README](../README.md#quick-start).
 
-This is the canonical reference for adding a Claude Code skill that wraps a YALC capability. Every new skill in `.claude/skills/` starts here.
+This is the canonical reference for adding a Claude Code skill that wraps a Crossnode GTM capability. Every new skill in `.claude/skills/` starts here.
 
 ---
 
 ## Overview — three skill systems, one of them is yours
 
-YALC ships three different things called "skills". They look similar, run on different runtimes, and live in different places. Only the first is in scope for this guide.
+Crossnode GTM ships three different things called "skills". They look similar, run on different runtimes, and live in different places. Only the first is in scope for this guide.
 
 | System | Location | Runtime | What it is |
 |---|---|---|---|
@@ -24,7 +24,7 @@ If you're adding a conversational entry point — keep reading. If you're adding
 
 Write a `.claude/skills/<slug>/SKILL.md` when:
 
-- A specific phrasing (or family of phrasings) should always route to a specific YALC flow. "Qualify these leads", "score these prospects", "run leads through the gates" → `qualify-leads`.
+- A specific phrasing (or family of phrasings) should always route to a specific Crossnode GTM flow. "Qualify these leads", "score these prospects", "run leads through the gates" → `qualify-leads`.
 - The user benefits from a guided conversation around the call (validating inputs, choosing between options, confirming destructive operations). The skill body is where that conversation lives.
 - The flow is high-frequency or high-value enough to justify the maintenance cost. Wrapping every CLI command would dilute trigger phrases and make the linter scream.
 
@@ -38,7 +38,7 @@ Write a `.claude/skills/<slug>/SKILL.md` when:
 
 ## Skill body patterns — Pattern A and Pattern B
 
-YALC uses a **hybrid runtime**: shell-out for SIDE-EFFECTING commands, import-direct for PURE commands. The benchmark numbers below justify the split.
+Crossnode GTM uses a **hybrid runtime**: shell-out for SIDE-EFFECTING commands, import-direct for PURE commands. The benchmark numbers below justify the split.
 
 ### Pattern A — SIDE-EFFECTING (shell-out)
 
@@ -95,12 +95,12 @@ Frontmatter: same shape as Pattern A.
 Body:
   1. Greeting (often no input is needed — these are read-only).
   2. Ask for inputs only if the function needs any.
-  3. Generate a tiny TS snippet at /tmp/yalc-skill-<slug>.mjs that:
+  3. Generate a tiny TS snippet at /tmp/crossnode-skill-<slug>.mjs that:
        - imports from the actual lib path (e.g.
          file:///abs/path/to/src/cli/commands/adapters-list.ts)
        - calls the function with the user's inputs
        - prints JSON to stdout
-  4. Bash(cd ~/Desktop/gtm-os && npx tsx /tmp/yalc-skill-<slug>.mjs)
+  4. Bash(cd ~/Desktop/gtm-os && npx tsx /tmp/crossnode-skill-<slug>.mjs)
   5. Parse + render.
   6. **Fall back to shell-out if the inline runner errors.** This gives
      import-direct the safety of shell-out without committing to it
@@ -128,7 +128,7 @@ Numbers from `node scripts/bench-skill-runtime.mjs` against `~/Desktop/gtm-os`. 
 **Read the table this way:**
 
 - **Single-command skills (A vs C).** Shell-out adds ~40ms over import-direct (764 vs 723ms median). That's a rounding error on a flow the user is already waiting for. **For single-command skills, shell out unconditionally — the engineering simplicity is worth more than 40ms.**
-- **Chained skills (B vs D).** Three shell-outs in series cost 2550ms vs one tsx with three imports at 1343ms — a **~47% reduction**. That's the win. The Tier 4 chained reads (e.g. an "everything I need to know about my YALC" composite read) get import-direct.
+- **Chained skills (B vs D).** Three shell-outs in series cost 2550ms vs one tsx with three imports at 1343ms — a **~47% reduction**. That's the win. The Tier 4 chained reads (e.g. an "everything I need to know about my Crossnode GTM" composite read) get import-direct.
 - **The Commander program loads a lot of stuff.** Scenario A's 764ms is mostly Node + tsx + the full `src/cli/index.ts` lazy-import graph (98 commands' wires + dotenv + diagnostics). Scenario C's 723ms is Node + tsx + only the lib chain `runAdaptersList` actually pulls. The 40ms gap underestimates the true Commander tax — under load (or on a colder machine), expect more.
 
 **Rule:**
@@ -196,9 +196,9 @@ In Pattern A bodies, this is one line: pipe stderr to the chat. In Pattern B bod
 |---|---|---|
 | CLI command | `area:command` (colons) | `leads:qualify` |
 | Skill folder | `verb-noun` (kebab) | `qualify-leads` |
-| yalc.ai page | matches skill folder | `yalc.ai/skills/qualify-leads/` |
+| crossnode.sh page | matches skill folder | `crossnode.sh/skills/qualify-leads/` |
 
-The CLI keeps colon-namespacing because Commander's `--help` groups commands by area prefix. The skill folder uses natural-language order because trigger phrases match natural language. The yalc.ai slug matches the skill folder so users can hop from a LinkedIn post to the skill landing page to the GitHub source without translating between formats.
+The CLI keeps colon-namespacing because Commander's `--help` groups commands by area prefix. The skill folder uses natural-language order because trigger phrases match natural language. The crossnode.sh slug matches the skill folder so users can hop from a LinkedIn post to the skill landing page to the GitHub source without translating between formats.
 
 The 16 wrappers in the 0.13.0 plan map this way:
 
@@ -227,19 +227,19 @@ Tier 4 is the only tier that gets Pattern B. Everything else is Pattern A.
 
 ## Onboarding interruption guard
 
-A user partway through `yalc-gtm start` (the Setup wizard) should not have a long-running skill kick off mid-Setup and fight for the same resources. The recommended check:
+A user partway through `crossnode-gtm start` (the Setup wizard) should not have a long-running skill kick off mid-Setup and fight for the same resources. The recommended check:
 
 ```
 Pre-flight (do this before any other step):
   Bash(test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK")
   If output is BLOCKED:
     Stop. Tell the user:
-      "It looks like Setup is mid-flight. Finish `yalc-gtm start` first,
+      "It looks like Setup is mid-flight. Finish `crossnode-gtm start` first,
        then re-invoke me."
     Exit cleanly.
 ```
 
-The `~/.gtm-os/.in-flight-setup` flag is the convention going forward. **As of 0.12.0 the Setup wizard does not yet write this flag** — adding the flag write is a future change to `bin/yalc-gtm.mjs` (or wherever the wizard lives). Skills should still include the check today; it's a no-op until the flag exists, and it lights up automatically when the wizard ships the write.
+The `~/.gtm-os/.in-flight-setup` flag is the convention going forward. **As of 0.12.0 the Setup wizard does not yet write this flag** — adding the flag write is a future change to `bin/crossnode-gtm.mjs` (or wherever the wizard lives). Skills should still include the check today; it's a no-op until the flag exists, and it lights up automatically when the wizard ships the write.
 
 If your skill is fast (Tier 4 read-only) and the user explicitly invokes it during Setup, you can soften this to a warning instead of a hard block. Anything Tier 1–3 should hard-block.
 
@@ -273,4 +273,4 @@ If every box is checked, your skill is ready for review.
 - Migrating the 8 pre-0.13.0 skills. Audit-only — see `CONTRIBUTING.md`.
 - `configs/skills/` framework runner steps. Different runtime, different review path.
 - `~/.gtm-os/skills/` wizard output. Created by `skills:create`, not authored by hand.
-- yalc.ai landing-page generation for the skill. That happens after the skill ships, via the `skill-launch-page` skill against the published `.claude/skills/` path.
+- crossnode.sh landing-page generation for the skill. That happens after the skill ships, via the `skill-launch-page` skill against the published `.claude/skills/` path.

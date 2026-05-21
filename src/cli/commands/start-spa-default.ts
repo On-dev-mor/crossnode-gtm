@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm start` (no flags) — SPA-as-default entry point (A1).
+ * `crossnode-gtm start` (no flags) — SPA-as-default entry point (A1).
  *
  * Routes the no-flag `start` invocation through a single inquirer prompt
  * that asks ONLY for the company website URL, then delegates to the
@@ -8,7 +8,7 @@
  * and opens /setup/review.
  *
  * The legacy 4-step terminal interview is reachable via
- * `yalc-gtm start --review-in-chat` (regression guard).
+ * `crossnode-gtm start --review-in-chat` (regression guard).
  *
  * This file owns ONLY the entry-point routing decision and the URL prompt
  * loop. It does NOT touch the internals of flag-capture or the SPA review
@@ -144,7 +144,7 @@ export async function runStartSpaDefault(
 
   if (!website) {
     console.error(
-      `  Aborted after ${maxAttempts} invalid attempts. Re-run \`yalc-gtm start\` when ready.`,
+      `  Aborted after ${maxAttempts} invalid attempts. Re-run \`crossnode-gtm start\` when ready.`,
     )
     return { exitCode: 1, website: null }
   }

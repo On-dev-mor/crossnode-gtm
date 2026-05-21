@@ -1,6 +1,6 @@
 ---
 name: provider-builder
-description: Use when a teammate wants to add a new vendor to YALC for an existing capability without shipping a release. Triggers include "add a new provider for X", "wire up [vendor] to YALC", "build an adapter for [vendor]", "I want to use [vendor] for [capability]", "add Apollo for icp-company-search", or any variant indicating they want to author a declarative YAML manifest under `~/.gtm-os/adapters/`. Converts a vendor name + capability id + docs URL into a registered, smoke-tested manifest in roughly five minutes.
+description: Use when a teammate wants to add a new vendor to Crossnode GTM for an existing capability without shipping a release. Triggers include "add a new provider for X", "wire up [vendor] to Crossnode GTM", "build an adapter for [vendor]", "I want to use [vendor] for [capability]", "add Apollo for icp-company-search", or any variant indicating they want to author a declarative YAML manifest under `~/.gtm-os/adapters/`. Converts a vendor name + capability id + docs URL into a registered, smoke-tested manifest in roughly five minutes.
 version: 1.0.0
 ---
 
@@ -23,7 +23,7 @@ Author a declarative adapter manifest from a vendor name, a capability id, and a
    ```bash
    test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
    ```
-   If `BLOCKED`, stop. Tell the user: "Setup is mid-flight. Finish `yalc-gtm start` first, then re-invoke me." Exit cleanly. This skill writes to the adapter registry from Step 5 onward, so it must not race the onboarding flow.
+   If `BLOCKED`, stop. Tell the user: "Setup is mid-flight. Finish `crossnode-gtm start` first, then re-invoke me." Exit cleanly. This skill writes to the adapter registry from Step 5 onward, so it must not race the onboarding flow.
 
 2. Confirm the trigger is in scope. If the user mentioned OAuth, an SDK, gRPC, or signed requests, jump to **Failure mode 2** and exit cleanly.
 3. Confirm `pnpm cli adapters:list` works in the cwd. If not, the package isn't built or the user is in the wrong directory — surface that and stop.
@@ -72,10 +72,10 @@ If the docs page is incomplete (no example response, no error envelope), ask the
 
 ### Step 3 — Draft manifest
 
-Write the YAML to `/tmp/yalc-builder/{capability}-{provider}.yaml`. Do **not** write directly to `~/.gtm-os/adapters/` — that comes after smoke green.
+Write the YAML to `/tmp/crossnode-builder/{capability}-{provider}.yaml`. Do **not** write directly to `~/.gtm-os/adapters/` — that comes after smoke green.
 
 ```bash
-mkdir -p /tmp/yalc-builder
+mkdir -p /tmp/crossnode-builder
 ```
 
 Start from `references/yaml-template.yaml`. Required fields:
@@ -132,7 +132,7 @@ Show the draft to the user before moving on.
 Ask the user for sample input that fits the capability's input schema and is realistic (a real company name, a real domain). Replace the YAML's `smoke_test.input` with that input. Then:
 
 ```bash
-pnpm cli adapters:smoke /tmp/yalc-builder/<capability>-<provider>.yaml
+pnpm cli adapters:smoke /tmp/crossnode-builder/<capability>-<provider>.yaml
 ```
 
 Exit code 0 = green: every `expectNonEmpty` path resolved to a non-empty value. Exit code 1 = red.
@@ -143,7 +143,7 @@ Exit code 0 = green: every `expectNonEmpty` path resolved to a non-empty value. 
 3. If the error is `ProviderApiError` with HTTP 4xx, the request body / query is wrong. Print the response, ask the user which field to revise, edit the manifest, re-run.
 4. If pass-checks read empty paths, `rootPath` or `mappings` are wrong. Re-run with `--json` (`pnpm cli adapters:smoke <path> --json`) to inspect the raw response, realign mappings, re-run.
 
-**Hard cap: 3 iterations.** After the third red, stop. Dump the last response + last manifest to `/tmp/yalc-builder/debug.json`. Tell the user the manifest is at `/tmp/yalc-builder/<file>.yaml`, the debug artifact is at `/tmp/yalc-builder/debug.json`, and that they should hand the artifact to a maintainer or use `references/troubleshooting.md`. Exit cleanly — never silently drop a half-broken manifest in the live adapters dir.
+**Hard cap: 3 iterations.** After the third red, stop. Dump the last response + last manifest to `/tmp/crossnode-builder/debug.json`. Tell the user the manifest is at `/tmp/crossnode-builder/<file>.yaml`, the debug artifact is at `/tmp/crossnode-builder/debug.json`, and that they should hand the artifact to a maintainer or use `references/troubleshooting.md`. Exit cleanly — never silently drop a half-broken manifest in the live adapters dir.
 
 ### Step 5 — Register
 
@@ -151,7 +151,7 @@ On smoke green:
 
 ```bash
 mkdir -p ~/.gtm-os/adapters
-mv /tmp/yalc-builder/<capability>-<provider>.yaml ~/.gtm-os/adapters/
+mv /tmp/crossnode-builder/<capability>-<provider>.yaml ~/.gtm-os/adapters/
 ```
 
 Then prompt the user: "Bump `<provider>` to the front of the priority list for `<capability>`?" If yes, edit `~/.gtm-os/config.yaml`:
@@ -183,7 +183,7 @@ Append a one-line entry to `~/.gtm-os/adapters/INSTALLED.md`:
 If the file does not exist, create it with a header:
 
 ```
-# YALC declarative adapters installed locally
+# Crossnode GTM declarative adapters installed locally
 # date — capability/provider — smoke status — docs URL
 ```
 
@@ -199,11 +199,11 @@ Detect in step 2. Exit cleanly with this message:
 
 > "[vendor] needs a TS adapter — out of scope for declarative v1. The declarative DSL only supports static auth (header / bearer / query) and one HTTP call per execute. A TS adapter stub goes at `src/lib/providers/adapters/<capability>-<provider>.ts`. See an existing adapter (e.g. `peopleEnrichFullenrichAdapter`) as a starting point."
 
-Do not draft a YAML. Do not write to `/tmp/yalc-builder/`.
+Do not draft a YAML. Do not write to `/tmp/crossnode-builder/`.
 
 ### 3. Smoke red after 3 iterations
 
-Stop. Write `/tmp/yalc-builder/debug.json` with the last manifest and the last response. Hand back to the user. See `references/troubleshooting.md` for the common causes.
+Stop. Write `/tmp/crossnode-builder/debug.json` with the last manifest and the last response. Hand back to the user. See `references/troubleshooting.md` for the common causes.
 
 ### 4. The capability id does not exist
 
@@ -224,7 +224,7 @@ This matches the user's standing rule on never displaying secrets in chat.
 
 - WebFetch — read vendor docs pages (preferred for static HTML docs).
 - `web-browsing` skill (Firecrawl) — for JS-heavy docs sites.
-- Bash — `pnpm cli adapters:list`, `pnpm cli adapters:smoke`, file ops under `/tmp/yalc-builder/` and `~/.gtm-os/adapters/`.
+- Bash — `pnpm cli adapters:list`, `pnpm cli adapters:smoke`, file ops under `/tmp/crossnode-builder/` and `~/.gtm-os/adapters/`.
 - Write / Edit — draft YAML and the INSTALLED.md log line.
 
 ## References

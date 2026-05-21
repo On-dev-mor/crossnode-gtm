@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
  * smoke.mjs — run a manifest's `smoke_test` block via the upstream
- * `yalc-gtm` CLI, which contributors should already have installed.
+ * `crossnode-gtm` CLI, which contributors should already have installed.
  *
  * Usage:
  *   node scripts/smoke.mjs manifests/icp-company-search/apollo.yaml
  *
  * This wrapper exists so contributors can paste a single command into
- * their PR description. It does NOT bundle yalc-gtm-os — that would
+ * their PR description. It does NOT bundle crossnode-gtm — that would
  * create a circular install (the community repo depending on the engine
  * it ships manifests for). Install separately:
  *
- *   pnpm add -g yalc-gtm-os
+ *   pnpm add -g crossnode-gtm
  *
  * Then set the relevant API key in `~/.gtm-os/.env` and rerun smoke.
  */
@@ -31,12 +31,12 @@ if (!existsSync(path)) {
   process.exit(1)
 }
 
-const child = spawn('pnpm', ['exec', 'yalc-gtm', 'adapters:smoke', path], {
+const child = spawn('pnpm', ['exec', 'crossnode-gtm', 'adapters:smoke', path], {
   stdio: 'inherit',
 })
 child.on('error', (err) => {
   console.error(
-    `Failed to invoke yalc-gtm. Install it with \`pnpm add -g yalc-gtm-os\` and try again.\n${err.message}`,
+    `Failed to invoke crossnode-gtm. Install it with \`pnpm add -g crossnode-gtm\` and try again.\n${err.message}`,
   )
   process.exit(1)
 })

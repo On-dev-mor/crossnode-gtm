@@ -82,14 +82,14 @@ export const ALL_TEMPLATE_KEYS: string[] = TEMPLATE_SECTIONS.flatMap((s) =>
 )
 
 const HEADER_BANNER = [
-  '# YALC GTM-OS — Provider API Keys',
+  '# Crossnode GTM — Provider API Keys',
   '#',
   '# Uncomment and fill in keys for the providers you want to use,',
-  '# then run: yalc-gtm doctor',
+  '# then run: crossnode-gtm doctor',
   '# to confirm they are picked up.',
   '#',
   '# This file lives at ~/.gtm-os/.env and is loaded automatically by every',
-  '# YALC command. Edit it in your editor — never paste API keys in chat.',
+  '# Crossnode GTM command. Edit it in your editor — never paste API keys in chat.',
 ].join('\n')
 
 const AUTO_BANNER = '# ── Auto-generated (do not modify) ──'
@@ -186,7 +186,7 @@ export function deltaMergeEnv(
   }
 
   const ts = (options.now ?? new Date()).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
-  const separator = `# ── Added by YALC 0.7.0 (${ts}) ──`
+  const separator = `# ── Added by Crossnode GTM 0.7.0 (${ts}) ──`
   const trailing = existing.endsWith('\n') ? existing : existing + '\n'
   const block = ['', separator, '', ...appended].join('\n')
 
@@ -309,6 +309,6 @@ export function envTemplateInstructions(envPath: string): string {
     `    code ${envPath}       # any platform with VS Code`,
     '',
     '  Uncomment + fill in keys for the providers you want to use.',
-    '  Then run `yalc-gtm doctor` to verify they are picked up.',
+    '  Then run `crossnode-gtm doctor` to verify they are picked up.',
   ].join('\n')
 }

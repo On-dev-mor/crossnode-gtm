@@ -35,7 +35,7 @@ export function Landing() {
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: 'var(--brand-gradient)' }}
             >
-              YALC
+              Crossnode GTM
             </span>
           </h1>
           <p className="text-base text-muted-foreground">

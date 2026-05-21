@@ -90,7 +90,7 @@ function resolveDefault(value: unknown): unknown {
     // eslint-disable-next-line no-console
     console.warn(
       `[framework] ICP ${path} not captured; falling back to generic defaults. ` +
-      `Edit ~/.gtm-os/company_context.yaml or re-run \`yalc-gtm start --regenerate icp\` to populate.`,
+      `Edit ~/.gtm-os/company_context.yaml or re-run \`crossnode-gtm start --regenerate icp\` to populate.`,
     )
     return CONTEXT_PATH_FALLBACKS[path]
   }
@@ -162,7 +162,7 @@ export async function runFrameworkRecommend(): Promise<void> {
         console.log(`  - ${i.framework}: ${i.detail}`)
       }
     }
-    console.log('\nRun `yalc-gtm framework:list` to see all bundled frameworks.\n')
+    console.log('\nRun `crossnode-gtm framework:list` to see all bundled frameworks.\n')
     return
   }
 
@@ -187,7 +187,7 @@ export async function runFrameworkRecommend(): Promise<void> {
     }
   }
 
-  console.log('\nInstall any of these with: yalc-gtm framework:install <name>\n')
+  console.log('\nInstall any of these with: crossnode-gtm framework:install <name>\n')
 }
 
 // ─── framework:install ─────────────────────────────────────────────────────
@@ -366,7 +366,7 @@ export async function runFrameworkInstall(name: string, opts: InstallOpts): Prom
   }
 
   if (loadInstalledConfig(name)) {
-    console.error(`Framework "${name}" already installed. Remove it first: yalc-gtm framework:remove ${name}`)
+    console.error(`Framework "${name}" already installed. Remove it first: crossnode-gtm framework:remove ${name}`)
     process.exit(1)
   }
 
@@ -414,14 +414,14 @@ export async function runFrameworkInstall(name: string, opts: InstallOpts): Prom
     console.log(`  Output:     Notion (parent: ${dest.notionParent})`)
   }
   if (isOnDemand) {
-    console.log(`  Schedule:   on-demand (run with: yalc-gtm framework:run ${framework.name})`)
+    console.log(`  Schedule:   on-demand (run with: crossnode-gtm framework:run ${framework.name})`)
   } else {
     console.log(`  Schedule:   ${framework.schedule.cron}${framework.schedule.timezone ? ` (${framework.schedule.timezone})` : ''}`)
   }
   if (visualization) {
     console.log(`  Visualize:  ${visualization.url} (${visualization.idiom})`)
   }
-  console.log(`  Logs:       yalc-gtm framework:logs ${framework.name}`)
+  console.log(`  Logs:       crossnode-gtm framework:logs ${framework.name}`)
   console.log()
 }
 
@@ -439,7 +439,7 @@ export async function runFrameworkRun(name: string, opts: RunOpts = {}): Promise
   }
   const cfg = loadInstalledConfig(name)
   if (!cfg) {
-    console.error(`Framework "${name}" is not installed. Install it first: yalc-gtm framework:install ${name}`)
+    console.error(`Framework "${name}" is not installed. Install it first: crossnode-gtm framework:install ${name}`)
     process.exit(1)
   }
   void framework
@@ -593,7 +593,7 @@ export async function runFrameworkDisable(name: string): Promise<void> {
     console.error(`Framework "${name}" not installed.`)
     process.exit(1)
   }
-  console.log(`Disabled ${name}. Config preserved. Re-enable with: yalc-gtm framework:install (will detect existing config) — or edit ~/.gtm-os/frameworks/installed/${name}.json directly.`)
+  console.log(`Disabled ${name}. Config preserved. Re-enable with: crossnode-gtm framework:install (will detect existing config) — or edit ~/.gtm-os/frameworks/installed/${name}.json directly.`)
 }
 
 // ─── framework:set-hypothesis ─────────────────────────────────────────────
@@ -642,7 +642,7 @@ export async function runFrameworkSetHypothesis(
   console.log(`  Message angle:       ${opts.messageAngle}`)
   console.log(`  Signal / trigger:    ${opts.signalTrigger}`)
   console.log(`  Expected reply rate: ${rate}`)
-  console.log(`  Run with:  yalc-gtm framework:run ${name}`)
+  console.log(`  Run with:  crossnode-gtm framework:run ${name}`)
 }
 
 // ─── framework:remove ──────────────────────────────────────────────────────

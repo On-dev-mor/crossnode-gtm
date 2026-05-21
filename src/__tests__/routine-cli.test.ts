@@ -19,7 +19,7 @@ let prevHome: string | undefined
 
 beforeEach(() => {
   prevHome = process.env.HOME
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-routine-cli-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-routine-cli-'))
   process.env.HOME = TMP
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
 })

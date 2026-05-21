@@ -9,6 +9,7 @@ const DEFAULTS: GTMOSConfig = {
   notion: {
     campaigns_ds: '',
     leads_ds: '',
+    prospects_ds: '',
     variants_ds: '',
     parent_page: '',
   },

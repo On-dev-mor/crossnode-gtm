@@ -47,7 +47,7 @@ interface ProviderKey {
 }
 
 const PROVIDER_KEYS: ProviderKey[] = [
-  { key: 'ANTHROPIC_API_KEY', label: 'Anthropic (Claude)', url: 'https://console.anthropic.com/settings/keys', tier: 1, capability: 'AI reasoning — powers planning, qualification, personalization', claudeCodeNote: 'Claude Code provides LLM reasoning. Skip unless you also run YALC standalone, via cron, or as a launchd job.' },
+  { key: 'ANTHROPIC_API_KEY', label: 'Anthropic (Claude)', url: 'https://console.anthropic.com/settings/keys', tier: 1, capability: 'AI reasoning — powers planning, qualification, personalization', claudeCodeNote: 'Claude Code provides LLM reasoning. Skip unless you also run Crossnode GTM standalone, via cron, or as a launchd job.' },
   { key: 'FIRECRAWL_API_KEY', label: 'Firecrawl', url: 'https://firecrawl.dev/app/api-keys', tier: 2, capability: 'Web scraping — auto-learn from your website', claudeCodeNote: 'Claude Code\'s WebFetch tool covers single-URL scrapes. Add Firecrawl later if you need JS-rendered pages, multi-page crawls, or web search.' },
   { key: 'CRUSTDATA_API_KEY', label: 'Crustdata', url: 'https://crustdata.com/dashboard/api', tier: 2, capability: 'Company & people search — find leads at scale' },
   { key: 'UNIPILE_API_KEY', label: 'Unipile (LinkedIn)', url: 'https://app.unipile.com/settings/api', signupUrl: SIGNUP_URLS.unipile, tier: 2, capability: 'LinkedIn outreach — connect, DM, scrape' },
@@ -58,7 +58,7 @@ const PROVIDER_KEYS: ProviderKey[] = [
 ]
 
 const DEFAULT_CONFIG = {
-  notion: { campaigns_ds: '', leads_ds: '', variants_ds: '', parent_page: '' },
+  notion: { campaigns_ds: '', leads_ds: '', prospects_ds: '', variants_ds: '', parent_page: '' },
   unipile: {
     daily_connect_limit: 30,
     sequence_timing: { connect_to_dm1_days: 2, dm1_to_dm2_days: 3 },
@@ -182,7 +182,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
 
   if (opts.commitPreview) {
     if (!previewExists(tenantCtx)) {
-      console.error('  No preview to commit. Run `yalc-gtm start --non-interactive` with capture flags first.')
+      console.error('  No preview to commit. Run `crossnode-gtm start --non-interactive` with capture flags first.')
       process.exitCode = 1
       return
     }
@@ -252,10 +252,10 @@ export async function runStart(opts: StartOptions): Promise<void> {
       `Uncommitted preview detected at ${previewRoot(tenantCtx)} (captured ${when}).`,
     )
     console.error('Resolve before running start again:')
-    console.error('  yalc-gtm start --commit-preview               # ship as-is')
-    console.error('  yalc-gtm start --regenerate <section>         # rerun synthesis on a section')
-    console.error('  yalc-gtm start --discard-preview              # delete the preview entirely')
-    console.error('  yalc-gtm start --force-overwrite-preview      # advance anyway (power-user override)')
+    console.error('  crossnode-gtm start --commit-preview               # ship as-is')
+    console.error('  crossnode-gtm start --regenerate <section>         # rerun synthesis on a section')
+    console.error('  crossnode-gtm start --discard-preview              # delete the preview entirely')
+    console.error('  crossnode-gtm start --force-overwrite-preview      # advance anyway (power-user override)')
     process.exitCode = 1
     return
   }
@@ -304,7 +304,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
 
     await applyMigrations()
     console.log(
-      '\nScaffold complete. Run `yalc-gtm start --non-interactive --website <url>` to capture context.',
+      '\nScaffold complete. Run `crossnode-gtm start --non-interactive --website <url>` to capture context.',
     )
     return
   }
@@ -316,7 +316,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
 
   console.log(`
   ╔══════════════════════════════════════╗
-  ║         YALC — Getting Started       ║
+  ║         Crossnode GTM — Getting Started       ║
   ╚══════════════════════════════════════╝
 `)
 
@@ -458,7 +458,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
   } else if (!inClaudeCode) {
     console.log('\n  ⚠ No ANTHROPIC_API_KEY set. LLM commands (orchestrate, leads:qualify,')
     console.log('    personalize, competitive-intel) will require one. Add it later to')
-    console.log('    .env.local and re-run `yalc-gtm setup` to validate.')
+    console.log('    .env.local and re-run `crossnode-gtm setup` to validate.')
   }
 
   // Write canonical env file at ~/.gtm-os/.env. First boot lays down the
@@ -616,7 +616,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
         '  ⚠ Capture took longer than expected. Synthesis may be slow due to model load —',
       )
       console.warn(
-        '    re-run with `yalc-gtm start --regenerate <section>` if any section is missing.',
+        '    re-run with `crossnode-gtm start --regenerate <section>` if any section is missing.',
       )
     }
     // Hand off to the SPA review surface (0.9.B). Three modes:
@@ -640,17 +640,17 @@ export async function runStart(opts: StartOptions): Promise<void> {
     // where opening a browser doesn't make sense (SSH, CI, no TTY).
     console.log('')
     console.log('  ──────────────────────────────────────────')
-    console.log(`    YALC setup ready: ${reviewUrl}`)
+    console.log(`    Crossnode GTM setup ready: ${reviewUrl}`)
     console.log('  ──────────────────────────────────────────')
     console.log('')
 
     // Auto-open is suppressed when the user opted out, when running over
-    // SSH, when YALC_NO_OPEN is set, or when stdout isn't a TTY (CI, pipes).
+    // SSH, when CROSSNODE_GTM_NO_OPEN is set, or when stdout isn't a TTY (CI, pipes).
     // The URL banner above stays in place either way.
     const skipAutoOpen =
       !!opts.noOpen ||
       !!process.env.SSH_CONNECTION ||
-      !!process.env.YALC_NO_OPEN ||
+      !!process.env.CROSSNODE_GTM_NO_OPEN ||
       !process.stdout.isTTY
 
     // 0.9.2: auto-spawn the dashboard server if the port isn't already in
@@ -680,7 +680,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
             console.error('')
             console.error(`  Port ${port} is already in use.`)
             console.error(`  Either stop the existing process (lsof -i :${port}) or run with a different port:`)
-            console.error(`    yalc-gtm start --port ${port + 1}`)
+            console.error(`    crossnode-gtm start --port ${port + 1}`)
             process.exitCode = 1
             return
           }
@@ -688,7 +688,7 @@ export async function runStart(opts: StartOptions): Promise<void> {
           console.log(
             `  Could not auto-spawn the review server. In another terminal run:`,
           )
-          console.log(`    yalc-gtm campaign:dashboard --port ${port}`)
+          console.log(`    crossnode-gtm campaign:dashboard --port ${port}`)
         }
       }
     }
@@ -714,14 +714,14 @@ export async function runStart(opts: StartOptions): Promise<void> {
         ? '--no-open'
         : process.env.SSH_CONNECTION
           ? 'SSH session detected'
-          : process.env.YALC_NO_OPEN
-            ? 'YALC_NO_OPEN set'
+          : process.env.CROSSNODE_GTM_NO_OPEN
+            ? 'CROSSNODE_GTM_NO_OPEN set'
             : 'non-TTY context'
       console.log(`  Auto-open skipped (${reason}). Open the URL above to review and commit.`)
     } else {
       console.log(`  Open ${reviewUrl} to review and commit.`)
     }
-    console.log('  CLI alternative: yalc-gtm start --commit-preview (or --review-in-chat).')
+    console.log('  CLI alternative: crossnode-gtm start --commit-preview (or --review-in-chat).')
     return
   }
 
@@ -757,8 +757,8 @@ export async function runStart(opts: StartOptions): Promise<void> {
     console.log('  ⊘ Skipped — framework derivation needs an Anthropic key.')
     console.log('    Your company context is saved. To finish setup later:')
     console.log('      1. Add ANTHROPIC_API_KEY to ~/.gtm-os/.env (or .env.local in your project)')
-    console.log('      2. Run: yalc-gtm onboard --linkedin <url> --website <url>')
-    console.log('      3. Run: yalc-gtm configure')
+    console.log('      2. Run: crossnode-gtm onboard --linkedin <url> --website <url>')
+    console.log('      3. Run: crossnode-gtm configure')
     console.log('\n── Step 4/4 — Goals & Configuration ──\n')
     console.log('  ⊘ Skipped (depends on the framework above).')
   } else {
@@ -921,7 +921,7 @@ async function pickOutboundProvider(deps: { select: SelectFn }): Promise<void> {
     message: 'Email provider',
     default: existingEmail,
     choices: [
-      { name: 'Instantly (built-in)', value: 'instantly', description: 'Default cold email engine bundled with YALC.' },
+      { name: 'Instantly (built-in)', value: 'instantly', description: 'Default cold email engine bundled with Crossnode GTM.' },
       { name: 'Brevo (via MCP)', value: 'brevo', description: 'Adds Brevo through an MCP server template.' },
       { name: 'Mailgun (via MCP)', value: 'mailgun', description: 'Adds Mailgun through an MCP server template.' },
       { name: 'SendGrid (via MCP)', value: 'sendgrid', description: 'Adds SendGrid through an MCP server template.' },
@@ -951,7 +951,7 @@ async function pickOutboundProvider(deps: { select: SelectFn }): Promise<void> {
     console.log('  ✓ Email provider set to instantly (built-in).')
   } else {
     console.log(`  ✓ Email provider set to ${emailChoice}.`)
-    console.log(`    Run: yalc-gtm provider:add --mcp ${emailChoice}`)
+    console.log(`    Run: crossnode-gtm provider:add --mcp ${emailChoice}`)
   }
 
   if (linkedinChoice === 'none') {
@@ -1039,7 +1039,7 @@ function printFileStructure(): void {
   console.log(`
   ── Where Things Live ──
 
-  YALC organizes your GTM data across two locations:
+  Crossnode GTM organizes your GTM data across two locations:
 
   ~/.gtm-os/                          Your GTM brain (persists across projects)
   ├── config.yaml                     Provider settings, Notion IDs, rate limits
@@ -1080,11 +1080,11 @@ function printReadinessReport(
 `)
 
   const capabilities: Array<{ check: boolean; label: string; command: string }> = [
-    { check: hasAnthropic, label: 'AI-powered GTM planning', command: 'yalc-gtm orchestrate "find companies matching my ICP"' },
-    { check: hasAnthropic && has('CRUSTDATA_API_KEY'), label: 'Lead qualification', command: 'yalc-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run' },
-    { check: has('UNIPILE_API_KEY'), label: 'LinkedIn campaigns', command: 'yalc-gtm campaign:create --title "First Campaign"' },
-    { check: has('NOTION_API_KEY'), label: 'Notion CRM sync', command: 'yalc-gtm notion:sync' },
-    { check: has('FIRECRAWL_API_KEY') || state.inClaudeCode, label: 'Web intelligence', command: 'yalc-gtm orchestrate "research competitors"' },
+    { check: hasAnthropic, label: 'AI-powered GTM planning', command: 'crossnode-gtm orchestrate "find companies matching my ICP"' },
+    { check: hasAnthropic && has('CRUSTDATA_API_KEY'), label: 'Lead qualification', command: 'crossnode-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run' },
+    { check: has('UNIPILE_API_KEY'), label: 'LinkedIn campaigns', command: 'crossnode-gtm campaign:create --title "First Campaign"' },
+    { check: has('NOTION_API_KEY'), label: 'Notion CRM sync', command: 'crossnode-gtm notion:sync' },
+    { check: has('FIRECRAWL_API_KEY') || state.inClaudeCode, label: 'Web intelligence', command: 'crossnode-gtm orchestrate "research competitors"' },
   ]
 
   for (const cap of capabilities) {
@@ -1110,13 +1110,13 @@ function printReadinessReport(
 
   let firstCommand: string
   if (!hasAnthropic && state.inClaudeCode) {
-    firstCommand = 'yalc-gtm provider:list'
+    firstCommand = 'crossnode-gtm provider:list'
   } else if (hasAnthropic && has('CRUSTDATA_API_KEY')) {
-    firstCommand = 'yalc-gtm research --question "what does <my-target-company> do" --target acme.com'
+    firstCommand = 'crossnode-gtm research --question "what does <my-target-company> do" --target acme.com'
   } else if (has('UNIPILE_API_KEY') && !linkedinOptedOut) {
-    firstCommand = 'yalc-gtm leads:scrape-post --url <linkedin-post-url>'
+    firstCommand = 'crossnode-gtm leads:scrape-post --url <linkedin-post-url>'
   } else {
-    firstCommand = 'yalc-gtm skills:browse --installed'
+    firstCommand = 'crossnode-gtm skills:browse --installed'
   }
   console.log(`  Try this first:
     ${firstCommand}
@@ -1125,8 +1125,8 @@ function printReadinessReport(
   if (!state.frameworkDerived) {
     console.log('  Pending: GTM framework not yet derived (needs ANTHROPIC_API_KEY).')
   }
-  console.log('  Run "yalc-gtm doctor" anytime to check your setup health.')
-  console.log('  Run "yalc-gtm start" again to reconfigure.\n')
+  console.log('  Run "crossnode-gtm doctor" anytime to check your setup health.')
+  console.log('  Run "crossnode-gtm start" again to reconfigure.\n')
 }
 
 /**
@@ -1192,7 +1192,7 @@ async function runRegenerateSection(args: {
   const { ALL_SECTION_IDS, writeSynthesizedPreview } = await import('./synthesis.js')
 
   if (!previewExists(tenant)) {
-    console.error('  No preview to regenerate. Run capture first: yalc-gtm start --non-interactive --website ...')
+    console.error('  No preview to regenerate. Run capture first: crossnode-gtm start --non-interactive --website ...')
     process.exitCode = 1
     return
   }
@@ -1272,7 +1272,7 @@ async function runRegenerateLowConfidence(args: {
 
   if (!previewExists(tenant)) {
     console.error(
-      '  No preview to scan. Run capture first: yalc-gtm start --non-interactive --website ...',
+      '  No preview to scan. Run capture first: crossnode-gtm start --non-interactive --website ...',
     )
     process.exitCode = 1
     return
@@ -1345,7 +1345,7 @@ export async function writeReviewCommittedSentinel(tenant: {
  *
  * The full per-section walk lives in the synthesis prompts; here we just
  * emit one summary line per section then immediately commit. Callers who
- * want fine-grained control should run `yalc-gtm start --regenerate
+ * want fine-grained control should run `crossnode-gtm start --regenerate
  * <section>` and `--commit-preview --discard <section>` directly.
  */
 async function runChatReviewWalk(args: { tenantId: string }): Promise<void> {
@@ -1406,7 +1406,7 @@ async function isPortListening(port: number, host = '127.0.0.1'): Promise<boolea
  * 0.9.2: spawn the dashboard server as a detached child process so it
  * survives this CLI's exit. Uses the same node binary + the same CLI
  * entry point we're already running, so it works inside sandboxed installs
- * where `yalc-gtm` may not be on the PATH of the spawned shell.
+ * where `crossnode-gtm` may not be on the PATH of the spawned shell.
  *
  * Returns the spawned PID on success, or null on failure.
  */

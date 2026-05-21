@@ -43,7 +43,7 @@ describe('track-campaigns skill', () => {
       'launch a LinkedIn campaign',
       'send a cold email',
       'list adapters',
-      'set up YALC',
+      'set up Crossnode GTM',
       'campaign status',
       'show me campaigns',
     ]

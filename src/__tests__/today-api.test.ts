@@ -42,7 +42,7 @@ function seedAwaitingGate(framework: string, payload: Record<string, unknown>) {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-today-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-today-api-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

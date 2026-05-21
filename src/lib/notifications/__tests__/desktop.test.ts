@@ -23,7 +23,7 @@ describe('notifications desktop sender', () => {
 
   it('shells out to osascript on darwin', async () => {
     await sendDesktopNotification({
-      title: 'YALC',
+      title: 'Crossnode GTM',
       body: 'Approve the proposed sequence?',
       platform: 'darwin',
       exec: execMock,
@@ -33,13 +33,13 @@ describe('notifications desktop sender', () => {
     expect(bin).toBe('osascript')
     // The script should reference both title and body strings.
     const joined = (args as string[]).join(' ')
-    expect(joined).toContain('YALC')
+    expect(joined).toContain('Crossnode GTM')
     expect(joined).toContain('Approve the proposed sequence?')
   })
 
   it('escapes embedded double-quotes safely', async () => {
     await sendDesktopNotification({
-      title: 'YALC',
+      title: 'Crossnode GTM',
       body: 'He said "hi"',
       platform: 'darwin',
       exec: execMock,
@@ -57,13 +57,13 @@ describe('notifications desktop sender', () => {
   it('is a no-op on non-darwin and warns once', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     await sendDesktopNotification({
-      title: 'YALC',
+      title: 'Crossnode GTM',
       body: 'x',
       platform: 'linux',
       exec: execMock,
     })
     await sendDesktopNotification({
-      title: 'YALC',
+      title: 'Crossnode GTM',
       body: 'y',
       platform: 'linux',
       exec: execMock,

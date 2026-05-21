@@ -2,22 +2,22 @@
 
 > **Tip:** you can run any of these commands by asking Claude Code in your IDE — see [Quick start in README](../README.md#quick-start).
 
-## Claude Code MCP vs YALC MCP — at a glance
+## Claude Code MCP vs Crossnode GTM MCP — at a glance
 
-YALC and Claude Code both have a thing called "MCP". They are different
+Crossnode GTM and Claude Code both have a thing called "MCP". They are different
 registries, live in different files, and serve different processes. Read this
 table before adding or editing any config.
 
-| Aspect | Claude Code MCP | YALC MCP |
+| Aspect | Claude Code MCP | Crossnode GTM MCP |
 |---|---|---|
-| Used by | Claude Code itself, when you chat in the IDE | YALC's CLI providers — `provider:list`, `provider:add`, doctor |
+| Used by | Claude Code itself, when you chat in the IDE | Crossnode GTM's CLI providers — `provider:list`, `provider:add`, doctor |
 | Config location | `.mcp.json` (project) or `~/.claude.json` (user) | `~/.gtm-os/mcp/<name>.json` (one file per provider) |
 | Loader | Claude Code reads at startup of each chat | `getMcpConfigDir()` in `src/lib/providers/mcp-loader.ts` |
-| Schema | Claude Code's MCP server descriptor | YALC provider config (capabilities, healthCheck, env) |
-| Edited by | `claude mcp add ...` or hand-editing | `yalc-gtm provider:add --mcp <name>` |
+| Schema | Claude Code's MCP server descriptor | Crossnode GTM provider config (capabilities, healthCheck, env) |
+| Edited by | `claude mcp add ...` or hand-editing | `crossnode-gtm provider:add --mcp <name>` |
 
-Rule of thumb: **never** point `provider:add` or any YALC tool at a
-`.mcp.json` / `~/.claude.json` path. YALC will refuse and redirect to
+Rule of thumb: **never** point `provider:add` or any Crossnode GTM tool at a
+`.mcp.json` / `~/.claude.json` path. Crossnode GTM will refuse and redirect to
 `~/.gtm-os/mcp/`.
 
 ## What is MCP?
@@ -74,10 +74,10 @@ cat > /tmp/pipedrive.json <<'EOF'
 EOF
 
 # 2. Register it
-yalc-gtm provider:add --mcp /tmp/pipedrive.json
+crossnode-gtm provider:add --mcp /tmp/pipedrive.json
 
 # 3. Verify
-yalc-gtm provider:test pipedrive
+crossnode-gtm provider:test pipedrive
 ```
 
 The config is copied to `~/.gtm-os/mcp/<name>.json` (the `name` field decides the filename, not the input path). Pass `--force` to overwrite an existing provider of the same name. The `${ENV_VAR}` syntax inside any string field is expanded at load time from your shell environment / `.env`.

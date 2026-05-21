@@ -108,7 +108,7 @@ Summary: 18 passed, 2 failed, 2 warnings, 6 skipped.
 
 Want me to walk you through fixing the 2 failures?
   1. Open http://localhost:3847/keys/connect/unipile to add your DSN.
-     I'll run: yalc-gtm dashboard --route /keys/connect/unipile
+     I'll run: crossnode-gtm dashboard --route /keys/connect/unipile
   2. Open http://localhost:3847/keys/connect/crustdata to refresh your key.
-     I'll run: yalc-gtm dashboard --route /keys/connect/crustdata
+     I'll run: crossnode-gtm dashboard --route /keys/connect/crustdata
 ```

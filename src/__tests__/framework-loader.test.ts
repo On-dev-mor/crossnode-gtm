@@ -161,7 +161,7 @@ describe('loadAllFrameworks', () => {
   })
 
   it('user-frameworks dir overrides bundled when names collide', () => {
-    const userBase = join(tmpdir(), `yalc-test-fw-${Date.now()}`)
+    const userBase = join(tmpdir(), `crossnode-test-fw-${Date.now()}`)
     const userDir = join(userBase, '.gtm-os', 'frameworks')
     mkdirSync(userDir, { recursive: true })
     const overrideYaml = `

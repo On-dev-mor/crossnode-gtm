@@ -22,7 +22,7 @@ let prevHome: string | undefined
 
 beforeEach(() => {
   prevHome = process.env.HOME
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-a3-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-a3-'))
   process.env.HOME = TMP
   delete process.env.UNIPILE_API_KEY
   delete process.env.UNIPILE_DSN
@@ -86,7 +86,7 @@ describe('A3 — setup.md Step 10 outbound-hypothesis prompt', () => {
     // Mentions both UNIPILE_API_KEY and INSTANTLY_API_KEY as gating conditions
     expect(step10).toMatch(/UNIPILE_API_KEY/)
     expect(step10).toMatch(/INSTANTLY_API_KEY/)
-    // Has a skip path that mentions yalc-gtm keys:connect
+    // Has a skip path that mentions crossnode-gtm keys:connect
     expect(step10).toMatch(/keys:connect/)
   })
 

@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm adapters:smoke <path>` — run the declarative manifest's
+ * `crossnode-gtm adapters:smoke <path>` — run the declarative manifest's
  * `smoke_test` block against the live vendor and report pass/fail.
  *
  * Used by:
@@ -27,7 +27,7 @@ export async function runAdaptersSmoke(
   opts: AdaptersSmokeOptions = {},
 ): Promise<AdaptersSmokeResult> {
   if (!path) {
-    return { exitCode: 1, output: 'Usage: yalc-gtm adapters:smoke <path>' }
+    return { exitCode: 1, output: 'Usage: crossnode-gtm adapters:smoke <path>' }
   }
   const result = await runSmoke(path)
   const output = opts.json ? JSON.stringify(result, null, 2) : formatSmokeResult(result)

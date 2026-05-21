@@ -1,5 +1,5 @@
 /**
- * Tests for the bundled declarative adapters that ship with YALC.
+ * Tests for the bundled declarative adapters that ship with Crossnode GTM.
  *
  * Covers (per task B4):
  *   1. Each manifest under `configs/adapters/` parses through `compileManifest`.
@@ -149,8 +149,8 @@ describe('bundled declarative manifests — invoke against recorded fixtures', (
     const fixture = loadFixture('brevo', 'campaign-created') as RecordedHttp
     const compiled = compileManifest(raw, 'b.yaml', { fetchImpl: makeFetchShim(fixture) })
     const out = (await compiled.invoke({
-      campaignName: 'YALC smoke',
-      sender: { name: 'YALC', email: 'noreply@yalc.test' },
+      campaignName: 'Crossnode GTM smoke',
+      sender: { name: 'Crossnode GTM', email: 'noreply@crossnode.test' },
       subject: 'hello',
       htmlContent: '<p>hi</p>',
       listIds: [1],
@@ -164,11 +164,11 @@ describe('bundled declarative manifests — invoke against recorded fixtures', (
     const fixture = loadFixture('vercel', 'deploy-success') as RecordedHttp
     const compiled = compileManifest(raw, 'v.yaml', { fetchImpl: makeFetchShim(fixture) })
     const out = (await compiled.invoke({
-      html: '<!doctype html><h1>yalc-smoke</h1>',
-      slug: 'yalc-smoke',
+      html: '<!doctype html><h1>crossnode-smoke</h1>',
+      slug: 'crossnode-smoke',
     })) as { deployed: boolean; url: string; deploymentId: string }
     expect(out.deployed).toBe(true)
-    expect(out.url).toBe('https://yalc-smoke-abc123.vercel.app')
+    expect(out.url).toBe('https://crossnode-smoke-abc123.vercel.app')
     expect(out.deploymentId).toBe('dpl_abc123xyz')
   })
 
@@ -177,12 +177,12 @@ describe('bundled declarative manifests — invoke against recorded fixtures', (
     const fixture = loadFixture('vercel', 'deploy-queued') as RecordedHttp
     const compiled = compileManifest(raw, 'v.yaml', { fetchImpl: makeFetchShim(fixture) })
     const out = (await compiled.invoke({
-      html: '<!doctype html><h1>yalc-smoke</h1>',
-      slug: 'yalc-smoke',
+      html: '<!doctype html><h1>crossnode-smoke</h1>',
+      slug: 'crossnode-smoke',
     })) as { deployed: boolean; url: string; deploymentId: string }
     expect(out.deployed).toBe(false)
     // URL still exposed so the caller can poll/preview the pending deployment.
-    expect(out.url).toBe('https://yalc-smoke-queued42.vercel.app')
+    expect(out.url).toBe('https://crossnode-smoke-queued42.vercel.app')
     expect(out.deploymentId).toBe('dpl_queued42')
   })
 

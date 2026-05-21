@@ -90,7 +90,7 @@ describe('0.9.F LLM-assisted skills:create', () => {
     const { tmpdir } = await import('node:os')
     const { mkdirSync, writeFileSync, rmSync } = await import('node:fs')
     const { join } = await import('node:path')
-    const dir = join(tmpdir(), `yalc-llm-draft-${Date.now()}`)
+    const dir = join(tmpdir(), `crossnode-llm-draft-${Date.now()}`)
     mkdirSync(dir, { recursive: true })
     const filePath = join(dir, 'research-x.md')
     writeFileSync(filePath, md)

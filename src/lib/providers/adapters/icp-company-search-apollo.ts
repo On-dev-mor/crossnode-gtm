@@ -21,7 +21,7 @@ export const icpCompanySearchApolloAdapter: CapabilityAdapter = {
   providerId: 'apollo',
   async execute(input, ctx: AdapterContext) {
     if (!ctx.executor) {
-      throw new ProviderApiError('apollo', 'Apollo provider not registered. Install with: yalc-gtm provider:add --mcp apollo')
+      throw new ProviderApiError('apollo', 'Apollo provider not registered. Install with: crossnode-gtm provider:add --mcp apollo')
     }
     const filters = (input ?? {}) as IcpCompanySearchInput
     const step = {

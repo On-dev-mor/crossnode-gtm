@@ -79,8 +79,8 @@ describe('launch-linkedin-campaign skill', () => {
 
   it('description trigger phrases do not collide with sibling skills', () => {
     const FORBIDDEN = [
-      'is YALC working',
-      'set up YALC',
+      'is Crossnode GTM working',
+      'set up Crossnode GTM',
       'list adapters',
       'qualify these leads',
       'add a new provider',

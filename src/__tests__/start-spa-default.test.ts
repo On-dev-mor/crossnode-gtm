@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm start` (no flags) — SPA-as-default routing (A1).
+ * Tests for `crossnode-gtm start` (no flags) — SPA-as-default routing (A1).
  *
  * Today: `start` (no flags) falls through to a 4-step terminal interview.
  * After A1: `start` (no flags) prompts ONLY for the company website URL,

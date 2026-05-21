@@ -43,7 +43,7 @@ function seedMinimalPreview() {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-cli-open-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-cli-open-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

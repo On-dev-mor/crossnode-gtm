@@ -1,6 +1,9 @@
 export interface NotionConfig {
   campaigns_ds: string
+  /** Raw scraped leads (Skool, engagers, CSV) — no lifecycle. */
   leads_ds: string
+  /** Qualified prospects + outreach lifecycle (sync, campaigns). */
+  prospects_ds: string
   variants_ds: string
   parent_page: string
 }
@@ -12,6 +15,8 @@ export interface UnipileConfig {
     dm1_to_dm2_days: number
   }
   rate_limit_ms: number
+  /** Unipile account id for Gmail/Outlook/IMAP outreach (distinct from LinkedIn). */
+  email_account_id?: string
 }
 
 export interface LinkedInConfig {
@@ -22,6 +27,10 @@ export interface LinkedInConfig {
 export interface EmailConfig {
   /** Provider id resolved against the registry for any `email_send` step. */
   provider: string
+  /** Shown in the recipient's inbox (Unipile `from.display_name`). */
+  from_display_name?: string
+  /** Mailbox address for `from.identifier`; defaults to the connected account email. */
+  from_identifier?: string
 }
 
 export interface QualificationConfig {

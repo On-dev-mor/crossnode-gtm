@@ -2,7 +2,7 @@
  * GTM-OS Doctor
  *
  * Proactive health check that runs through all 5 diagnostic layers.
- * Like `brew doctor` — users run `yalc-gtm doctor` to validate their setup
+ * Like `brew doctor` — users run `crossnode-gtm doctor` to validate their setup
  * before anything breaks.
  *
  * Optionally generates a diagnostic report file for bug reports.
@@ -340,7 +340,7 @@ function checkDatabase(): LayerResult {
     checks.push({
       name: 'Database file',
       status: 'fail',
-      detail: `Not found at ${dbPath}. Run: yalc-gtm start to initialize.`,
+      detail: `Not found at ${dbPath}. Run: crossnode-gtm start to initialize.`,
     })
     return { layer: 'Database', checks }
   }
@@ -363,13 +363,13 @@ function checkDatabase(): LayerResult {
     checks.push({
       name: 'Core tables',
       status: 'fail',
-      detail: `All core tables missing. Run: yalc-gtm start to initialize.`,
+      detail: `All core tables missing. Run: crossnode-gtm start to initialize.`,
     })
   } else {
     checks.push({
       name: `Core tables (${coreTables.length - missingTables.length}/${coreTables.length})`,
       status: 'fail',
-      detail: `Missing: ${missingTables.join(', ')}. Run: yalc-gtm start to initialize.`,
+      detail: `Missing: ${missingTables.join(', ')}. Run: crossnode-gtm start to initialize.`,
     })
   }
 
@@ -413,13 +413,13 @@ function checkConfiguration(): LayerResult {
       checks.push({
         name: frameworkLabel,
         status: 'skip',
-        detail: 'Optional inside Claude Code. Run `yalc-gtm onboard` once you add ANTHROPIC_API_KEY to derive a framework.',
+        detail: 'Optional inside Claude Code. Run `crossnode-gtm onboard` once you add ANTHROPIC_API_KEY to derive a framework.',
       })
     } else {
       checks.push({
         name: frameworkLabel,
         status: 'fail',
-        detail: 'Missing. Run: yalc-gtm onboard',
+        detail: 'Missing. Run: crossnode-gtm onboard',
       })
     }
   } else {
@@ -440,7 +440,7 @@ function checkConfiguration(): LayerResult {
         checks.push({
           name: frameworkLabel,
           status: 'warn',
-          detail: 'File exists but onboarding_complete is false. Run: yalc-gtm onboard',
+          detail: 'File exists but onboarding_complete is false. Run: crossnode-gtm onboard',
         })
       }
     } catch (e) {
@@ -458,7 +458,7 @@ function checkConfiguration(): LayerResult {
     checks.push({
       name: 'User config (~/.gtm-os/config.yaml)',
       status: 'warn',
-      detail: 'Missing. Run: yalc-gtm setup — to create with defaults.',
+      detail: 'Missing. Run: crossnode-gtm setup — to create with defaults.',
     })
   } else {
     try {
@@ -494,7 +494,7 @@ function checkConfiguration(): LayerResult {
 
   // 0.6.0: company_context.yaml is first-class. Pre-0.6.0 installs have a
   // framework.yaml without a paired company_context.yaml — flag it so the
-  // user knows to run `yalc-gtm migrate`.
+  // user knows to run `crossnode-gtm migrate`.
   const companyContextPath = join(GTM_OS_DIR, 'company_context.yaml')
   const hasFramework = existsSync(frameworkPath)
   const hasCompanyContext = existsSync(companyContextPath)
@@ -502,7 +502,7 @@ function checkConfiguration(): LayerResult {
     checks.push({
       name: 'Company context (~/.gtm-os/company_context.yaml)',
       status: 'warn',
-      detail: 'Pre-0.6.0 install detected. Run yalc-gtm migrate to extract company context to its own file.',
+      detail: 'Pre-0.6.0 install detected. Run crossnode-gtm migrate to extract company context to its own file.',
     })
   } else if (hasCompanyContext) {
     checks.push({
@@ -523,7 +523,7 @@ function checkConfiguration(): LayerResult {
           status: 'warn',
           detail:
             'Not captured. weekly-engagement-harvest needs this to know which Unipile account to scrape. ' +
-            'Run `yalc-gtm provider:add unipile` or set it manually under sources: in company_context.yaml.',
+            'Run `crossnode-gtm provider:add unipile` or set it manually under sources: in company_context.yaml.',
         })
       } else {
         checks.push({ name: 'sources.linkedin_account_id', status: 'pass', detail: '' })
@@ -541,7 +541,7 @@ function checkConfiguration(): LayerResult {
 // When a provider check FAILs because the API key is missing/invalid, doctor
 // prints a clickable URL pointing at the SPA's `/keys/connect/<provider>`
 // route so the user has an actionable next step. Doctor itself does NOT
-// boot the server — it just prints the URL. The user runs `yalc-gtm
+// boot the server — it just prints the URL. The user runs `crossnode-gtm
 // dashboard` (A2) separately when they want to click through.
 
 const KEYS_CONNECT_BASE_URL = 'http://localhost:3847/keys/connect'
@@ -580,6 +580,7 @@ async function checkProviders(): Promise<LayerResult> {
   const linkedinProvider = (userConfig.linkedin as Record<string, unknown> | undefined)?.provider
   const emailDisabled = isProviderDisabled(emailProvider)
   const linkedinDisabled = isProviderDisabled(linkedinProvider)
+  const emailUsesUnipile = String(emailProvider ?? '').trim().toLowerCase() === 'unipile'
 
   // Provider self-describing health checks (0.7.0). Walk the registry and
   // call `selfHealthCheck()` for any builtin that exposes it. Builtins that
@@ -597,8 +598,12 @@ async function checkProviders(): Promise<LayerResult> {
       { id: 'instantly', label: 'Instantly', gate: 'email' },
     ]
     for (const entry of ordered) {
-      if (entry.gate === 'email' && emailDisabled) {
-        checks.push({ name: entry.label, status: 'skip', detail: 'Opted out via config' })
+      if (entry.gate === 'email' && (emailDisabled || (entry.id === 'instantly' && emailUsesUnipile))) {
+        checks.push({
+          name: entry.label,
+          status: 'skip',
+          detail: emailUsesUnipile && entry.id === 'instantly' ? 'Using Unipile for email' : 'Opted out via config',
+        })
         selfHealthDone.add(entry.id)
         continue
       }
@@ -779,6 +784,8 @@ async function checkProviders(): Promise<LayerResult> {
     // already reported
   } else if (emailDisabled) {
     checks.push({ name: 'Instantly', status: 'skip', detail: 'Opted out via config' })
+  } else if (emailUsesUnipile) {
+    checks.push({ name: 'Instantly', status: 'skip', detail: 'Using Unipile for email' })
   } else if (process.env.INSTANTLY_API_KEY) {
     try {
       // Pass the API key as a Bearer header instead of a URL query string so
@@ -976,7 +983,7 @@ function retiredFrameworksLayer(): LayerResult | null {
         status: 'warn',
         detail:
           `Replaced by '${r.replacement}'. Install the archetype with ` +
-          `\`yalc-gtm framework:install ${r.replacement}\` and remove the legacy ` +
+          `\`crossnode-gtm framework:install ${r.replacement}\` and remove the legacy ` +
           `agent yaml under ~/.gtm-os/agents/${r.name}.yaml when ready.`,
       })
     }

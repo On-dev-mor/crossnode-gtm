@@ -40,7 +40,7 @@ describe('run-competitive-intel skill', () => {
   })
 
   it('triggers do not collide with siblings', () => {
-    const FORBIDDEN = ['list adapters', 'set up YALC', 'research this prospect', 'find lookalikes']
+    const FORBIDDEN = ['list adapters', 'set up Crossnode GTM', 'research this prospect', 'find lookalikes']
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {
         expect(p.toLowerCase().includes(f.toLowerCase())).toBe(false)

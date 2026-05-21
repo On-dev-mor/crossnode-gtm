@@ -106,7 +106,7 @@ describe('framework:resume (HOME-isolated)', () => {
   beforeEach(() => {
     prevHome = process.env.HOME
     prevCwd = process.cwd()
-    tempHome = join(tmpdir(), `yalc-resume-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-resume-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     frameworkName = `resume-test-${Date.now()}-${Math.floor(Math.random() * 1e6)}`

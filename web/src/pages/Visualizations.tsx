@@ -107,7 +107,7 @@ export function Visualizations() {
           <h1 className="font-heading text-3xl font-bold tracking-tight">Saved views</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Tailored interactive pages generated from your local data. Re-run
-            <code className="font-mono mx-1">yalc-gtm visualize &lt;view_id&gt;</code>
+            <code className="font-mono mx-1">crossnode-gtm visualize &lt;view_id&gt;</code>
             to refresh any view.
           </p>
         </header>
@@ -117,7 +117,7 @@ export function Visualizations() {
         {items.length === 0 && !loadError && (
           <p className="text-sm" data-testid="visualizations-empty">
             No visualizations saved yet. Try{' '}
-            <code className="font-mono">yalc-gtm visualize &lt;view_id&gt; --data &lt;glob&gt; --intent "..."</code>
+            <code className="font-mono">crossnode-gtm visualize &lt;view_id&gt; --data &lt;glob&gt; --intent "..."</code>
             .
           </p>
         )}
@@ -170,7 +170,7 @@ export function Visualizations() {
                   </CardHeader>
                   <CardContent>
                     <code className="block font-mono text-xs text-muted-foreground">
-                      yalc-gtm visualize {f.view_id} --data
+                      crossnode-gtm visualize {f.view_id} --data
                       "~/.gtm-os/agents/{f.framework}.runs/*.json" --intent
                       "{f.intent}" --open
                     </code>

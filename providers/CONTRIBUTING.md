@@ -1,6 +1,6 @@
 # Contributing community providers
 
-Thanks for considering a contribution. The `providers/` tree inside the YALC repo is curated lightly: we want a single canonical manifest per `(capability, provider)` pair on `main`, and we want every merged manifest to actually work against the live vendor.
+Thanks for considering a contribution. The `providers/` tree inside the Crossnode GTM repo is curated lightly: we want a single canonical manifest per `(capability, provider)` pair on `main`, and we want every merged manifest to actually work against the live vendor.
 
 ## What can I contribute
 
@@ -14,7 +14,7 @@ If a manifest already exists on `main` for the same `(capability, provider)` and
 
 The manifest spec is the source of truth in the engine repo:
 
-- Spec: [`docs/superpowers/specs/2026-05-01-declarative-adapters-design.md`](https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system/blob/main/docs/superpowers/specs/2026-05-01-declarative-adapters-design.md)
+- Spec: [`docs/superpowers/specs/2026-05-01-declarative-adapters-design.md`](https://github.com/Othmane-Khadri/crossnode-gtm/blob/main/docs/superpowers/specs/2026-05-01-declarative-adapters-design.md)
 - Schema (canonical, used by both runtime and validator): [`src/lib/providers/declarative/schema.json`](../src/lib/providers/declarative/schema.json)
 
 A manifest is a single YAML file that declares:
@@ -31,15 +31,15 @@ Don't inline secrets. All credentials reference env vars via `${env:NAME}`.
 
 ## Local workflow
 
-You need Node 20+ and pnpm. From the YALC repo root:
+You need Node 20+ and pnpm. From the Crossnode GTM repo root:
 
 ```bash
-pnpm install                                                # installs ajv + yaml (already deps of YALC)
+pnpm install                                                # installs ajv + yaml (already deps of Crossnode GTM)
 node providers/scripts/validate.mjs                         # schema-validate every manifest
 node providers/scripts/smoke.mjs providers/manifests/<cap>/<prov>.yaml
 ```
 
-`smoke.mjs` shells out to `yalc-gtm adapters:smoke <path>`. The CLI is the binary published as `yalc-gtm-os` on npm; if you cloned the repo, `pnpm cli adapters:smoke <path>` works too.
+`smoke.mjs` shells out to `crossnode-gtm adapters:smoke <path>`. The CLI is the binary published as `crossnode-gtm` on npm; if you cloned the repo, `pnpm cli adapters:smoke <path>` works too.
 
 Set the relevant API key in `~/.gtm-os/.env` before running smoke.
 

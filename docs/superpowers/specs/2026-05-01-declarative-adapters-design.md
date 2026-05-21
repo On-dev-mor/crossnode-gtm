@@ -2,12 +2,12 @@
 
 **Status:** Design spec — v1 proposal
 **Date:** 2026-05-01
-**Owner:** YALC GTM-OS core
+**Owner:** Crossnode GTM core
 **Branch:** `wt/b1-spec`
 
 ## Context
 
-YALC ships 21 capability adapters as TypeScript files under `src/lib/providers/adapters/`. Each implements `CapabilityAdapter` (see `src/lib/providers/capabilities.ts`) and is wired into `registerBuiltinCapabilities()`. Adding a new provider — even a thin REST wrapper like Apollo — requires editing the package and shipping a release.
+Crossnode GTM ships 21 capability adapters as TypeScript files under `src/lib/providers/adapters/`. Each implements `CapabilityAdapter` (see `src/lib/providers/capabilities.ts`) and is wired into `registerBuiltinCapabilities()`. Adding a new provider — even a thin REST wrapper like Apollo — requires editing the package and shipping a release.
 
 This spec proposes a declarative path: a YAML DSL under `~/.gtm-os/adapters/`, a runtime compiler that turns each manifest into a fetch call, and a Claude Code skill (`provider-builder`) that lets a user add a new provider in a 5-minute conversation. Built-in TS adapters keep working unchanged; declarative adapters layer onto the same `CapabilityRegistry`.
 
@@ -149,8 +149,8 @@ response:
     messagePath: $.error.message
 smoke_test:
   input:
-    html: "<!doctype html><h1>yalc-smoke</h1>"
-    slug: "yalc-smoke"
+    html: "<!doctype html><h1>crossnode-smoke</h1>"
+    slug: "crossnode-smoke"
   expectNonEmpty: [url]
 ```
 
@@ -209,7 +209,7 @@ capabilities:
     priority: [apollo, crustdata]
 ```
 
-When the same `(capabilityId, providerId)` exists as both a built-in TS adapter and a declarative manifest, the declarative manifest **overrides** the built-in (last write to `bucket.set()` wins). This makes hot-patching a broken TS adapter possible without shipping a YALC release: drop a manifest with the same provider id and it takes over. A startup log line announces the override so users see it.
+When the same `(capabilityId, providerId)` exists as both a built-in TS adapter and a declarative manifest, the declarative manifest **overrides** the built-in (last write to `bucket.set()` wins). This makes hot-patching a broken TS adapter possible without shipping a Crossnode GTM release: drop a manifest with the same provider id and it takes over. A startup log line announces the override so users see it.
 
 **isAvailable.** A declarative adapter is "available" iff every env var referenced in `auth.value` is present in the process env. No registry executor lookup is needed (declarative adapters bypass the provider registry — they are self-contained).
 
@@ -217,7 +217,7 @@ When the same `(capabilityId, providerId)` exists as both a built-in TS adapter 
 
 Lives at `.claude/skills/provider-builder/SKILL.md` plus a small reference folder (`schema.md`, `mappings-cheatsheet.md`).
 
-**Trigger phrases:** "add a new provider for X", "wire up [vendor] to YALC", "build an adapter for [vendor]", "I want to use [vendor] for [capability]".
+**Trigger phrases:** "add a new provider for X", "wire up [vendor] to Crossnode GTM", "build an adapter for [vendor]", "I want to use [vendor] for [capability]".
 
 **Inputs:** vendor name, target capability id, vendor docs URL (optional but recommended), API key env var name (the skill double-checks the user has it in `~/.gtm-os/.env` without ever reading the value).
 
@@ -225,7 +225,7 @@ Lives at `.claude/skills/provider-builder/SKILL.md` plus a small reference folde
 
 1. **Discover.** Resolve the capability id (fuzzy match — "find emails" → `people-enrich`). Show the capability's input/output schema.
 2. **Read vendor docs.** WebFetch / Firecrawl the docs URL. Pull endpoint, auth, request and response shapes.
-3. **Draft manifest.** Write YAML to `/tmp/yalc-builder/{capability}-{provider}.yaml` first (not the live adapters dir).
+3. **Draft manifest.** Write YAML to `/tmp/crossnode-builder/{capability}-{provider}.yaml` first (not the live adapters dir).
 4. **Smoke test.** Run `smoke_test.input` against the compiled invoke. Green = `expectNonEmpty` paths populated. Red = print response, revise mapping/auth, loop.
 5. **Register.** On green, move file to `~/.gtm-os/adapters/`, append the provider id to `config.yaml → capabilities.<id>.priority` (front of list, with confirmation).
 6. **Document.** Append a one-line entry to `~/.gtm-os/adapters/INSTALLED.md`.
@@ -235,7 +235,7 @@ Lives at `.claude/skills/provider-builder/SKILL.md` plus a small reference folde
 - *Vendor docs incomplete.* Skill asks for the missing piece. Never guesses.
 - *Auth flow non-trivial (OAuth, signed requests).* Detected in step 2; skill exits with "needs a TS adapter — out of scope for declarative v1" plus a stub TS template.
 - *SDK-only vendors (gRPC, websockets).* Same exit.
-- *Smoke test red after 3 iterations.* Skill stops, dumps last response + last manifest to `/tmp/yalc-builder/debug.json`, hands back to user.
+- *Smoke test red after 3 iterations.* Skill stops, dumps last response + last manifest to `/tmp/crossnode-builder/debug.json`, hands back to user.
 
 ## 5. Security
 
@@ -257,13 +257,13 @@ The provider-builder skill must NEVER write a key value into a manifest, NEVER p
 
 1. Mark the TS file `@deprecated since 0.x.0 — use docs/adapters/<capability>-<provider>.yaml`.
 2. Move the canonical YAML into `docs/adapters/` (shipped, not loaded by default).
-3. After two minor versions, delete the TS file. Users opt in via `yalc-gtm provider:install <capability>-<provider>`.
+3. After two minor versions, delete the TS file. Users opt in via `crossnode-gtm provider:install <capability>-<provider>`.
 
-**Migration guide.** A one-pager in `docs/providers.md` covers: spotting deprecated providers via `yalc-gtm doctor`, installing the declarative replacement, and overriding behaviour locally.
+**Migration guide.** A one-pager in `docs/providers.md` covers: spotting deprecated providers via `crossnode-gtm doctor`, installing the declarative replacement, and overriding behaviour locally.
 
 ## 7. Community providers (in-repo)
 
-Community manifests live inside the YALC repo under `providers/manifests/<capability>/<provider>.yaml`. Single repo for engine + manifests — contributors PR to the same place and use the same issue tracker.
+Community manifests live inside the Crossnode GTM repo under `providers/manifests/<capability>/<provider>.yaml`. Single repo for engine + manifests — contributors PR to the same place and use the same issue tracker.
 
 **Layout:**
 
@@ -280,7 +280,7 @@ providers/
       brevo.yaml
   scripts/
     validate.mjs   # ajv-validates every manifest against the canonical schema at src/lib/providers/declarative/schema.json
-    smoke.mjs      # wraps `yalc-gtm adapters:smoke <path>`
+    smoke.mjs      # wraps `crossnode-gtm adapters:smoke <path>`
   README.md
   CONTRIBUTING.md
 ```
@@ -291,7 +291,7 @@ providers/
 
 **Curation rules (light).** Merge requires (a) CI green (schema validation), (b) one maintainer sign-off, (c) a smoke-test reply in the PR. One canonical manifest per (capability, provider) lives on `main`; variants live on branches.
 
-**Installing.** CLI: `yalc-gtm provider:install icp-company-search/apollo` fetches the YAML from `main`, writes it to `~/.gtm-os/adapters/`, and prompts to add to `config.yaml` priority. Manual: download the YAML from the raw GitHub URL and drop it in.
+**Installing.** CLI: `crossnode-gtm provider:install icp-company-search/apollo` fetches the YAML from `main`, writes it to `~/.gtm-os/adapters/`, and prompts to add to `config.yaml` priority. Manual: download the YAML from the raw GitHub URL and drop it in.
 
 ## 8. Test plan
 

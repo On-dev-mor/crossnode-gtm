@@ -21,7 +21,7 @@ import yaml from 'js-yaml'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-rlc-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-rlc-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   delete process.env.ANTHROPIC_API_KEY

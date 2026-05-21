@@ -83,7 +83,7 @@ function seedLive() {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-brain-section-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-brain-section-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

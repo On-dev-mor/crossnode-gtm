@@ -44,7 +44,7 @@ describe('send-cold-email skill', () => {
       'launch a LinkedIn campaign',
       'qualify these leads',
       'list adapters',
-      'set up YALC',
+      'set up Crossnode GTM',
     ]
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {

@@ -13,8 +13,8 @@
  *
  * Channels (Slack / desktop) are independently enabled via the
  * `notifications:` block in `~/.gtm-os/config.yaml`. Slack additionally
- * requires `YALC_SLACK_WEBHOOK_URL`; the dashboard URL falls back to
- * `http://localhost:3847` when `YALC_BASE_URL` is unset.
+ * requires `CROSSNODE_GTM_SLACK_WEBHOOK_URL`; the dashboard URL falls back to
+ * `http://localhost:3847` when `CROSSNODE_GTM_BASE_URL` is unset.
  */
 
 import type { AwaitingGateRecord } from '../frameworks/runner.js'
@@ -44,7 +44,7 @@ export type { NotificationsConfig, NotificationKind, NotifyOptions } from './typ
 const DEFAULT_BASE_URL = 'http://localhost:3847'
 
 function resolveBaseUrl(): string {
-  const env = process.env.YALC_BASE_URL
+  const env = process.env.CROSSNODE_GTM_BASE_URL
   if (typeof env === 'string' && env.trim()) return env.trim()
   return DEFAULT_BASE_URL
 }
@@ -55,8 +55,8 @@ function buildDesktopBody(gate: AwaitingGateRecord, kind: NotificationKind): {
 } {
   const title =
     kind === 'stale'
-      ? `YALC — Stale gate (${gate.framework})`
-      : `YALC — Gate awaiting (${gate.framework})`
+      ? `Crossnode GTM — Stale gate (${gate.framework})`
+      : `Crossnode GTM — Gate awaiting (${gate.framework})`
   // Keep the body concise; macOS truncates long notifications anyway.
   const body = gate.prompt.length > 240 ? `${gate.prompt.slice(0, 237)}...` : gate.prompt
   return { title, body }
@@ -77,7 +77,7 @@ async function dispatch(
   const tasks: Promise<void>[] = []
 
   if (config.slack) {
-    const webhookUrl = process.env.YALC_SLACK_WEBHOOK_URL
+    const webhookUrl = process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
     if (webhookUrl && webhookUrl.trim()) {
       const args: SlackSendArgs = {
         webhookUrl: webhookUrl.trim(),

@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm visualize <view_id>` — generate a tailored interactive page
+ * `crossnode-gtm visualize <view_id>` — generate a tailored interactive page
  * from local JSON data and an intent string.
  *
  * Re-running with the same `view_id` overwrites the saved HTML + sidecar.

@@ -84,7 +84,7 @@ export class CapabilityUnsatisfied extends Error {
     const list = tried.length > 0 ? `[${tried.join(', ')}]` : '[]'
     super(
       `Capability '${capabilityId}' has no satisfied provider. Tried (in order): ${list}. ` +
-      `Install one with: yalc-gtm provider:add --mcp <name> OR yalc-gtm connect-provider <name> (in 0.8.E).`,
+      `Install one with: crossnode-gtm provider:add --mcp <name> OR crossnode-gtm connect-provider <name> (in 0.8.E).`,
     )
     this.name = 'CapabilityUnsatisfied'
     this.capabilityId = capabilityId

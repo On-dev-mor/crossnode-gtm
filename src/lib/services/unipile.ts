@@ -211,6 +211,72 @@ export class UnipileService {
     }
     return res.json()
   }
+
+  /** Accounts connected for email (Google, Microsoft, IMAP — not LinkedIn). */
+  async listEmailAccounts(): Promise<Array<{ id: string; type?: string; name?: string; email?: string }>> {
+    const response = await this.getAccounts()
+    const items = (response as { items?: Array<Record<string, unknown>> })?.items ?? []
+    return items
+      .filter((item) => {
+        const type = String(item.type ?? item.provider ?? '').toUpperCase()
+        return type !== 'LINKEDIN' && type !== ''
+      })
+      .map((item) => ({
+        id: String(item.id ?? ''),
+        type: item.type != null ? String(item.type) : undefined,
+        name: item.name != null ? String(item.name) : undefined,
+        email: item.email != null ? String(item.email) : undefined,
+      }))
+      .filter((a) => a.id)
+  }
+
+  /**
+   * Send one email via a connected Unipile mailbox (Google / Microsoft / IMAP).
+   * @see https://developer.unipile.com/docs/send-email
+   */
+  async sendEmail(opts: {
+    accountId: string
+    to: string
+    subject: string
+    body: string
+    toDisplayName?: string
+    from?: { display_name: string; identifier: string }
+  }): Promise<Record<string, unknown>> {
+    const dsn = process.env.UNIPILE_DSN!.replace(/\/+$/, '')
+    const apiKey = process.env.UNIPILE_API_KEY!
+    const url = `${dsn}/api/v1/emails`
+    const payload: Record<string, unknown> = {
+      account_id: opts.accountId,
+      subject: opts.subject,
+      body: opts.body,
+      to: [
+        {
+          identifier: opts.to,
+          ...(opts.toDisplayName ? { display_name: opts.toDisplayName } : {}),
+        },
+      ],
+    }
+    if (opts.from?.identifier) {
+      payload.from = {
+        identifier: opts.from.identifier,
+        ...(opts.from.display_name ? { display_name: opts.from.display_name } : {}),
+      }
+    }
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': apiKey,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Unipile sendEmail failed (${res.status}): ${text}`)
+    }
+    return res.json() as Promise<Record<string, unknown>>
+  }
 }
 
 export const unipileService = new UnipileService()

@@ -5,7 +5,7 @@
  * document per archetype. Each test then asserts (via the static
  * helpers in helpers/brand-check.ts):
  *
- *   1. The Yalc.ai primary hex appears in the HTML.
+ *   1. The Crossnode primary hex appears in the HTML.
  *   2. The chosen Outfit + Inter font pairing appears in <style>.
  *   3. No generic Tailwind blue/gray/slate utilities leak through.
  *   4. The webfont CDN URL is linked in <head>.
@@ -98,7 +98,7 @@ async function installBrandFaithfulAdapter(viewId: string, idiom: string) {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-viz-brand-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-viz-brand-'))
   vi.stubEnv('HOME', TMP)
   vi.stubEnv('ANTHROPIC_API_KEY', 'test-key')
   resetCapabilityRegistry()

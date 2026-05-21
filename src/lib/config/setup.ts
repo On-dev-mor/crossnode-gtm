@@ -23,6 +23,7 @@ const DEFAULT_CONFIG = {
   notion: {
     campaigns_ds: '',
     leads_ds: '',
+    prospects_ds: '',
     variants_ds: '',
     parent_page: '',
   },
@@ -369,8 +370,8 @@ export async function runSetupWizard(): Promise<void> {
 
   // 9. Next steps
   console.log('\n── Next Steps ──')
-  console.log('  yalc-gtm onboard --linkedin <your-linkedin-url> --website <your-website-url>')
-  console.log('  yalc-gtm doctor')
+  console.log('  crossnode-gtm onboard --linkedin <your-linkedin-url> --website <your-website-url>')
+  console.log('  crossnode-gtm doctor')
   console.log('')
 }
 

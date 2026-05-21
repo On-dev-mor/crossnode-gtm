@@ -79,7 +79,7 @@ const RICH_TOOL_INPUT = {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-a4-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-a4-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
@@ -273,7 +273,7 @@ describe('A4 — flag-capture rich profile synthesis', () => {
       const real = (await orig()) as Record<string, unknown>
       return {
         ...real,
-        runSectionPrompt: async () => 'segments: []\n__yalc_confidence: 5\n',
+        runSectionPrompt: async () => 'segments: []\n__crossnode_confidence: 5\n',
       }
     })
 

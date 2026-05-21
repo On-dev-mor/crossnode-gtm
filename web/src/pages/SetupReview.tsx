@@ -912,7 +912,7 @@ export function SetupReview() {
               <p className="mt-4 text-sm text-muted-foreground">
                 Run{' '}
                 <code className="font-mono">
-                  yalc-gtm start --non-interactive --website &lt;url&gt;
+                  crossnode-gtm start --non-interactive --website &lt;url&gt;
                 </code>{' '}
                 to capture a fresh preview, then refresh this page.
               </p>

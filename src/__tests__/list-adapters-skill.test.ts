@@ -19,7 +19,7 @@ const TRIGGER_PHRASES = [
   'list adapters',
   'show me which providers are configured',
   'which providers are available',
-  'what capabilities can YALC use right now',
+  'what capabilities can Crossnode GTM use right now',
   'show capability coverage',
 ]
 
@@ -75,16 +75,16 @@ describe('list-adapters skill', () => {
 
   it('description trigger phrases do not collide with sibling skills', () => {
     // provider-builder uses 'add a new provider', 'wire up', 'build an adapter'.
-    // run-doctor uses 'is YALC working', 'diagnose YALC', etc.
-    // setup uses 'set up YALC'.
+    // run-doctor uses 'is Crossnode GTM working', 'diagnose Crossnode GTM', etc.
+    // setup uses 'set up Crossnode GTM'.
     // None of our 5 phrases should substring-overlap any of those.
     const FORBIDDEN = [
       'add a new provider',
       'wire up',
       'build an adapter',
-      'is YALC working',
-      'diagnose YALC',
-      'set up YALC',
+      'is Crossnode GTM working',
+      'diagnose Crossnode GTM',
+      'set up Crossnode GTM',
     ]
     for (const phrase of TRIGGER_PHRASES) {
       const lower = phrase.toLowerCase()

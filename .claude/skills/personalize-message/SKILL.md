@@ -47,7 +47,7 @@ Use this skill when the user says:
    ```bash
    test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
    ```
-   If `BLOCKED`, stop and tell the user to finish `yalc-gtm start` first.
+   If `BLOCKED`, stop and tell the user to finish `crossnode-gtm start` first.
 
 2. Confirm cwd is `~/Desktop/gtm-os/`.
 

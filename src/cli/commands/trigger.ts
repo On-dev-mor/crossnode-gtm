@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm trigger <framework>` — fire an on-demand framework run from CLI.
+ * `crossnode-gtm trigger <framework>` — fire an on-demand framework run from CLI.
  *
  * Mirrors `POST /api/today/trigger/:framework` so that scripted triggers
  * (cron, ops scripts, quick local tests) see the same validation +
@@ -47,7 +47,7 @@ export async function runTrigger(
     return { exitCode: 1 }
   }
   logError(
-    `Framework "${framework}" is mode: scheduled. Use \`yalc-gtm framework:run ${framework}\` ` +
+    `Framework "${framework}" is mode: scheduled. Use \`crossnode-gtm framework:run ${framework}\` ` +
       `to fire scheduled frameworks manually.`,
   )
   return { exitCode: 1 }

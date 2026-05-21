@@ -1,6 +1,6 @@
 ---
 name: import-leads
-description: "Import a batch of leads from CSV, JSON, or a Notion DB into the local SQLite database without running the qualification pipeline. Use when the user says 'just import this CSV', 'load these leads without qualifying', 'bulk import this file', 'add these prospects to the DB', or 'pull this Notion DB into YALC'. Side-effecting — writes rows into local SQLite."
+description: "Import a batch of leads from CSV, JSON, or a Notion DB into the local SQLite database without running the qualification pipeline. Use when the user says 'just import this CSV', 'load these leads without qualifying', 'bulk import this file', 'add these prospects to the DB', or 'pull this Notion DB into Crossnode GTM'. Side-effecting — writes rows into local SQLite."
 version: 1.0.0
 ---
 
@@ -14,7 +14,7 @@ I'll wrap `leads:import`. Take an input file or Notion DB id, run the import, an
 - "load these leads without qualifying"
 - "bulk import this file"
 - "add these prospects to the DB"
-- "pull this Notion DB into YALC"
+- "pull this Notion DB into Crossnode GTM"
 
 **NOT this skill** (use `qualify-leads` instead):
 - "qualify these leads" / "score this list" — that runs the 7-gate pipeline. This skill is import only.

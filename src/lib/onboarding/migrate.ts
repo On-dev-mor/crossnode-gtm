@@ -12,7 +12,7 @@
  *
  * The migration writes to the LIVE folder — not preview — because the
  * source is already-committed live state. Migration is opt-in (the user
- * runs `yalc-gtm migrate`); it is never auto-triggered.
+ * runs `crossnode-gtm migrate`); it is never auto-triggered.
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'

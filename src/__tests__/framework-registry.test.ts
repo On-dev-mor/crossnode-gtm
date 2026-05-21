@@ -31,7 +31,7 @@ describe('framework registry (HOME-isolated)', () => {
   let tempHome: string
 
   beforeEach(() => {
-    tempHome = join(tmpdir(), `yalc-fw-test-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-fw-test-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     homeBackup = process.env.HOME
     process.env.HOME = tempHome

@@ -138,7 +138,7 @@ export const SETUP_FIELD_HELP: Record<string, SectionFieldHelp> = {
     },
     'meta.version': {
       label: 'Version',
-      help: 'YALC schema version that authored the file. Read-only.',
+      help: 'Crossnode GTM schema version that authored the file. Read-only.',
     },
   },
 

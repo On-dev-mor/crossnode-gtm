@@ -60,7 +60,7 @@ function seedPreviewMeta() {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-brain-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-brain-api-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

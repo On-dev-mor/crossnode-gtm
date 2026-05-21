@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm notify:test` (D2).
+ * Tests for `crossnode-gtm notify:test` (D2).
  *
  * Verifies:
  *   - `--channel desktop` shells out to the injected exec with osascript.
@@ -15,13 +15,13 @@ describe('notify:test command', () => {
   let prevWebhook: string | undefined
 
   beforeEach(() => {
-    prevWebhook = process.env.YALC_SLACK_WEBHOOK_URL
-    delete process.env.YALC_SLACK_WEBHOOK_URL
+    prevWebhook = process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
+    delete process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
   })
 
   afterEach(() => {
-    if (prevWebhook === undefined) delete process.env.YALC_SLACK_WEBHOOK_URL
-    else process.env.YALC_SLACK_WEBHOOK_URL = prevWebhook
+    if (prevWebhook === undefined) delete process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
+    else process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL = prevWebhook
     vi.restoreAllMocks()
   })
 
@@ -54,7 +54,7 @@ describe('notify:test command', () => {
   })
 
   it('slack channel: posts via injected fetch when webhook set', async () => {
-    process.env.YALC_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
+    process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/x'
     const fetchMock = vi
       .fn()
       .mockResolvedValue(new Response('ok', { status: 200 }))

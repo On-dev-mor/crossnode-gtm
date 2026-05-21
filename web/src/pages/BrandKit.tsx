@@ -41,7 +41,7 @@ export function BrandKit() {
             className="bg-clip-text text-transparent"
             style={{ backgroundImage: 'var(--brand-gradient)' }}
           >
-            YALC
+            Crossnode GTM
           </span>{' '}
           design tokens
         </h1>
@@ -114,7 +114,7 @@ export function BrandKit() {
               <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-1">
                 Mono — {tokens.fonts.mono}
               </p>
-              <p className="font-mono text-sm">yalc-gtm leads:qualify --result-set 2026-04</p>
+              <p className="font-mono text-sm">crossnode-gtm leads:qualify --result-set 2026-04</p>
             </div>
           </CardContent>
         </Card>

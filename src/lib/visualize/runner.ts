@@ -99,7 +99,7 @@ export function loadBrandTokens(): Record<string, unknown> {
 /**
  * Build the design directives that the LLM treats as authoritative.
  * The string mirrors what `ui-ux-pro-max` would emit for the resolved
- * brand palette + intent. We hard-code yalc rose + Outfit/Inter pairing
+ * brand palette + intent. We hard-code Crossnode rose + Outfit/Inter pairing
  * because those are the brand non-negotiables.
  */
 export function buildUiUxDirectives(
@@ -118,7 +118,7 @@ export function buildUiUxDirectives(
   if (intentLower.includes('table')) lift = 'row hover background tint (rgba(201,80,110,0.04)).'
   if (intentLower.includes('chart')) lift = 'data-point dot expansion + tooltip on hover.'
   return [
-    `palette: yalc rose — primary ${primary}, accent ${accent}, paper ${paper}.`,
+    `palette: Crossnode rose — primary ${primary}, accent ${accent}, paper ${paper}.`,
     `pairing: ${heading} for headings, ${body} for body, JetBrains Mono for code.`,
     `spacing: 24px between columns, 16px between cards, 100px section padding.`,
     `radius: 14px md, 16px lg, 9999px pill.`,

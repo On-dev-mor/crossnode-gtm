@@ -15,6 +15,7 @@ const RATE_LIMITS: Record<string, number> = {
   'linkedin.connect': 30,   // per day
   'linkedin.dm': 50,        // per day (lowered from 100 during GTM-OS Day 30 announcement, restore after Apr 22)
   'instantly.send': 50,     // per day per account
+  'unipile.email': 50,      // per day per mailbox
   'crustdata.search': 100,  // per day (credit proxy)
 }
 

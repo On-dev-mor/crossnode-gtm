@@ -33,7 +33,7 @@ frameworkRoutes.get('/', (c) => {
 <style>body{font-family:system-ui,-apple-system,sans-serif;background:#0f0f0f;color:#e5e5e5;max-width:760px;margin:3rem auto;padding:0 1.5rem}
 h1{margin-bottom:.5rem}p{color:#888}code{background:#1a1a1a;padding:.15rem .35rem;border-radius:4px;color:#f5c542}</style></head>
 <body><h1>Frameworks</h1>
-<p>No frameworks installed yet. Run <code>yalc-gtm framework:recommend</code> to see what's available for your setup.</p>
+<p>No frameworks installed yet. Run <code>crossnode-gtm framework:recommend</code> to see what's available for your setup.</p>
 </body></html>`)
   }
 

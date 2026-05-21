@@ -6,7 +6,7 @@ import { resultRows, campaignLeads, campaigns, conversations } from '../db/schem
 import { IntelligenceStore } from '../intelligence/store'
 import { getRegistryReady } from '../providers/registry'
 import { buildFrameworkContext } from '../framework/context'
-import { notionService } from '../services/notion'
+import { pushQualifiedProspectsToNotion, isProspectsNotionSyncEnabled } from '../notion/push-qualified-prospects'
 import { runImport } from './importers'
 import { DedupEngine } from '../dedup/engine'
 import { buildSuppressionSet } from '../dedup/live-sync'
@@ -278,9 +278,12 @@ export async function runQualify(opts: QualifyOptions): Promise<QualifyResult> {
   // Ensure a holding campaign exists for unassigned leads
   const holdingCampaignId = await getOrCreateHoldingCampaign()
 
+  const insertedLeadIds: string[] = []
   for (const lead of pipeline) {
+    const leadId = randomUUID()
+    insertedLeadIds.push(leadId)
     await db.insert(campaignLeads).values({
-      id: randomUUID(),
+      id: leadId,
       campaignId: holdingCampaignId,
       providerId: String(lead.provider_id ?? lead.providerId ?? randomUUID()),
       linkedinUrl: String(lead.linkedin_url ?? lead.linkedinUrl ?? ''),
@@ -295,18 +298,25 @@ export async function runQualify(opts: QualifyOptions): Promise<QualifyResult> {
     })
   }
 
-  // ─── Push to Notion ──────────────────────────────────────────────────────────
-  if (pipeline.length > 0 && opts.config.notion.leads_ds) {
-    console.log(`[qualify] Pushing ${pipeline.length} leads to Notion...`)
+  // ─── Push to Notion Prospects DB (separate from scraped Leads DB) ─────────────
+  if (pipeline.length > 0 && isProspectsNotionSyncEnabled(opts.config)) {
     try {
-      const { created, failed } = await notionService.bulkCreateLeads(
-        opts.config.notion.leads_ds,
-        pipeline,
-      )
-      console.log(`[qualify] Notion: ${created} created, ${failed} failed`)
+      const prospects = pipeline.map(l => ({ ...l, lifecycleStatus: 'Qualified' }))
+      const notionResult = await pushQualifiedProspectsToNotion(opts.config, prospects)
+      if (notionResult) {
+        for (let i = 0; i < insertedLeadIds.length; i++) {
+          const pageId = notionResult.pageIds[i]
+          if (!pageId) continue
+          await db.update(campaignLeads)
+            .set({ notionPageId: pageId, updatedAt: new Date().toISOString() })
+            .where(eq(campaignLeads.id, insertedLeadIds[i]))
+        }
+      }
     } catch (err) {
-      console.log(`[qualify] Notion push skipped: ${err instanceof Error ? err.message : err}`)
+      console.log(`[qualify] Prospects Notion push skipped: ${err instanceof Error ? err.message : err}`)
     }
+  } else if (pipeline.length > 0 && opts.config.notion.prospects_ds) {
+    console.log('[qualify] prospects_ds set but Notion unavailable — check NOTION_API_KEY')
   }
 
   // ─── Summary ─────────────────────────────────────────────────────────────────

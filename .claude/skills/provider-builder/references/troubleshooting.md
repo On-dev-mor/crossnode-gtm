@@ -60,7 +60,7 @@ The HTTP call succeeded, but the `expectNonEmpty` paths are blank.
 `rootPath` or `mappings` are misaligned with the actual response shape. Inspect the raw response:
 
 ```bash
-pnpm cli adapters:smoke /tmp/yalc-builder/<file>.yaml --json
+pnpm cli adapters:smoke /tmp/crossnode-builder/<file>.yaml --json
 ```
 
 Look at `response` — that's what the projector returned. Walk the JSON manually and compare to your mappings.

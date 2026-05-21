@@ -1,9 +1,9 @@
 /**
- * Tests for `yalc-gtm provider:install <capability>/<provider>`.
+ * Tests for `crossnode-gtm provider:install <capability>/<provider>`.
  *
  * The install handler:
  *   1. Resolves a remote URL on the configured providers source
- *      (default: YALC main repo providers/manifests/ tree on GitHub raw).
+ *      (default: Crossnode GTM main repo providers/manifests/ tree on GitHub raw).
  *   2. Fetches the YAML manifest via the injected fetch impl.
  *   3. Validates it through `compileManifest` (full schema check; no
  *      live HTTP smoke).
@@ -77,7 +77,7 @@ describe('provider:install', () => {
   let configPath: string
 
   beforeEach(() => {
-    tmpHome = mkdtempSync(join(tmpdir(), 'yalc-provider-install-'))
+    tmpHome = mkdtempSync(join(tmpdir(), 'crossnode-provider-install-'))
     adaptersDir = join(tmpHome, '.gtm-os', 'adapters')
     configPath = join(tmpHome, '.gtm-os', 'config.yaml')
     mkdirSync(adaptersDir, { recursive: true })
@@ -104,13 +104,13 @@ describe('provider:install', () => {
 
     expect(result.exitCode).toBe(0)
     expect(fetched).toEqual([
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml',
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml',
     ])
   })
 
   it('writes the manifest to <adaptersDir>/<capability>-<provider>.yaml', async () => {
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const result = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,
@@ -152,7 +152,7 @@ describe('provider:install', () => {
 
   it('refuses to overwrite an existing manifest without --force', async () => {
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const target = join(adaptersDir, 'icp-company-search-apollo.yaml')
     writeFileSync(target, '# pre-existing\n', 'utf-8')
 
@@ -171,7 +171,7 @@ describe('provider:install', () => {
 
   it('overwrites when --force is set', async () => {
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const target = join(adaptersDir, 'icp-company-search-apollo.yaml')
     writeFileSync(target, '# pre-existing\n', 'utf-8')
 
@@ -189,7 +189,7 @@ describe('provider:install', () => {
 
   it('exits non-zero with a useful message on schema validation failure', async () => {
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const result = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,
@@ -234,7 +234,7 @@ describe('provider:install', () => {
       'utf-8',
     )
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const result = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,
@@ -251,7 +251,7 @@ describe('provider:install', () => {
   it('creates capabilities section when missing and asked to update priority', async () => {
     writeFileSync(configPath, `notion:\n  campaigns_ds: ''\n`, 'utf-8')
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const result = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,
@@ -273,7 +273,7 @@ describe('provider:install', () => {
       'utf-8',
     )
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const result = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,
@@ -289,7 +289,7 @@ describe('provider:install', () => {
     expect(occurrences.length).toBe(1)
   })
 
-  it('respects YALC_PROVIDERS_SOURCE env var when --source is not given', async () => {
+  it('respects CROSSNODE_GTM_PROVIDERS_SOURCE env var when --source is not given', async () => {
     const envSource = 'https://raw.example.test/custom/providers/main/manifests'
     const url = `${envSource}/icp-company-search/apollo.yaml`
     let observed = ''
@@ -298,8 +298,8 @@ describe('provider:install', () => {
       return new Response(APOLLO_YAML, { status: 200 })
     }) as typeof fetch
 
-    const prev = process.env.YALC_PROVIDERS_SOURCE
-    process.env.YALC_PROVIDERS_SOURCE = envSource
+    const prev = process.env.CROSSNODE_GTM_PROVIDERS_SOURCE
+    process.env.CROSSNODE_GTM_PROVIDERS_SOURCE = envSource
     try {
       const result = await runProviderInstall('icp-company-search/apollo', {
         adaptersDir,
@@ -311,14 +311,14 @@ describe('provider:install', () => {
       expect(result.exitCode).toBe(0)
       expect(observed).toBe(url)
     } finally {
-      if (prev === undefined) delete process.env.YALC_PROVIDERS_SOURCE
-      else process.env.YALC_PROVIDERS_SOURCE = prev
+      if (prev === undefined) delete process.env.CROSSNODE_GTM_PROVIDERS_SOURCE
+      else process.env.CROSSNODE_GTM_PROVIDERS_SOURCE = prev
     }
   })
 
   it('e2e: install + adapters:list shows the installed provider', async () => {
     const url =
-      'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests/icp-company-search/apollo.yaml'
+      'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests/icp-company-search/apollo.yaml'
     const installResult = await runProviderInstall('icp-company-search/apollo', {
       adaptersDir,
       configPath,

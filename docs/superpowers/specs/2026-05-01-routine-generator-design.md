@@ -2,18 +2,18 @@
 
 **Status:** Design spec — v1 proposal
 **Date:** 2026-05-01
-**Owner:** YALC GTM-OS core
+**Owner:** Crossnode GTM core
 **Branch:** `wt/c1-routine-spec`
 
 ## 1. Goal + non-goals
 
-Today the last mile of `yalc-gtm start` is manual. After flag-capture, profile review, and key wiring, the user lands in Step 9 of `setup.md`, is walked through `framework:recommend`, and has to interactively `framework:install <name>` for each framework, accepting or overriding inputs one at a time. They then jump to Step 10 to install `outreach-campaign-builder` (only if a channel key is present) and capture an outbound hypothesis. By Step 11 they've made roughly a dozen micro-decisions — most of which the system already had enough information to answer.
+Today the last mile of `crossnode-gtm start` is manual. After flag-capture, profile review, and key wiring, the user lands in Step 9 of `setup.md`, is walked through `framework:recommend`, and has to interactively `framework:install <name>` for each framework, accepting or overriding inputs one at a time. They then jump to Step 10 to install `outreach-campaign-builder` (only if a channel key is present) and capture an outbound hypothesis. By Step 11 they've made roughly a dozen micro-decisions — most of which the system already had enough information to answer.
 
-The Routine Generator collapses that surface into a single yes/no. Concrete user story: *after I run `yalc-gtm start` and finish review, the system proposes a complete routine — frameworks installed, schedules set, dashboard chosen — and I confirm with one prompt.* The generator is rule-based, deterministic, and inspectable; it reads the same `RecommendationEnvironment` `recommend.ts` reads, derives a `Routine`, and either prints or applies it. **Non-goals:** replacing the human-in-the-loop gates inside frameworks (every `gate:` still fires at run time), auto-running campaigns without confirmation, training a recommendation model. The generator chooses *what to install*, not *what to send*.
+The Routine Generator collapses that surface into a single yes/no. Concrete user story: *after I run `crossnode-gtm start` and finish review, the system proposes a complete routine — frameworks installed, schedules set, dashboard chosen — and I confirm with one prompt.* The generator is rule-based, deterministic, and inspectable; it reads the same `RecommendationEnvironment` `recommend.ts` reads, derives a `Routine`, and either prints or applies it. **Non-goals:** replacing the human-in-the-loop gates inside frameworks (every `gate:` still fires at run time), auto-running campaigns without confirmation, training a recommendation model. The generator chooses *what to install*, not *what to send*.
 
 ## 2. Inputs + signals
 
-The generator reads four inputs, all already present at the end of `yalc-gtm start`:
+The generator reads four inputs, all already present at the end of `crossnode-gtm start`:
 
 1. **Resolved capabilities** — the projection of `adapters:list` (built-in TS + declarative manifests under `~/.gtm-os/adapters/` and bundled `providers/`): *which provider ids are available right now*. A provider is "available" when `isAvailable()` returns true (env vars set + adapter registered), per `src/lib/providers/capabilities.ts`. We reuse `RecommendationEnvironment.providers` so the generator unit-tests in isolation.
 2. **Archetype (A/B/C/D)** — derived from the four shipped frameworks. **A** = `competitor-audience-mining` (LinkedIn engagement-driven inbound), **B** = `content-calendar-builder` (weekly content cadence), **C** = `outreach-campaign-builder` (hypothesis-led outbound), **D** = `lead-magnet-builder`. Labels match the existing `archetype-*.test.ts` integration tests. A user usually maps to *more than one* archetype — the generator selects the set, not a single winner.
@@ -94,14 +94,14 @@ The two known conflicts:
 
 ### CLI
 
-- `yalc-gtm routine:propose` — runs the rule pipeline and prints the proposed `Routine` to stdout. Default output is human-readable (a numbered list of frameworks with rationale lines, schedules, default dashboard, notes). `--json` switches to a single-line JSON dump for SPA consumption. Exit 0 on success, exit 2 when no Anthropic key is set (the empty-routine case still renders, but exit 2 signals "nothing to install"). The command is read-only — it never writes to `~/.gtm-os`.
-- `yalc-gtm routine:install` — applies the proposed Routine. Runs `routine:propose` internally to recompute (so a stale proposal can't drift into install), then calls `framework:install --auto-confirm` per entry, writes the schedule files via the existing agent-runner path, and updates `~/.gtm-os/config.yaml`'s `dashboard.default_route` to the routine's `defaultDashboard`. Supports `--dry-run` (print the actions, don't execute) and `--only <framework>` (install a subset). Always idempotent: re-running it after a successful install is a no-op when the inputs haven't changed.
+- `crossnode-gtm routine:propose` — runs the rule pipeline and prints the proposed `Routine` to stdout. Default output is human-readable (a numbered list of frameworks with rationale lines, schedules, default dashboard, notes). `--json` switches to a single-line JSON dump for SPA consumption. Exit 0 on success, exit 2 when no Anthropic key is set (the empty-routine case still renders, but exit 2 signals "nothing to install"). The command is read-only — it never writes to `~/.gtm-os`.
+- `crossnode-gtm routine:install` — applies the proposed Routine. Runs `routine:propose` internally to recompute (so a stale proposal can't drift into install), then calls `framework:install --auto-confirm` per entry, writes the schedule files via the existing agent-runner path, and updates `~/.gtm-os/config.yaml`'s `dashboard.default_route` to the routine's `defaultDashboard`. Supports `--dry-run` (print the actions, don't execute) and `--only <framework>` (install a subset). Always idempotent: re-running it after a successful install is a no-op when the inputs haven't changed.
 
 ### SPA — setup.md Step 11
 
 A new Step 11 lands between current Step 10 (outbound hypothesis) and the existing hand-off (now Step 12). Step 11:
 
-1. Calls `yalc-gtm routine:propose --json`.
+1. Calls `crossnode-gtm routine:propose --json`.
 2. Renders the human-readable preview to the user — frameworks, schedules, dashboard, notes.
 3. Asks one prompt: `"Install this routine? (yes / show details / skip)"`.
 4. On `yes`, calls `routine:install`, prints the `framework:install` exit lines, and continues to hand-off.
@@ -114,7 +114,7 @@ This preserves the human-in-the-loop principle (every framework still has its `g
 
 The chosen Routine is persisted to a sidecar at `~/.gtm-os/routine.yaml` rather than embedded in `~/.gtm-os/config.yaml`. Reasoning: `config.yaml` is the *resolved* state (priorities, default dashboard, tenant settings) — it should stay small and human-edited. `routine.yaml` is a *snapshot* of generator output, captured at install time, so a future `routine:diff` can compare the current proposal against what was last installed. Storing the snapshot also means we can show "you installed this routine on YYYY-MM-DD" in the SPA without re-deriving.
 
-The sidecar holds the full `Routine` cast to YAML plus a `routine_meta:` block (`installed_at`, YALC version, frameworks skipped via `--only`). It is *not* the source of truth for installed frameworks — that remains `~/.gtm-os/frameworks/installed/<name>.json`. The sidecar is advisory; deleting it has no functional effect.
+The sidecar holds the full `Routine` cast to YAML plus a `routine_meta:` block (`installed_at`, Crossnode GTM version, frameworks skipped via `--only`). It is *not* the source of truth for installed frameworks — that remains `~/.gtm-os/frameworks/installed/<name>.json`. The sidecar is advisory; deleting it has no functional effect.
 
 **Re-run semantics.** Running `routine:propose` again recomputes from current state. If the new proposal matches the sidecar, the CLI prints `"Routine unchanged."` and exits 0. If it differs, the CLI prints the diff (added/removed frameworks, schedule changes) and recommends `routine:install --diff-only` — applies the delta only. This is the upgrade path when the user adds a provider or captures fresh signals later.
 

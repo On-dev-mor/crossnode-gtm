@@ -18,7 +18,7 @@ let TMP: string
 let ENV_PATH: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-env-template-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-env-template-'))
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
   ENV_PATH = join(TMP, '.gtm-os', '.env')
 })
@@ -30,7 +30,7 @@ afterEach(() => {
 describe('renderEnvTemplate', () => {
   it('contains the canonical header banner + auto-keys + every placeholder', () => {
     const out = renderEnvTemplate({ ENCRYPTION_KEY: 'deadbeef', DATABASE_URL: 'file:/x.db' })
-    expect(out).toContain('YALC GTM-OS — Provider API Keys')
+    expect(out).toContain('Crossnode GTM — Provider API Keys')
     expect(out).toContain('ENCRYPTION_KEY=deadbeef')
     expect(out).toContain('DATABASE_URL=file:/x.db')
     for (const key of ALL_TEMPLATE_KEYS) {
@@ -87,7 +87,7 @@ describe('deltaMergeEnv', () => {
     // Existing file: pretend an upgrade scenario where only the original
     // 0.6.0 builtins are present and the new MCP section is absent.
     const existing = [
-      '# YALC GTM-OS — old',
+      '# Crossnode GTM — old',
       'ENCRYPTION_KEY=abc',
       'DATABASE_URL=file:/old.db',
       'ANTHROPIC_API_KEY=sk-real',
@@ -122,7 +122,7 @@ describe('deltaMergeEnv', () => {
     }
 
     // Timestamped separator is present.
-    expect(result.content).toContain('# ── Added by YALC 0.7.0 (2026-04-25')
+    expect(result.content).toContain('# ── Added by Crossnode GTM 0.7.0 (2026-04-25')
   })
 
   it('preserves user comments and arbitrary lines verbatim', () => {
@@ -243,6 +243,6 @@ describe('envTemplateInstructions', () => {
     expect(out).toContain('open /tmp/.env')
     expect(out).toContain('xdg-open /tmp/.env')
     expect(out).toContain('code /tmp/.env')
-    expect(out).toContain('yalc-gtm doctor')
+    expect(out).toContain('crossnode-gtm doctor')
   })
 })

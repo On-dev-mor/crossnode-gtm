@@ -44,7 +44,7 @@ describe('find-lookalikes skill', () => {
   })
 
   it('triggers do not collide with siblings', () => {
-    const FORBIDDEN = ['list adapters', 'is YALC working', 'qualify these leads', 'set up YALC']
+    const FORBIDDEN = ['list adapters', 'is Crossnode GTM working', 'qualify these leads', 'set up Crossnode GTM']
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {
         expect(p.toLowerCase().includes(f.toLowerCase())).toBe(false)

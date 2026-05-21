@@ -1,28 +1,28 @@
-# YALC GTM-OS — Setup Procedure
+# Crossnode GTM — Setup Procedure
 
 This is the long-form runbook for the `/setup` skill. Walk the user through every step, in order. Each numbered step is a single conversational beat — confirm with the user before moving on when the step asks for input or approval.
 
 Hard rules across the whole flow:
 - **Never print or echo API keys, tokens, or secrets.** When you read `~/.gtm-os/.env` for any reason, mask values (e.g. `ANTHROPIC_API_KEY=sk-...redacted`). Never display raw key values back to the user. Never include them in any tool input either.
-- **Never push to git.** This skill only runs local YALC commands.
+- **Never push to git.** This skill only runs local Crossnode GTM commands.
 - **Never assume command success.** Every CLI call below has an exit-code check — if it fails, stop and report the exact stderr to the user before continuing.
-- **Use `--non-interactive` everywhere.** YALC will not prompt mid-flow. All values are passed as flags.
+- **Use `--non-interactive` everywhere.** Crossnode GTM will not prompt mid-flow. All values are passed as flags.
 
 ---
 
-## Step 1 — Verify YALC is installed (and recent enough)
+## Step 1 — Verify Crossnode GTM is installed (and recent enough)
 
 Run:
 ```bash
-yalc-gtm --version 2>/dev/null || echo "NOT_INSTALLED"
+crossnode-gtm --version 2>/dev/null || echo "NOT_INSTALLED"
 ```
 
 Decision tree:
-- Output is `NOT_INSTALLED` (or command is not found) → run `npm i -g yalc-gtm-os` (warn the user it may need `sudo` on system Node; if so, ask before re-running with sudo). Re-check version.
-- Output is a version string `< 0.7.0` → run `npm i -g yalc-gtm-os@latest`. Re-check.
+- Output is `NOT_INSTALLED` (or command is not found) → run `npm i -g crossnode-gtm` (warn the user it may need `sudo` on system Node; if so, ask before re-running with sudo). Re-check version.
+- Output is a version string `< 0.7.0` → run `npm i -g crossnode-gtm@latest`. Re-check.
 - Output is `0.7.0` or higher → continue.
 
-Print the resolved version once: `YALC GTM-OS <version> ready.`
+Print the resolved version once: `Crossnode GTM <version> ready.`
 
 ---
 
@@ -30,7 +30,7 @@ Print the resolved version once: `YALC GTM-OS <version> ready.`
 
 Run:
 ```bash
-yalc-gtm start --non-interactive
+crossnode-gtm start --non-interactive
 ```
 
 Exit code 0 expected. The command writes `~/.gtm-os/` (config, db, env template) and prints a banner. Do not parse the banner — just confirm exit 0.
@@ -69,7 +69,7 @@ Ask the user, one question at a time:
 
 Do **not** ask for `--icp-summary` yet — only ask for it if Step 5 reports a thin fetch.
 
-If the user can't or won't share a website, fall back to the legacy interactive interview by running `yalc-gtm start` (no `--non-interactive`) and let them answer the 10-question flow. Note this is rare; the website-driven path is the default.
+If the user can't or won't share a website, fall back to the legacy interactive interview by running `crossnode-gtm start` (no `--non-interactive`) and let them answer the 10-question flow. Note this is rare; the website-driven path is the default.
 
 ---
 
@@ -77,7 +77,7 @@ If the user can't or won't share a website, fall back to the legacy interactive 
 
 Construct the command from the inputs in Step 4:
 ```bash
-yalc-gtm start --non-interactive \
+crossnode-gtm start --non-interactive \
   --website "<website>" \
   [--linkedin "<linkedin>"] \
   [--docs "<docs1>" --docs "<docs2>" ...]
@@ -94,11 +94,11 @@ Run it. Three outcomes:
 
 Re-run the command with the extra flag(s). Do **not** pass `--force-synthesis` unless the user explicitly says "ignore the bar and try anyway."
 
-**C — Stdout contains a `<<<YALC_WEBFETCH_REQUEST:{...}>>>` marker.** YALC needs the parent harness (you) to fetch a URL it can't reach itself. Parse the JSON inside the marker — it has `url`, `save_to`, and `reason` fields. Then:
+**C — Stdout contains a `<<<CROSSNODE_GTM_WEBFETCH_REQUEST:{...}>>>` marker.** Crossnode GTM needs the parent harness (you) to fetch a URL it can't reach itself. Parse the JSON inside the marker — it has `url`, `save_to`, and `reason` fields. Then:
 
 1. Use the WebFetch tool to fetch the URL.
 2. Save the fetched markdown to the `save_to` path (create parent dirs if needed).
-3. Re-run the same `yalc-gtm start` command. The cached content will now satisfy the fetch.
+3. Re-run the same `crossnode-gtm start` command. The cached content will now satisfy the fetch.
 
 ---
 
@@ -114,7 +114,7 @@ Wait for the user to confirm "committed". Do not progress until they say so.
 
 If the browser didn't open (headless box, CI, container) the CLI prints the URL — the user can copy it. If they have no browser at all, they can rerun with `--review-in-chat` for a terminal-driven walk that commits immediately:
 ```bash
-yalc-gtm start --non-interactive --website "<website>" --review-in-chat
+crossnode-gtm start --non-interactive --website "<website>" --review-in-chat
 ```
 
 While waiting, do not read the preview files back into chat — the user is editing them in the browser and re-reading is just noise.
@@ -138,7 +138,7 @@ Confirm to the user: "Setup is now live at `~/.gtm-os/`. Running doctor next."
 
 Run:
 ```bash
-yalc-gtm doctor
+crossnode-gtm doctor
 ```
 
 Read the output and summarize for the user:
@@ -154,7 +154,7 @@ Do not gate framework recommendation on doctor passing — many frameworks work 
 
 Run:
 ```bash
-yalc-gtm framework:recommend
+crossnode-gtm framework:recommend
 ```
 
 The command prints a ranked list of frameworks the user qualifies for, given the providers they configured and the company context they captured. Each row shows: name, one-line description, what it requires, where output will land (Notion if `NOTION_API_KEY` is set, dashboard otherwise).
@@ -164,14 +164,14 @@ For each recommended framework:
 2. Ask: "Want to install this one? (yes / skip)"
 3. If yes — run the install wizard:
    ```bash
-   yalc-gtm framework:install <name>
+   crossnode-gtm framework:install <name>
    ```
    The wizard prompts for inputs interactively. Walk the user through each prompt. When asked about output destination, default to `dashboard` if they don't have Notion configured.
 4. After install, the seed run executes once. Print the output URL to the user.
 
 If the user wants to install a recommended framework non-interactively (defaults are fine), use `--auto-confirm`:
 ```bash
-yalc-gtm framework:install <name> --auto-confirm
+crossnode-gtm framework:install <name> --auto-confirm
 ```
 
 Repeat for every framework the user accepts.
@@ -199,7 +199,7 @@ keys back) and confirm one of:
 If neither is available, tell the user verbatim or close to it:
 
 > Outbound campaigns need a channel. Set keys first via
-> `yalc-gtm keys:connect` (LinkedIn = `UNIPILE_API_KEY` + `UNIPILE_DSN`,
+> `crossnode-gtm keys:connect` (LinkedIn = `UNIPILE_API_KEY` + `UNIPILE_DSN`,
 > Email = `INSTANTLY_API_KEY`), then re-run `/setup`. Skipping this step.
 
 Then jump straight to **Step 11**. Do not run `framework:install`.
@@ -211,7 +211,7 @@ If the channel-key gate passed, ask exactly:
 > Want to test an outbound hypothesis right now? (yes / skip)
 
 If the user says "skip", confirm "Skipping outbound hypothesis. You can run
-`yalc-gtm framework:install outreach-campaign-builder` whenever you're
+`crossnode-gtm framework:install outreach-campaign-builder` whenever you're
 ready." and jump to Step 11. Do not install.
 
 If the user says "yes", continue to Step 10.3.
@@ -221,7 +221,7 @@ If the user says "yes", continue to Step 10.3.
 Run:
 
 ```bash
-yalc-gtm framework:install outreach-campaign-builder --auto-confirm --destination dashboard
+crossnode-gtm framework:install outreach-campaign-builder --auto-confirm --destination dashboard
 ```
 
 Exit code 0 expected. The framework is `mode: on-demand`, so no launchd job
@@ -260,7 +260,7 @@ Persist the 4 captured fields by calling the shipped CLI helper that writes
 both the JSON sidecar AND the installed-config slot:
 
 ```bash
-yalc-gtm framework:set-hypothesis outreach-campaign-builder \
+crossnode-gtm framework:set-hypothesis outreach-campaign-builder \
   --icp-segment "<answer 1>" \
   --message-angle "<answer 2>" \
   --signal-trigger "<answer 3>" \
@@ -268,7 +268,7 @@ yalc-gtm framework:set-hypothesis outreach-campaign-builder \
 ```
 
 Exit code 0 expected. Confirm to the user: "Hypothesis locked. Run
-`yalc-gtm framework:run outreach-campaign-builder` whenever you're ready
+`crossnode-gtm framework:run outreach-campaign-builder` whenever you're ready
 to launch — the framework will draft variants, build the lead list, and
 gate on you before sending anything."
 
@@ -294,7 +294,7 @@ is deterministic, rule-based, and reads only the artifacts already on disk
 Run:
 
 ```bash
-yalc-gtm routine:propose
+crossnode-gtm routine:propose
 ```
 
 Exit code 0 expected when an Anthropic key is set. Exit code 2 means "no
@@ -316,7 +316,7 @@ Show the user the proposed routine output verbatim, then ask exactly:
   framework yaml `description` plus the entry `rationale` (already on
   the proposal). Then re-ask the prompt.
 - **skip** — confirm "Skipping routine install. You can re-run
-  `yalc-gtm routine:propose` whenever you are ready." and jump straight
+  `crossnode-gtm routine:propose` whenever you are ready." and jump straight
   to **Step 12**. Do not call `routine:install`. The proposal is *not*
   persisted on skip — re-running setup re-derives.
 
@@ -325,7 +325,7 @@ Show the user the proposed routine output verbatim, then ask exactly:
 Run:
 
 ```bash
-yalc-gtm routine:install --yes
+crossnode-gtm routine:install --yes
 ```
 
 Exit code 0 expected. The command:
@@ -349,10 +349,10 @@ skipped, and any warnings.
 Print a closing summary:
 
 - **Installed providers:** read from `~/.gtm-os/config.yaml` (services with non-empty keys).
-- **Active frameworks:** run `yalc-gtm framework:list` and report the ones with `status: active`.
+- **Active frameworks:** run `crossnode-gtm framework:list` and report the ones with `status: active`.
 - **Output destinations:** Notion parent page (if set) and `http://localhost:3847/frameworks` (dashboard).
 - **What to check daily:** the dashboard URL or the Notion pages.
-- **How to inspect a framework:** `yalc-gtm framework:status <name>` and `yalc-gtm framework:logs <name>`.
-- **How to disable / remove:** `yalc-gtm framework:disable <name>` (keeps config) or `yalc-gtm framework:remove <name>` (deletes).
+- **How to inspect a framework:** `crossnode-gtm framework:status <name>` and `crossnode-gtm framework:logs <name>`.
+- **How to disable / remove:** `crossnode-gtm framework:disable <name>` (keeps config) or `crossnode-gtm framework:remove <name>` (deletes).
 
-End with: "You're set. The frameworks will run on their own schedules. Come back anytime — `yalc-gtm framework:recommend` will surface new ones as you add providers or context."
+End with: "You're set. The frameworks will run on their own schedules. Come back anytime — `crossnode-gtm framework:recommend` will surface new ones as you add providers or context."

@@ -6,12 +6,15 @@ import { resultSets, resultRows, workflows, conversations } from '../db/schema'
 import { randomUUID } from 'crypto'
 import { notionService } from '../services/notion'
 import type { GTMOSConfig } from '../config/types'
+import { isNotionImportSyncEnabled, pushImportedLeadsToNotion } from '../notion/push-imported-leads'
 
 interface ImportOptions {
   config: GTMOSConfig
   source: string
   input: string
   dryRun?: boolean
+  /** Skip Notion push (e.g. when pages were already created in this run). */
+  skipNotionPush?: boolean
 }
 
 interface ImportResult {
@@ -42,6 +45,9 @@ export async function runImport(opts: ImportOptions): Promise<ImportResult> {
     case 'engagers':
       records = parseEngagers(input)
       break
+    case 'skool':
+      records = parseSkoolMembers(input)
+      break
     case 'hubspot':
     case 'salesforce':
     case 'pipedrive':
@@ -56,6 +62,12 @@ export async function runImport(opts: ImportOptions): Promise<ImportResult> {
 
   if (records.length === 0) {
     throw new Error('No records found in input')
+  }
+
+  if (!opts.dryRun && !opts.skipNotionPush && source !== 'notion') {
+    await pushImportedLeadsToNotion(opts.config, records)
+  } else if (!opts.dryRun && isNotionImportSyncEnabled(opts.config) && source === 'notion') {
+    console.log('[import] Source is Notion — skipping push-back to scraped Leads DB')
   }
 
   // Create a conversation and workflow to anchor the result set
@@ -237,6 +249,27 @@ function parseVisitors(filePath: string): Record<string, unknown>[] {
   }))
 }
 
+function parseSkoolMembers(filePath: string): Record<string, unknown>[] {
+  const raw = readFileSync(filePath, 'utf-8')
+  const parsed = JSON.parse(raw)
+  const rows = Array.isArray(parsed) ? parsed : parsed.members ?? parsed.data ?? [parsed]
+
+  return rows.map((e: Record<string, unknown>) => ({
+    first_name: e.first_name ?? e.firstName ?? '',
+    last_name: e.last_name ?? e.lastName ?? '',
+    name: e.name ?? '',
+    headline: e.headline ?? e.title ?? e.bio ?? '',
+    company: e.company ?? e.company_name ?? '',
+    email: e.email ?? '',
+    linkedin_url: e.linkedin_url ?? e.linkedinUrl ?? e.profile_url ?? '',
+    profile_url: e.profile_url ?? e.profileUrl ?? '',
+    source: e.source ?? 'skool',
+    source_detail: e.source_detail ?? 'skool:unknown',
+    notes: e.notes ?? '',
+    engagement_type: e.engagement_type ?? 'member',
+  }))
+}
+
 function parseEngagers(filePath: string): Record<string, unknown>[] {
   const raw = readFileSync(filePath, 'utf-8')
   const parsed = JSON.parse(raw)
@@ -265,7 +298,7 @@ async function importFromCrm(provider: string): Promise<Record<string, unknown>[
   const crmConfig = loadCrmConfig(provider)
   if (!crmConfig) {
     throw new Error(
-      `No CRM config for "${provider}". Run: yalc-gtm crm:setup --provider ${provider}`,
+      `No CRM config for "${provider}". Run: crossnode-gtm crm:setup --provider ${provider}`,
     )
   }
 

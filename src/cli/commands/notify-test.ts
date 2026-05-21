@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm notify:test --channel slack|desktop` (D2).
+ * `crossnode-gtm notify:test --channel slack|desktop` (D2).
  *
  * Sends a single test notification to the requested channel so operators
  * can verify their config without waiting for a real awaiting-gate event.
@@ -31,7 +31,7 @@ const TEST_GATE: AwaitingGateRecord = {
   framework: 'notify-test',
   step_index: 0,
   gate_id: 'test',
-  prompt: 'YALC test notification — if you see this, notifications are wired up.',
+  prompt: 'Crossnode GTM test notification — if you see this, notifications are wired up.',
   payload: null,
   payload_step_index: null,
   prior_step_outputs: [],
@@ -53,7 +53,7 @@ export async function runNotifyTest(
     }
     try {
       await sendDesktopNotification({
-        title: 'YALC',
+        title: 'Crossnode GTM',
         body: TEST_GATE.prompt,
         platform,
         exec: opts.exec,
@@ -68,15 +68,15 @@ export async function runNotifyTest(
   }
 
   if (channel === 'slack') {
-    const webhookUrl = process.env.YALC_SLACK_WEBHOOK_URL
+    const webhookUrl = process.env.CROSSNODE_GTM_SLACK_WEBHOOK_URL
     if (!webhookUrl || !webhookUrl.trim()) {
       return {
         exitCode: 1,
         output:
-          'No Slack webhook configured. Set YALC_SLACK_WEBHOOK_URL in ~/.gtm-os/.env or your environment.',
+          'No Slack webhook configured. Set CROSSNODE_GTM_SLACK_WEBHOOK_URL in ~/.gtm-os/.env or your environment.',
       }
     }
-    const baseUrl = process.env.YALC_BASE_URL?.trim() || 'http://localhost:3847'
+    const baseUrl = process.env.CROSSNODE_GTM_BASE_URL?.trim() || 'http://localhost:3847'
     const prevFetch = globalThis.fetch
     if (opts.fetchImpl) {
       // Temporary stubbing for the test seam.

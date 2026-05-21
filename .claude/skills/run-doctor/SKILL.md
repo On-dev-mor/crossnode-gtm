@@ -1,20 +1,20 @@
 ---
 name: run-doctor
-description: "Run the GTM-OS health check across all 5 diagnostic layers (environment, database, configuration, provider connectivity, runtime state). Use when the user says 'is YALC working', 'diagnose YALC', 'check YALC health', 'is everything configured', 'run the health check', or 'are my keys set up'. Read-only — never writes anything. Surfaces /keys/connect/<provider> URLs alongside any failed provider so the user has a one-click path to fix."
+description: "Run the GTM-OS health check across all 5 diagnostic layers (environment, database, configuration, provider connectivity, runtime state). Use when the user says 'is Crossnode GTM working', 'diagnose Crossnode GTM', 'check Crossnode GTM health', 'is everything configured', 'run the health check', or 'are my keys set up'. Read-only — never writes anything. Surfaces /keys/connect/<provider> URLs alongside any failed provider so the user has a one-click path to fix."
 version: 1.0.0
 ---
 
 # Run Doctor
 
-I'll run the 5-layer health check and tell you what's missing. This is the read-only diagnostic that proves YALC is wired up correctly — environment file, SQLite schema, framework + user config, live provider connectivity, and runtime state. Nothing here writes to disk or burns credits.
+I'll run the 5-layer health check and tell you what's missing. This is the read-only diagnostic that proves Crossnode GTM is wired up correctly — environment file, SQLite schema, framework + user config, live provider connectivity, and runtime state. Nothing here writes to disk or burns credits.
 
 ## When This Skill Applies
 
 Use this skill when the user says:
 
-- "is YALC working"
-- "diagnose YALC"
-- "check YALC health"
+- "is Crossnode GTM working"
+- "diagnose Crossnode GTM"
+- "check Crossnode GTM health"
 - "is everything configured"
 - "run the health check"
 - "are my keys set up"
@@ -24,7 +24,7 @@ Use this skill when the user says:
 - "fix", "not working", "broken", "troubleshoot" — those route to debugger.
 
 **NOT this skill** (use `setup` instead):
-- "set up YALC" — that's the onboarding flow.
+- "set up Crossnode GTM" — that's the onboarding flow.
 
 ## What This Skill Does
 
@@ -32,7 +32,7 @@ Use this skill when the user says:
 2. Captures the printed health check output by intercepting `console.log` and `process.exit`.
 3. Renders a clean per-layer summary: PASS / FAIL / WARN / SKIP for each check.
 4. For any FAIL'd or WARN'd provider, surfaces the matching `/keys/connect/<provider>` URL (the URL hint A5 added).
-5. Offers to walk you through fixing each failure — typically by opening the relevant `/keys/connect/...` route in your browser via `yalc-gtm dashboard --route /keys/connect/<provider>`.
+5. Offers to walk you through fixing each failure — typically by opening the relevant `/keys/connect/...` route in your browser via `crossnode-gtm dashboard --route /keys/connect/<provider>`.
 
 ## What This Skill Does NOT
 
@@ -48,7 +48,7 @@ Use this skill when the user says:
 test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
 ```
 
-If `BLOCKED`, surface a soft warning: setup is mid-flight and the diagnostic snapshot may be incomplete (config + DB are still being assembled). Since this skill is read-only and never writes anything, ask the user whether to (a) run anyway against the in-flight state, or (b) finish `yalc-gtm setup --resume` first and re-invoke. Default to (b) unless the user explicitly opts in to (a).
+If `BLOCKED`, surface a soft warning: setup is mid-flight and the diagnostic snapshot may be incomplete (config + DB are still being assembled). Since this skill is read-only and never writes anything, ask the user whether to (a) run anyway against the in-flight state, or (b) finish `crossnode-gtm setup --resume` first and re-invoke. Default to (b) unless the user explicitly opts in to (a).
 
 ## Workflow
 
@@ -58,12 +58,12 @@ This is a read-only command. Skip straight to step 1.
 
 ### Step 1: Generate the inline runner
 
-Generate `/tmp/yalc-skill-run-doctor.mjs` from the gtm-os root (`~/Desktop/gtm-os/`). The runner imports `runDoctor` directly (the import-direct pattern from 0.13.0), monkey-patches `console.log` and `process.exit` so the output is collected as structured lines, and prints JSON to stdout.
+Generate `/tmp/crossnode-skill-run-doctor.mjs` from the gtm-os root (`~/Desktop/gtm-os/`). The runner imports `runDoctor` directly (the import-direct pattern from 0.13.0), monkey-patches `console.log` and `process.exit` so the output is collected as structured lines, and prints JSON to stdout.
 
 **Important — the import path must be absolute.** `tsx` resolves relative imports against the script's own directory, not against `cwd`. Since the runner lives in `/tmp/`, a relative `./src/...` import resolves to `/tmp/src/...` and fails. Build the runner with the absolute path baked in via heredoc expansion:
 
 ```bash
-cd ~/Desktop/gtm-os && cat > /tmp/yalc-skill-run-doctor.mjs <<RUNNEREOF
+cd ~/Desktop/gtm-os && cat > /tmp/crossnode-skill-run-doctor.mjs <<RUNNEREOF
 import { runDoctor } from '\${PWD}/src/lib/diagnostics/doctor.ts'
 
 const lines = []
@@ -101,7 +101,7 @@ Note: do **not** add a `--json` flag — `runDoctor` does not accept one; this w
 From the gtm-os root (`~/Desktop/gtm-os/`):
 
 ```bash
-npx tsx /tmp/yalc-skill-run-doctor.mjs
+npx tsx /tmp/crossnode-skill-run-doctor.mjs
 ```
 
 ### Step 3: Parse the JSON output
@@ -128,7 +128,7 @@ End the summary with the overall verdict: healthy / minor warnings / N issues ne
 
 For each FAIL or WARN row whose detail includes a `/keys/connect/<provider>` URL, ask the user:
 
-> "Want me to open `/keys/connect/<provider>` in your browser? I'll run `yalc-gtm dashboard --route /keys/connect/<provider>`."
+> "Want me to open `/keys/connect/<provider>` in your browser? I'll run `crossnode-gtm dashboard --route /keys/connect/<provider>`."
 
 Don't run the dashboard command unless they say yes. The dashboard command (A2) starts the SPA on port 3847 and routes the user to the connect screen for that provider.
 

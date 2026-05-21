@@ -466,7 +466,7 @@ function loadDir(dir: string): FrameworkDefinition[] {
 }
 
 /**
- * Load every framework definition known to YALC.
+ * Load every framework definition known to Crossnode GTM.
  * Bundled definitions are loaded first; user-installed definitions follow.
  * If a user file shadows a bundled name, the user copy wins (override).
  */

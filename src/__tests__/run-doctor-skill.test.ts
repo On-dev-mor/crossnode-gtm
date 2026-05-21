@@ -13,9 +13,9 @@ import { join } from 'node:path'
 const SKILL_DIR = join(process.cwd(), '.claude', 'skills', 'run-doctor')
 
 const TRIGGER_PHRASES = [
-  'is YALC working',
-  'diagnose YALC',
-  'check YALC health',
+  'is Crossnode GTM working',
+  'diagnose Crossnode GTM',
+  'check Crossnode GTM health',
   'is everything configured',
   'run the health check',
   'are my keys set up',
@@ -81,9 +81,9 @@ describe('run-doctor skill', () => {
 
   it('description trigger phrases do not collide with sibling skills', () => {
     // The 6 trigger phrases must avoid substring overlap with `setup`'s
-    // 'set up YALC' and `debugger`'s 'debug', 'fix', 'not working',
+    // 'set up Crossnode GTM' and `debugger`'s 'debug', 'fix', 'not working',
     // 'broken', 'troubleshoot' so the router doesn't misroute.
-    const FORBIDDEN = ['set up YALC', 'debug', 'troubleshoot', 'broken', 'not working']
+    const FORBIDDEN = ['set up Crossnode GTM', 'debug', 'troubleshoot', 'broken', 'not working']
     for (const phrase of TRIGGER_PHRASES) {
       const lower = phrase.toLowerCase()
       for (const f of FORBIDDEN) {

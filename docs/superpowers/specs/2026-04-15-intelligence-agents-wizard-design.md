@@ -55,7 +55,7 @@ Users must hand-write AgentConfig in TypeScript or YAML. Only one example exists
 ### CLI Command
 
 ```
-yalc-gtm agent:create
+crossnode-gtm agent:create
 ```
 
 ### Interactive Flow
@@ -110,7 +110,7 @@ New users must manually edit `.env.local` with 8-10 keys. No guidance, no valida
 ### CLI Command
 
 ```
-yalc-gtm setup --wizard
+crossnode-gtm setup --wizard
 ```
 
 ### Flow

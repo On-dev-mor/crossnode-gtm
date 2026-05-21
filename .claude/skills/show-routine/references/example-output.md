@@ -23,5 +23,5 @@ Default dashboard: /dashboard/b
 Archetypes covered: B (content-calendar) + C (outreach, deferred)
 
 To install this routine, invoke the `build-routine` skill or run:
-  yalc-gtm routine:install --yes
+  crossnode-gtm routine:install --yes
 ```

@@ -1,12 +1,12 @@
 ---
 name: list-adapters
-description: "Show every capability the engine knows about and which provider backs it (built-in TypeScript, bundled YAML, or user-installed YAML), with availability flags reflecting whether each provider's API key is set. Use when the user says 'list adapters', 'show me which providers are configured', 'which providers are available', 'what capabilities can YALC use right now', or 'show capability coverage'. Read-only — never writes anything."
+description: "Show every capability the engine knows about and which provider backs it (built-in TypeScript, bundled YAML, or user-installed YAML), with availability flags reflecting whether each provider's API key is set. Use when the user says 'list adapters', 'show me which providers are configured', 'which providers are available', 'what capabilities can Crossnode GTM use right now', or 'show capability coverage'. Read-only — never writes anything."
 version: 1.0.0
 ---
 
 # List Adapters
 
-I'll show you every capability the engine recognizes and which provider currently backs it. This is the read-only inventory that proves YALC's adapter registry is correctly wired and tells you which capabilities are actually executable on your machine.
+I'll show you every capability the engine recognizes and which provider currently backs it. This is the read-only inventory that proves Crossnode GTM's adapter registry is correctly wired and tells you which capabilities are actually executable on your machine.
 
 ## When This Skill Applies
 
@@ -15,21 +15,21 @@ Use this skill when the user says:
 - "list adapters"
 - "show me which providers are configured"
 - "which providers are available"
-- "what capabilities can YALC use right now"
+- "what capabilities can Crossnode GTM use right now"
 - "show capability coverage"
 
 **NOT this skill** (use `provider-builder` instead):
 - "add a new provider for X" — provider-builder authors a fresh YAML manifest.
-- "wire up [vendor] to YALC" — same.
+- "wire up [vendor] to Crossnode GTM" — same.
 
 **NOT this skill** (use `run-doctor` instead):
-- "is YALC working" / "diagnose YALC" — run-doctor is the broader 5-layer health check; this skill only inventories adapters.
+- "is Crossnode GTM working" / "diagnose Crossnode GTM" — run-doctor is the broader 5-layer health check; this skill only inventories adapters.
 
 ## What This Skill Does
 
-1. Runs `yalc-gtm adapters:list --json` to get the structured adapter registry.
+1. Runs `crossnode-gtm adapters:list --json` to get the structured adapter registry.
 2. Parses the JSON and renders it grouped by capability.
-3. For each capability, lists every provider the engine knows about with its source tag — `[built-in]` (TypeScript), `[bundled]` (YAML shipped with YALC under `configs/adapters/`), or `[user]` (YAML the user dropped in `~/.gtm-os/adapters/`).
+3. For each capability, lists every provider the engine knows about with its source tag — `[built-in]` (TypeScript), `[bundled]` (YAML shipped with Crossnode GTM under `configs/adapters/`), or `[user]` (YAML the user dropped in `~/.gtm-os/adapters/`).
 4. Marks each provider with availability — `✓` if every required env var is set, `✗` if any required key is missing.
 5. Surfaces which provider wins resolution for each capability based on the user's `~/.gtm-os/config.yaml` priority list (or the default priority if no override).
 
@@ -47,7 +47,7 @@ Use this skill when the user says:
 test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
 ```
 
-If `BLOCKED`, surface a soft warning: setup is mid-flight, so the adapter inventory may not yet reflect freshly-set keys or newly-installed manifests. Since this skill is read-only and never writes anything, ask the user whether to (a) run anyway against the in-flight state, or (b) finish `yalc-gtm setup --resume` first and re-invoke. Default to (b) unless the user explicitly opts in to (a).
+If `BLOCKED`, surface a soft warning: setup is mid-flight, so the adapter inventory may not yet reflect freshly-set keys or newly-installed manifests. Since this skill is read-only and never writes anything, ask the user whether to (a) run anyway against the in-flight state, or (b) finish `crossnode-gtm setup --resume` first and re-invoke. Default to (b) unless the user explicitly opts in to (a).
 
 ## Workflow
 
@@ -102,7 +102,7 @@ If any capability has zero available providers, ask:
 
 If a bundled provider exists but its key isn't set, suggest the relevant `/keys/connect/<provider>` URL via the dashboard command:
 
-> "`<provider>` is bundled but `<ENV_VAR>` isn't set. Want me to open `/keys/connect/<provider>` in your browser? I'll run `yalc-gtm dashboard --route /keys/connect/<provider>`."
+> "`<provider>` is bundled but `<ENV_VAR>` isn't set. Want me to open `/keys/connect/<provider>` in your browser? I'll run `crossnode-gtm dashboard --route /keys/connect/<provider>`."
 
 Don't run anything unless they say yes.
 

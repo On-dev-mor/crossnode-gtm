@@ -1,6 +1,6 @@
 ---
 name: show-routine
-description: "Show the proposed sales routine without installing it — read-only preview of which frameworks YALC would auto-configure, with schedules and rationale, based on current archetype + providers + context. Use when the user says 'show my routine', 'what would YALC propose', 'preview the routine', 'dry-run the routine generator', or 'just show me the proposal'. Read-only — never writes anything."
+description: "Show the proposed sales routine without installing it — read-only preview of which frameworks Crossnode GTM would auto-configure, with schedules and rationale, based on current archetype + providers + context. Use when the user says 'show my routine', 'what would Crossnode GTM propose', 'preview the routine', 'dry-run the routine generator', or 'just show me the proposal'. Read-only — never writes anything."
 version: 1.0.0
 ---
 
@@ -11,7 +11,7 @@ I'll wrap `routine:propose` in read-only mode. Same generator as `build-routine`
 ## When This Skill Applies
 
 - "show my routine"
-- "what would YALC propose"
+- "what would Crossnode GTM propose"
 - "preview the routine"
 - "dry-run the routine generator"
 - "just show me the proposal"

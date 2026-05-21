@@ -92,7 +92,7 @@ function seedPreview(opts: { withMeta?: boolean } = {}) {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-setup-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-setup-api-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

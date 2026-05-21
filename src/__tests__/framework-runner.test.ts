@@ -119,7 +119,7 @@ describe('framework runner (HOME-isolated)', () => {
   beforeEach(() => {
     prevHome = process.env.HOME
     prevCwd = process.cwd()
-    tempHome = join(tmpdir(), `yalc-runner-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-runner-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     // Frameworks are loaded from PKG_ROOT/configs/frameworks. Drop a

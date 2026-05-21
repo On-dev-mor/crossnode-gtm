@@ -8,7 +8,7 @@
  * `RejectedGateRecord` with reason `"timeout: <N>h elapsed without action"`.
  *
  * Timeout precedence (resolved per-framework):
- *   manifest `gate_timeout_hours` > `YALC_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h fallback.
+ *   manifest `gate_timeout_hours` > `CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS` env > 72h fallback.
  *
  * The transition is idempotent: a stale gate is auto-rejected at most once.
  * Subsequent ticks observe the rejected sentinel (the awaiting one has been
@@ -40,14 +40,14 @@ export const STALE_BADGE_THRESHOLD = 0.8
 /**
  * Resolve the awaiting-gate timeout for a framework. Precedence:
  *   1. `manifestHours` (`gate_timeout_hours` from the framework yaml).
- *   2. `YALC_DEFAULT_GATE_TIMEOUT_HOURS` env, parsed as a positive number.
+ *   2. `CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS` env, parsed as a positive number.
  *   3. `DEFAULT_GATE_TIMEOUT_HOURS` (72h).
  */
 export function resolveGateTimeoutHours(manifestHours: number | undefined): number {
   if (typeof manifestHours === 'number' && Number.isFinite(manifestHours) && manifestHours > 0) {
     return manifestHours
   }
-  const envRaw = process.env.YALC_DEFAULT_GATE_TIMEOUT_HOURS
+  const envRaw = process.env.CROSSNODE_GTM_DEFAULT_GATE_TIMEOUT_HOURS
   if (envRaw !== undefined && envRaw !== '') {
     const parsed = Number(envRaw)
     if (Number.isFinite(parsed) && parsed > 0) return parsed

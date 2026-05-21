@@ -13,7 +13,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-preview-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-preview-'))
   vi.stubEnv('HOME', TMP)
   // Reset module cache so paths.ts re-resolves HOME_DIR per test.
   vi.resetModules()

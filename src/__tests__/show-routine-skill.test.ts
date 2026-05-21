@@ -9,7 +9,7 @@ const SKILL_DIR = join(process.cwd(), '.claude', 'skills', 'show-routine')
 
 const TRIGGER_PHRASES = [
   'show my routine',
-  'what would YALC propose',
+  'what would Crossnode GTM propose',
   'preview the routine',
   'dry-run the routine generator',
   'just show me the proposal',
@@ -44,7 +44,7 @@ describe('show-routine skill', () => {
       'set up a sales routine',
       'auto-derive my routine',
       'list adapters',
-      'set up YALC',
+      'set up Crossnode GTM',
     ]
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {

@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm keys:connect [provider] [--open]` (0.9.D).
+ * Tests for `crossnode-gtm keys:connect [provider] [--open]` (0.9.D).
  *
  * The CLI delegates to `runKeysConnect()`. Each test stubs `spawn` (so no
  * real browser launches) and writes/reads sentinel files in a hermetic
@@ -14,7 +14,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-keys-connect-cli-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-keys-connect-cli-'))
 })
 
 afterEach(() => {

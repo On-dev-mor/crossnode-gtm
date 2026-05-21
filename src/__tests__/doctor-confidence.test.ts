@@ -43,7 +43,7 @@ function writeMeta(home: string, sections: Record<string, { confidence: number; 
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-doctor-conf-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-doctor-conf-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

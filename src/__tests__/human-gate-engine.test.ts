@@ -108,7 +108,7 @@ describe('framework runner — human-gate (HOME-isolated)', () => {
   beforeEach(() => {
     prevHome = process.env.HOME
     prevCwd = process.cwd()
-    tempHome = join(tmpdir(), `yalc-gate-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-gate-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     frameworkName = `gate-test-${Date.now()}-${Math.floor(Math.random() * 1e6)}`

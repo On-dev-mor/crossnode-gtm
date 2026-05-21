@@ -44,7 +44,7 @@ describe('answer-linkedin-comments skill', () => {
       'scrape engagers',
       'launch a LinkedIn campaign',
       'list adapters',
-      'set up YALC',
+      'set up Crossnode GTM',
       'personalize this message',
     ]
     for (const p of TRIGGER_PHRASES) {

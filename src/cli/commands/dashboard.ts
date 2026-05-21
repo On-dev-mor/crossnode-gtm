@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm dashboard` (alias `ui`) — summon the SPA from anywhere.
+ * `crossnode-gtm dashboard` (alias `ui`) — summon the SPA from anywhere.
  *
  * Today the SPA only opens at the end of `start --non-interactive`. Operators
  * who want to re-check state had to re-run setup or hit `campaign:dashboard`
@@ -115,7 +115,7 @@ async function defaultIsPortListening(port: number, host = '127.0.0.1'): Promise
 /**
  * Spawn the dashboard server as a detached child process so it survives
  * this CLI's exit. Re-uses the same node binary + CLI entry point so it
- * works inside sandboxed installs where `yalc-gtm` may not be on PATH.
+ * works inside sandboxed installs where `crossnode-gtm` may not be on PATH.
  */
 async function defaultSpawnServer(port: number): Promise<number | null> {
   try {
@@ -196,7 +196,7 @@ export async function runDashboard(
     console.log(
       `Could not auto-spawn the dashboard server. In another terminal run:`,
     )
-    console.log(`  yalc-gtm campaign:dashboard --port ${port}`)
+    console.log(`  crossnode-gtm campaign:dashboard --port ${port}`)
   }
 
   if (opts.open !== false) {

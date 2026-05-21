@@ -39,7 +39,7 @@ async function installFakeAdapter(html: string, idiom: string, summary: string) 
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-viz-skill-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-viz-skill-'))
   vi.stubEnv('HOME', TMP)
   vi.stubEnv('ANTHROPIC_API_KEY', 'test-key')
   capturedPrompts = []
@@ -146,7 +146,7 @@ describe('visualize skill — error + idempotency', () => {
     })
     expect(capturedPrompts.length).toBeGreaterThan(0)
     const prompt = capturedPrompts[0]
-    // The brand tokens block always carries the canonical Yalc rose hex.
+    // The brand tokens block always carries the canonical Crossnode rose hex.
     expect(prompt).toContain('#C9506E')
     expect(prompt).toContain('#E07A95')
     expect(prompt.toLowerCase()).toContain('outfit')
@@ -162,7 +162,7 @@ describe('visualize skill — error + idempotency', () => {
     })
     const prompt = capturedPrompts[0]
     expect(prompt).toContain('UI/UX Pro Max design directives')
-    expect(prompt.toLowerCase()).toContain('palette: yalc rose')
+    expect(prompt.toLowerCase()).toContain('palette: Crossnode rose')
     expect(prompt.toLowerCase()).toContain('forbidden:')
     expect(prompt.toLowerCase()).toContain('bg-blue-')
   })

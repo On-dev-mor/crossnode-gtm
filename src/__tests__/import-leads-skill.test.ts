@@ -12,7 +12,7 @@ const TRIGGER_PHRASES = [
   'load these leads without qualifying',
   'bulk import this file',
   'add these prospects to the DB',
-  'pull this Notion DB into YALC',
+  'pull this Notion DB into Crossnode GTM',
 ]
 
 describe('import-leads skill', () => {
@@ -41,7 +41,7 @@ describe('import-leads skill', () => {
   })
 
   it('triggers do not collide with siblings', () => {
-    const FORBIDDEN = ['qualify these leads', 'list adapters', 'set up YALC', 'scrape engagers']
+    const FORBIDDEN = ['qualify these leads', 'list adapters', 'set up Crossnode GTM', 'scrape engagers']
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {
         expect(p.toLowerCase().includes(f.toLowerCase())).toBe(false)

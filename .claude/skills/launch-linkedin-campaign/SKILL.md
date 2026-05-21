@@ -44,7 +44,7 @@ Use this skill when the user says:
 test -f ~/.gtm-os/.in-flight-setup && echo "BLOCKED" || echo "OK"
 ```
 
-If `BLOCKED`, stop. Tell the user to finish `yalc-gtm start` first.
+If `BLOCKED`, stop. Tell the user to finish `crossnode-gtm start` first.
 
 ### Hypothesis gate (THE critical check)
 
@@ -56,11 +56,11 @@ If `MISSING`, refuse to proceed:
 
 > "Can't launch a LinkedIn campaign without a recorded outbound hypothesis. Either:
 >
-> (a) finish setup Step 10 to record one (`yalc-gtm start --review-in-chat` and re-run setup), or
+> (a) finish setup Step 10 to record one (`crossnode-gtm start --review-in-chat` and re-run setup), or
 >
 > (b) record one directly:
 > ```
-> yalc-gtm framework:set-hypothesis outreach-campaign-builder \
+> crossnode-gtm framework:set-hypothesis outreach-campaign-builder \
 >   --icp-segment '<segment>' \
 >   --message-angle '<angle>' \
 >   --signal-trigger '<signal>' \
@@ -141,7 +141,7 @@ The CLI emits per-lead message previews + the staged sequence ids. Capture them.
 > "Campaign `<id>` created with `<n>` qualified leads.
 > Sequence drafted with `<m>` per-lead messages staged.
 >
-> Ready to send? Hitting yes will start the campaign tracker so messages go out on schedule. (Or run `yalc-gtm campaign:track` manually anytime.)"
+> Ready to send? Hitting yes will start the campaign tracker so messages go out on schedule. (Or run `crossnode-gtm campaign:track` manually anytime.)"
 
 **Do not run `campaign:track` yourself.** That's the `track-campaigns` skill's job (Wave 4). The user makes the call.
 

@@ -46,7 +46,7 @@ Campaign cmp_2026_04_30_x1y2z3 staged.
 
 Status: DRAFT — nothing sent yet.
 
-Ready to send? Run `yalc-gtm campaign:track` once to start the tracker.
+Ready to send? Run `crossnode-gtm campaign:track` once to start the tracker.
 ```
 
 ## Failure modes
@@ -55,7 +55,7 @@ Ready to send? Run `yalc-gtm campaign:track` once to start the tracker.
 
 ```
 ⚠ Cannot launch — no outbound hypothesis recorded.
-Run: yalc-gtm framework:set-hypothesis outreach-campaign-builder \
+Run: crossnode-gtm framework:set-hypothesis outreach-campaign-builder \
        --icp-segment '<seg>' --message-angle '<angle>' \
        --signal-trigger '<sig>' --expected-reply-rate 0.05
 ```

@@ -6,6 +6,10 @@ import { validateAndFix, validateMessage } from '../../outbound/validator'
 import { rateLimiter } from '../../rate-limiter'
 import { unipileService } from '../../services/unipile'
 import { instantlyService } from '../../services/instantly'
+import { loadConfig } from '../../config/loader'
+import { resolveEmailFrom } from '../../email/from-line'
+import { homedir } from 'os'
+import { join } from 'path'
 
 interface MultiChannelInput {
   sequencePath: string
@@ -55,6 +59,24 @@ export const multiChannelCampaignSkill: Skill = {
 
   async *execute(input: unknown, _context: SkillContext): AsyncIterable<SkillEvent> {
     const { sequencePath, leads, linkedinAccountId, dryRun } = input as MultiChannelInput
+
+    let emailProvider = 'instantly'
+    let unipileEmailAccountId: string | undefined
+    let unipileEmailFrom: { display_name: string; identifier: string } | undefined
+    try {
+      const cfgPath = process.env.GTM_OS_CONFIG ?? join(homedir(), '.gtm-os', 'config.yaml')
+      const config = loadConfig(cfgPath.replace('~', homedir()))
+      emailProvider = config.email?.provider ?? 'instantly'
+      unipileEmailAccountId = config.unipile.email_account_id
+      if (emailProvider === 'unipile' && unipileService.isAvailable()) {
+        const accounts = await unipileService.listEmailAccounts()
+        const mailbox = accounts.find((a) => a.id === unipileEmailAccountId)?.email ?? accounts[0]?.email
+        unipileEmailFrom = resolveEmailFrom(config, mailbox)
+      }
+    } catch {
+      // defaults above
+    }
+    const useUnipileEmail = emailProvider === 'unipile'
 
     // 1. Load sequence
     let sequence: SequenceDefinition
@@ -185,6 +207,25 @@ export const multiChannelCampaignSkill: Skill = {
           }
           if (!message) {
             status = 'skipped_no_template'
+          } else if (useUnipileEmail) {
+            if (!unipileService.isAvailable()) {
+              status = 'unipile_unavailable'
+            } else if (validateMessage(message).violations.some(v => v.severity === 'hard')) {
+              status = 'blocked_validator'
+            } else if (!await rateLimiter.acquire('unipile.email', unipileEmailAccountId ?? 'default')) {
+              status = 'rate_limited'
+            } else {
+              const subject = nextStep.subject || nextStep.template?.split('\n')[0]?.slice(0, 80) || sequence.name
+              await unipileService.sendEmail({
+                accountId: unipileEmailAccountId ?? process.env.UNIPILE_EMAIL_ACCOUNT_ID ?? '',
+                to: lead.email!,
+                subject,
+                body: message,
+                toDisplayName: [lead.firstName, lead.lastName].filter(Boolean).join(' ') || undefined,
+                from: unipileEmailFrom,
+              })
+              status = 'sent_email'
+            }
           } else if (!instantlyService.isAvailable()) {
             status = 'instantly_unavailable'
           } else if (validateMessage(message).violations.some(v => v.severity === 'hard')) {
@@ -213,7 +254,7 @@ export const multiChannelCampaignSkill: Skill = {
         }
 
         actions.push({ leadId: lead.id, day: nextStep.day, channel: nextStep.channel, action: nextStep.action, status })
-        if (status === 'sent' || status === 'logged' || status === 'queued_email') {
+        if (status === 'sent' || status === 'logged' || status === 'queued_email' || status === 'sent_email') {
           processed++
         }
       } catch (err) {
@@ -223,7 +264,7 @@ export const multiChannelCampaignSkill: Skill = {
     }
 
     // 3b. Flush buffered email sends to Instantly (bulk per unique template)
-    if (!dryRun && emailBuffers.size > 0 && instantlyService.isAvailable()) {
+    if (!dryRun && !useUnipileEmail && emailBuffers.size > 0 && instantlyService.isAvailable()) {
       // Idempotency: list existing Instantly campaigns once and reuse-by-name where possible.
       let existingCampaigns: Array<{ id: string; name: string; status: string }> = []
       try {

@@ -33,7 +33,7 @@ export interface ExtractInput {
 
 /**
  * Title-case a slug-ish identifier. Keeps multi-word brands legible
- * ("yalc-gtm" → "Yalc Gtm"). We don't try to be clever about acronyms.
+ * ("crossnode-gtm" → "Crossnode Gtm"). We don't try to be clever about acronyms.
  */
 function titleCase(s: string): string {
   return s

@@ -40,7 +40,7 @@ describe('registerDeclarativeAdapters', () => {
   beforeEach(() => {
     prevHome = process.env.HOME
     prevApolloKey = process.env.APOLLO_API_KEY
-    dir = join(tmpdir(), `yalc-decl-int-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    dir = join(tmpdir(), `crossnode-decl-int-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(dir, { recursive: true })
     resetDeclarativeLoaderCache()
   })

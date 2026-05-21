@@ -1,27 +1,27 @@
 # First Run Tutorial
 
-This guide walks you through what happens when you run YALC's first-run flow, and then shows you three things to try after setup.
+This guide walks you through what happens when you run Crossnode GTM's first-run flow, and then shows you three things to try after setup.
 
 ## Quick start
 
 Node.js 20 or higher required ([nodejs.org](https://nodejs.org/)).
 
-### Option A — Drive YALC from your IDE (recommended)
+### Option A — Drive Crossnode GTM from your IDE (recommended)
 Open this repo in Cursor or VS Code with the Claude Code extension installed.
 In the chat panel, paste this repo URL or just say "let's start".
-Claude will introduce YALC, check your prerequisites, and walk you through setup.
+Claude will introduce Crossnode GTM, check your prerequisites, and walk you through setup.
 
 ### Option B — Use the CLI directly
 ```bash
-npm i -g yalc-gtm-os
-yalc-gtm start
+npm i -g crossnode-gtm
+crossnode-gtm start
 ```
 
 That is the whole installation. The `start` command writes its config to `~/.gtm-os/`, asks for your company website URL, then opens the browser at `/setup/review` so you can confirm the inferred framework.
 
 ## Running `start`
 
-Whether you triggered it from the IDE chat or invoked it directly, `yalc-gtm start` walks through the same 4 steps below.
+Whether you triggered it from the IDE chat or invoked it directly, `crossnode-gtm start` walks through the same 4 steps below.
 
 ### Step 1/4 — Environment
 
@@ -57,7 +57,7 @@ The CLI first asks how you want to provide context. Three modes are available:
 
 - **A. Q&A** — answer the 10 onboarding questions one by one (the flow shown below).
 - **B. Long-form** — your editor opens with a markdown template; you paste a single response covering every heading and Claude maps it back to structured fields.
-- **C. Context-only** — give YALC your website URL plus any local docs, and Claude infers the answers for you. Falls back to Q&A if no Anthropic key is available.
+- **C. Context-only** — give Crossnode GTM your website URL plus any local docs, and Claude infers the answers for you. Falls back to Q&A if no Anthropic key is available.
 
 For Q&A mode, the CLI asks 10 questions about your company. Answer as specifically as you can — this data drives everything that follows.
 
@@ -130,7 +130,7 @@ At the end, you see what's available based on your configured providers:
     ○ Web intelligence           (add FIRECRAWL_API_KEY to unlock)
 
   Try this first:
-    yalc-gtm orchestrate "find companies matching my ICP"
+    crossnode-gtm orchestrate "find companies matching my ICP"
 ```
 
 ---
@@ -142,13 +142,13 @@ At the end, you see what's available based on your configured providers:
 Already have a lead list? Run qualification in dry-run mode against your CSV:
 
 ```bash
-yalc-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run
+crossnode-gtm leads:qualify --source csv --input ./your-leads.csv --dry-run
 ```
 
-Don't have a list yet? Let YALC find and qualify leads for you:
+Don't have a list yet? Let Crossnode GTM find and qualify leads for you:
 
 ```bash
-yalc-gtm orchestrate "find 10 SaaS CTOs matching my ICP and qualify them"
+crossnode-gtm orchestrate "find 10 SaaS CTOs matching my ICP and qualify them"
 ```
 
 This runs each lead through the 7-gate qualification pipeline:
@@ -167,14 +167,14 @@ Each lead gets a score and reason. Review the results, then run without `--dry-r
 Requires: `UNIPILE_API_KEY` + `UNIPILE_DSN`
 
 ```bash
-yalc-gtm campaign:create --title "Q2 CS Leaders" --hypothesis "VP CS responds to churn data"
+crossnode-gtm campaign:create --title "Q2 CS Leaders" --hypothesis "VP CS responds to churn data"
 ```
 
 This creates a 3-step LinkedIn sequence (connect → DM1 → DM2) with A/B variant testing. The templates use your voice from Step 4.
 
 Track progress daily:
 ```bash
-yalc-gtm campaign:track --dry-run
+crossnode-gtm campaign:track --dry-run
 ```
 
 ### 3. Orchestrate with Natural Language
@@ -182,7 +182,7 @@ yalc-gtm campaign:track --dry-run
 The orchestrator takes a plain English request and plans a multi-step workflow:
 
 ```bash
-yalc-gtm orchestrate "find 10 SaaS companies in New York with 100-500 employees, find their VP of Customer Success, and qualify them"
+crossnode-gtm orchestrate "find 10 SaaS companies in New York with 100-500 employees, find their VP of Customer Success, and qualify them"
 ```
 
 Claude decomposes this into skills (find-companies → find-people → qualify-leads), picks the right providers, and executes step by step.
@@ -208,9 +208,9 @@ Claude decomposes this into skills (find-companies → find-people → qualify-l
 
 ## Re-running Setup
 
-Run `yalc-gtm start` again anytime to reconfigure. It preserves existing keys and lets you update your company context.
+Run `crossnode-gtm start` again anytime to reconfigure. It preserves existing keys and lets you update your company context.
 
 To just check your setup health without reconfiguring:
 ```bash
-yalc-gtm doctor
+crossnode-gtm doctor
 ```

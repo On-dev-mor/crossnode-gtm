@@ -20,7 +20,7 @@ Powers all AI reasoning — framework derivation, lead qualification, campaign p
 
 **What it unlocks:** Everything. Without this key, GTM-OS cannot function.
 
-**Verify:** `yalc-gtm doctor` will check the key is valid.
+**Verify:** `crossnode-gtm doctor` will check the key is valid.
 
 ---
 
@@ -45,7 +45,7 @@ Company and people intelligence. 800M+ professional profiles, 200M+ companies. P
 - `leads:qualify` — enhanced qualification with company signals
 - `competitive-intel` — competitor research with company enrichment
 
-**Verify:** `yalc-gtm doctor` checks the key format. Run `yalc-gtm orchestrate "find 5 SaaS companies in Berlin"` to test.
+**Verify:** `crossnode-gtm doctor` checks the key format. Run `crossnode-gtm orchestrate "find 5 SaaS companies in Berlin"` to test.
 
 ### Unipile
 
@@ -54,7 +54,7 @@ LinkedIn operations — connect with prospects, send DMs, scrape post engagers, 
 | | |
 |---|---|
 | **Env vars** | `UNIPILE_API_KEY` and `UNIPILE_DSN` |
-| **Sign up** | https://www.unipile.com/?utm_source=partner&utm_campaign=Yalc |
+| **Sign up** | https://www.unipile.com/?utm_source=partner&utm_campaign=Crossnode |
 | **Get API key** | https://app.unipile.com/settings/api |
 | **Note** | You need both the API key AND the DSN (endpoint URL). The DSN looks like `https://api{N}.unipile.com:13{XXX}` |
 | **Pricing** | Subscription-based. Check Unipile pricing page. |
@@ -68,7 +68,7 @@ LinkedIn operations — connect with prospects, send DMs, scrape post engagers, 
 
 **Rate limits enforced by GTM-OS:** 30 connection requests/day, 3-second delay between API calls.
 
-**Verify:** `yalc-gtm doctor` validates both keys with a live API call.
+**Verify:** `crossnode-gtm doctor` validates both keys with a live API call.
 
 ### Firecrawl
 
@@ -86,7 +86,7 @@ Web scraping and search. Converts any URL to clean markdown. Used during onboard
 - `competitive-intel` — scrape competitor websites for positioning analysis
 - `orchestrate` — web research as part of multi-step workflows
 
-**Verify:** `yalc-gtm doctor` scrapes example.com to test connectivity.
+**Verify:** `crossnode-gtm doctor` scrapes example.com to test connectivity.
 
 ### Notion
 
@@ -108,12 +108,13 @@ CRM sync — track campaigns, leads, and results in Notion databases. Bidirectio
 ```yaml
 notion:
   campaigns_ds: "your-campaigns-database-id"
-  leads_ds: "your-leads-database-id"
+  leads_ds: "your-scraped-leads-database-id"      # raw Skool/engagers — simple columns
+  prospects_ds: "your-qualified-prospects-database-id"  # lifecycle + outreach sync
   variants_ds: "your-variants-database-id"
   parent_page: "your-parent-page-id"
 ```
 
-**Verify:** `yalc-gtm doctor` runs a Notion search to test connectivity.
+**Verify:** `crossnode-gtm doctor` runs a Notion search to test connectivity.
 
 ---
 
@@ -141,7 +142,7 @@ Cold email campaign management. Create email sequences, add leads, track opens/r
 | | |
 |---|---|
 | **Env var** | `INSTANTLY_API_KEY` |
-| **Sign up** | https://instantly.ai?via=yalc |
+| **Sign up** | https://instantly.ai?via=crossnode |
 | **Get API key** | https://instantly.ai/settings/api |
 | **Pricing** | Subscription-based. Check Instantly pricing. |
 | **Prerequisite** | You need at least one email sending account configured in Instantly before creating campaigns |
@@ -161,7 +162,7 @@ Universal API gateway — one key gives access to 100+ enrichment, scraping, and
 | | |
 |---|---|
 | **Env var** | `ORTHOGONAL_API_KEY` |
-| **Sign up** | https://www.orthogonal.com/?utm_source=yalc&utm_medium=referral&utm_campaign=in-app |
+| **Sign up** | https://www.orthogonal.com/?utm_source=crossnode&utm_medium=referral&utm_campaign=in-app |
 | **Get API key** | https://orthogonal.com/sign-up |
 | **Free tier** | $5 free credits, no card required |
 
@@ -180,13 +181,13 @@ Test provider for development. Returns synthetic data. No API key needed.
 
 ## Bring your own email provider
 
-Instantly is the default email backend, but YALC can route `email:send` through any provider that advertises the `email_send` capability via the MCP registry. Brevo, Mailgun, and SendGrid ship as templates out of the box.
+Instantly is the default email backend, but Crossnode GTM can route `email:send` through any provider that advertises the `email_send` capability via the MCP registry. Brevo, Mailgun, and SendGrid ship as templates out of the box.
 
 Three steps to swap in a new provider:
 
 1. **Copy the template** into `~/.gtm-os/mcp/` so it loads on the next CLI invocation:
    ```bash
-   yalc-gtm provider:add --mcp brevo
+   crossnode-gtm provider:add --mcp brevo
    ```
    The command prints the env vars the template references and whether each is already set.
 2. **Set the env var(s)** the template needs in `~/.gtm-os/.env` (or your shell):
@@ -195,11 +196,11 @@ Three steps to swap in a new provider:
    ```
 3. **Verify connectivity** with the provider health check:
    ```bash
-   yalc-gtm provider:test brevo
+   crossnode-gtm provider:test brevo
    ```
    On success, `provider:list` shows the provider as `OK` and you can route a send through it with `email:send --provider brevo`. To make it the default for all sends, set `email.provider: brevo` in `~/.gtm-os/config.yaml`.
 
-The same recipe works for `mailgun` and `sendgrid` — only the env var names change. To stop using a provider, run `yalc-gtm provider:remove <name>`.
+The same recipe works for `mailgun` and `sendgrid` — only the env var names change. To stop using a provider, run `crossnode-gtm provider:remove <name>`.
 
 ---
 
@@ -208,7 +209,7 @@ The same recipe works for `mailgun` and `sendgrid` — only the env var names ch
 Run the doctor command anytime to verify all providers:
 
 ```bash
-yalc-gtm doctor
+crossnode-gtm doctor
 ```
 
 This runs a 5-layer diagnostic:
@@ -223,14 +224,14 @@ This runs a 5-layer diagnostic:
 You can always add new provider keys after initial setup:
 
 1. Add the key to `.env.local`
-2. Run `yalc-gtm doctor` to verify
+2. Run `crossnode-gtm doctor` to verify
 3. The new capabilities are immediately available
 
 ---
 
 ## Bundled declarative providers
 
-YALC ships a small set of providers as YAML manifests under `configs/adapters/`. They behave exactly like built-in TypeScript adapters — same capability registry, same priority resolution — but are defined declaratively (no code change required to ship a new one). The adapters appear under `[bundled]` in `yalc-gtm adapters:list`.
+Crossnode GTM ships a small set of providers as YAML manifests under `configs/adapters/`. They behave exactly like built-in TypeScript adapters — same capability registry, same priority resolution — but are defined declaratively (no code change required to ship a new one). The adapters appear under `[bundled]` in `crossnode-gtm adapters:list`.
 
 | Capability | Provider | Env var | Manifest |
 |---|---|---|---|
@@ -241,7 +242,7 @@ YALC ships a small set of providers as YAML manifests under `configs/adapters/`.
 **How to use:**
 
 1. Drop the env var in `.env.local`. No code change needed — boot picks up the manifest automatically.
-2. Run `yalc-gtm adapters:list` and confirm the row flips from `✗` to `✓`.
+2. Run `crossnode-gtm adapters:list` and confirm the row flips from `✗` to `✓`.
 3. (Optional) Make the bundled provider win the resolution race for an existing capability by setting a priority in `~/.gtm-os/config.yaml`:
    ```yaml
    capabilities:
@@ -252,7 +253,7 @@ YALC ships a small set of providers as YAML manifests under `configs/adapters/`.
    ```
 4. (Optional) Run a hermetic check before pointing real traffic at the manifest:
    ```bash
-   yalc-gtm adapters:smoke configs/adapters/people-enrich-peopledatalabs.yaml
+   crossnode-gtm adapters:smoke configs/adapters/people-enrich-peopledatalabs.yaml
    ```
 
 ### People Data Labs
@@ -279,8 +280,8 @@ pnpm add playwright
 npx playwright install chromium
 ```
 
-Run `yalc-gtm adapters:list` and confirm the `asset-rendering` row flips from `✗` to `✓` for the `playwright` provider. Until Playwright is installed, the adapter still handles `format: 'html'` cleanly and returns a `fallbackReason` when callers ask for `pdf` or `png`.
+Run `crossnode-gtm adapters:list` and confirm the `asset-rendering` row flips from `✗` to `✓` for the `playwright` provider. Until Playwright is installed, the adapter still handles `format: 'html'` cleanly and returns a `fallbackReason` when callers ask for `pdf` or `png`.
 
 ### User-installed manifests
 
-The same loader also reads `~/.gtm-os/adapters/*.yaml`. A user manifest with the same `(capability, provider)` key as a bundled one wins via last-write-to-bucket — useful for hot-patching a vendor URL change without waiting on a YALC release. The CLI labels these `[user]` instead of `[bundled]`.
+The same loader also reads `~/.gtm-os/adapters/*.yaml`. A user manifest with the same `(capability, provider)` key as a bundled one wins via last-write-to-bucket — useful for hot-patching a vendor URL change without waiting on a Crossnode GTM release. The CLI labels these `[user]` instead of `[bundled]`.

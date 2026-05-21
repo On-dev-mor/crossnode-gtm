@@ -106,7 +106,7 @@ export interface CompanyContextSources {
   linkedin_fetched_at?: string
   /**
    * Unipile account id whose LinkedIn engagement is harvested. Populated
-   * when the user runs `yalc-gtm provider:add unipile` or sets
+   * when the user runs `crossnode-gtm provider:add unipile` or sets
    * UNIPILE_DEFAULT_ACCOUNT_ID. Resolved via
    * `$context.sources.linkedin_account_id` from framework yamls. The
    * doctor command emits a WARN when it's missing on a tenant that has
@@ -122,9 +122,9 @@ export interface CompanyContextSources {
 export interface CompanyContextMeta {
   captured_at: string
   last_updated_at: string
-  /** Set when the file was produced by `yalc-gtm migrate`. */
+  /** Set when the file was produced by `crossnode-gtm migrate`. */
   migrated_from?: string
-  /** YALC version that authored the file. */
+  /** Crossnode GTM version that authored the file. */
   version?: string
 }
 

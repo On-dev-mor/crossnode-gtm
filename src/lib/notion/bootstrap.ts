@@ -119,13 +119,17 @@ export async function runBootstrap(opts: BootstrapOptions): Promise<void> {
     console.log(`[bootstrap]   ✓ Variant: ${name} → ${campaignName}`)
   }
 
-  // ── Step 3: Import leads ──────────────────────────────────────────────────
-  console.log('\n[bootstrap] Fetching leads from Notion...')
-  const leadPages = await notionService.queryDatabase(config.notion.leads_ds)
-  console.log(`[bootstrap] Found ${leadPages.length} lead(s)`)
-
+  // ── Step 3: Import qualified prospects (not scraped Leads DB) ─────────────
+  const prospectsDb = config.notion.prospects_ds
   let imported = 0
   let skipped = 0
+
+  if (!prospectsDb) {
+    console.log('\n[bootstrap] No prospects_ds configured — skipping prospect import')
+  } else {
+  console.log('\n[bootstrap] Fetching qualified prospects from Notion...')
+  const leadPages = await notionService.queryDatabase(prospectsDb)
+  console.log(`[bootstrap] Found ${leadPages.length} prospect(s)`)
 
   for (const page of leadPages) {
     const p = page as { id: string; properties?: Record<string, unknown> }
@@ -177,14 +181,15 @@ export async function runBootstrap(opts: BootstrapOptions): Promise<void> {
     imported++
   }
 
-  console.log(`[bootstrap]   ✓ Imported ${imported} leads (${skipped} skipped — no provider ID or no campaign match)`)
+  console.log(`[bootstrap]   ✓ Imported ${imported} prospects (${skipped} skipped — no provider ID or no campaign match)`)
+  }
 
   // ── Summary ───────────────────────────────────────────────────────────────
   console.log(`\n[bootstrap] Done!`)
   console.log(`  Campaigns: ${campaignPages.length}`)
   console.log(`  Variants:  ${variantNameToCampaignMap.size}`)
-  console.log(`  Leads:     ${imported}`)
-  console.log(`\nRun \`yalc-gtm campaign:dashboard\` to visualize.`)
+  console.log(`  Prospects: ${imported}`)
+  console.log(`\nRun \`crossnode-gtm campaign:dashboard\` to visualize.`)
 }
 
 // ─── Notion Property Extractors ──────────────────────────────────────────────

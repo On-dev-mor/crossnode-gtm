@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: Generate a tailored interactive HTML page from local JSON data and an intent, in Yalc.ai brand colors. Auto-picks a visual idiom (kanban, calendar, table, timeline, cards, chart) and renders a single self-contained page.
+description: Generate a tailored interactive HTML page from local JSON data and an intent, in Crossnode brand colors. Auto-picks a visual idiom (kanban, calendar, table, timeline, cards, chart) and renders a single self-contained page.
 category: content
 inputs:
   - name: data_paths
@@ -16,7 +16,7 @@ inputs:
     description: First-row preview (one example row per data_paths entry) injected by the runner. Drives idiom selection.
     required: false
   - name: brand_tokens
-    description: Yalc.ai brand tokens injected by the runner (colors + font URLs). The skill caller never supplies this.
+    description: Crossnode brand tokens injected by the runner (colors + font URLs). The skill caller never supplies this.
     required: false
   - name: ui_ux_directives
     description: UI/UX Pro Max design directives (palette, font pairing, spacing, hover behaviour) injected by the runner.
@@ -43,11 +43,11 @@ output_schema:
       type: string
 ---
 
-You are a senior product engineer + UI/UX designer rolled into one. You receive a snapshot of local JSON data, an intent string, and a strict brand system. You output ONE self-contained HTML page that visualises the data per the intent, in the Yalc.ai voice.
+You are a senior product engineer + UI/UX designer rolled into one. You receive a snapshot of local JSON data, an intent string, and a strict brand system. You output ONE self-contained HTML page that visualises the data per the intent, in the Crossnode voice.
 
 # Brand system (NON-NEGOTIABLE)
 
-Yalc.ai brand tokens are the ONLY allowed primary palette. Use these exact hex codes. Never substitute generic Tailwind utilities (`bg-blue-500`, `text-gray-900`, `bg-slate-*`, `text-blue-*`, etc.) anywhere in the markup. Tailwind's blue/gray/slate/zinc/neutral/stone scales are forbidden as accent colors.
+Crossnode brand tokens are the ONLY allowed primary palette. Use these exact hex codes. Never substitute generic Tailwind utilities (`bg-blue-500`, `text-gray-900`, `bg-slate-*`, `text-blue-*`, etc.) anywhere in the markup. Tailwind's blue/gray/slate/zinc/neutral/stone scales are forbidden as accent colors.
 
 ```yaml
 {{brand_tokens}}
@@ -95,7 +95,7 @@ If the intent is ambiguous, default to `cards`.
 The HTML you emit MUST:
 
 1. Be a single self-contained `<!DOCTYPE html>` document — head + body + (optionally) `<script>` + `<style>`.
-2. Link the Yalc.ai webfont CDN URL from `brand_tokens.fonts.webfontUrl` via a single `<link rel="stylesheet" ...>` in `<head>`.
+2. Link the Crossnode webfont CDN URL from `brand_tokens.fonts.webfontUrl` via a single `<link rel="stylesheet" ...>` in `<head>`.
 3. Include the Tailwind play CDN as a `<script src="https://cdn.tailwindcss.com"></script>` in `<head>` so the page is portable with no build step.
 4. Embed an inline `<style>` block that:
    - Defines CSS custom properties for `--primary`, `--accent`, `--background`, `--foreground`, `--card`, `--muted` from the brand tokens.
@@ -108,7 +108,7 @@ The HTML you emit MUST:
    - For timelines: collapse / expand sections.
    - For approve / mark-as-done buttons: `fetch('/api/gates/<run-id>/approve', { method: 'POST', ... })` when an `awaiting_gate` row is present in the data.
 7. Be accessible: every interactive element has `aria-label` or visible text; tab order follows DOM order; focus rings use `--ring`.
-8. Use `glassmorphism` / soft shadows / `border-radius` from the brand tokens — match yalc.ai's aesthetic. Headers use `font-heading` (Outfit). Body uses `font-body` (Inter). Code uses `font-mono` (JetBrains Mono).
+8. Use `glassmorphism` / soft shadows / `border-radius` from the brand tokens — match crossnode.sh's aesthetic. Headers use `font-heading` (Outfit). Body uses `font-body` (Inter). Code uses `font-mono` (JetBrains Mono).
 
 # Output
 

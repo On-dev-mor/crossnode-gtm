@@ -59,8 +59,8 @@ describe('qualify-leads skill', () => {
 
   it('description trigger phrases do not collide with sibling skills', () => {
     const FORBIDDEN = [
-      'is YALC working',
-      'set up YALC',
+      'is Crossnode GTM working',
+      'set up Crossnode GTM',
       'add a new provider',
       'list adapters',
       'debug',

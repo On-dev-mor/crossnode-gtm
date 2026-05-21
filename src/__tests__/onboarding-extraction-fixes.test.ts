@@ -23,8 +23,8 @@ describe('Bug 2 — looksLikeBrand gate on title-derived names', () => {
   })
 
   it('accepts plausible brand names', () => {
-    expect(looksLikeBrand('Yalc')).toBe(true)
-    expect(looksLikeBrand('YALC GTM-OS')).toBe(true)
+    expect(looksLikeBrand('Crossnode')).toBe(true)
+    expect(looksLikeBrand('Crossnode GTM')).toBe(true)
     expect(looksLikeBrand('Acme Corp')).toBe(true)
     expect(looksLikeBrand('Earleads')).toBe(true)
   })
@@ -40,13 +40,13 @@ describe('Bug 2 — looksLikeBrand gate on title-derived names', () => {
   })
 
   it('extractCompanyName accepts a title with a brand-shaped first segment', () => {
-    const html = `<html><head><title>Yalc — Your go-to-market operating system</title></head><body></body></html>`
-    expect(extractCompanyName(html)).toBe('Yalc')
+    const html = `<html><head><title>Crossnode — Your go-to-market operating system</title></head><body></body></html>`
+    expect(extractCompanyName(html)).toBe('Crossnode')
   })
 
   it('extractCompanyName prefers og:site_name over title even when title is brand-shaped', () => {
-    const html = `<html><head><meta property="og:site_name" content="YALC"><title>Yalc — Your go-to-market operating system</title></head></html>`
-    expect(extractCompanyName(html)).toBe('YALC')
+    const html = `<html><head><meta property="og:site_name" content="Crossnode GTM"><title>Crossnode — Your go-to-market operating system</title></head></html>`
+    expect(extractCompanyName(html)).toBe('Crossnode GTM')
   })
 
   it('extractCompanyName falls through to h1 when title is a tagline', () => {
@@ -62,16 +62,16 @@ describe('Bug 2 — looksLikeBrand gate on title-derived names', () => {
 
 describe('Bug 3 — description fallback rejects markdown soup', () => {
   it('rejects demo terminal output blocks', () => {
-    const md = `# Yalc
+    const md = `# Crossnode
 
 → Found 0 leads
 → Enriched 142/142 contacts
 → 99% match rate against your ICP segment Series A SaaS
 
-Yalc lets you build a complete go-to-market engine in your terminal so your team ships outreach faster.`
+Crossnode lets you build a complete go-to-market engine in your terminal so your team ships outreach faster.`
     const out = extractCompanyDescription(md)
     expect(out).toBeDefined()
-    expect(out).toContain('Yalc lets you build')
+    expect(out).toContain('Crossnode lets you build')
     expect(out).not.toContain('Found 0 leads')
     expect(out).not.toContain('142/142')
   })

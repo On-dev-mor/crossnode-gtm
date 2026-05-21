@@ -14,7 +14,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-skills-api-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-skills-api-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

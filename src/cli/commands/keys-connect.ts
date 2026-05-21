@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm keys:connect [provider] [--open]` — open the SPA's
+ * `crossnode-gtm keys:connect [provider] [--open]` — open the SPA's
  * /keys/connect form, then poll the sentinel file the form drops at
  * `~/.gtm-os/_handoffs/keys/<provider>.ready` (or any file there in
  * agnostic mode).

@@ -35,7 +35,7 @@ describe('D3 — approved-gate diff persistence', () => {
 
   beforeEach(() => {
     prevHome = process.env.HOME
-    tempHome = join(tmpdir(), `yalc-d3-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempHome = join(tmpdir(), `crossnode-d3-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempHome, { recursive: true })
     process.env.HOME = tempHome
     mkdirSync(join(tempHome, '.gtm-os', 'agents', `${framework}.runs`), { recursive: true })

@@ -165,7 +165,7 @@ describe('gold-fixtures: fixture format guardrails', () => {
   }
 
   it('rejects malformed JSON in a fixture file', () => {
-    tmpDir = join(tmpdir(), `yalc-fx-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tmpDir = join(tmpdir(), `crossnode-fx-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tmpDir, { recursive: true })
     const bad = join(tmpDir, 'bad.json')
     writeFileSync(bad, '{ this is not json', 'utf-8')

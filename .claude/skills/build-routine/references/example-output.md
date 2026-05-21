@@ -63,7 +63,7 @@ Routine installed.
 
 Next moves:
   (a) Qualify leads with `qualify-leads`?
-  (b) Open the dashboard with `yalc-gtm dashboard`?
+  (b) Open the dashboard with `crossnode-gtm dashboard`?
   (c) Record an outbound hypothesis to un-defer outreach-campaign-builder?
 ```
 
@@ -82,7 +82,7 @@ The win on this skill is small (~60ms) because both phases run once. For routine
 
 ```
 ⚠ Import-direct runner failed: SyntaxError in generator.ts
-Falling back to shell-out: yalc-gtm routine:propose --json
+Falling back to shell-out: crossnode-gtm routine:propose --json
 ```
 
 The skill auto-falls-back. The user sees the same proposal, just slower.
@@ -108,5 +108,5 @@ routine:install failed (exit 1):
 
 Error: framework 'outbound-signals-radar' not in registry.
 
-To fix: ensure your YALC version is ≥ 0.12.0 and the framework files are present.
+To fix: ensure your Crossnode GTM version is ≥ 0.12.0 and the framework files are present.
 ```

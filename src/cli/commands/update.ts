@@ -4,10 +4,10 @@ import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 /**
- * Self-update. Detects how YALC was installed and routes accordingly:
+ * Self-update. Detects how Crossnode GTM was installed and routes accordingly:
  * - From source (a .git directory exists at the package root): pull from origin,
  *   reinstall deps, re-link the CLI globally.
- * - From npm (no .git): run `npm update -g yalc-gtm-os` so the user gets the
+ * - From npm (no .git): run `npm update -g crossnode-gtm` so the user gets the
  *   latest published version.
  *
  * User data in ~/.gtm-os/ is never touched.
@@ -36,7 +36,7 @@ function runFromSourceUpdate(root: string) {
 
   if (hadStash) {
     console.log('[update] Stashing your local changes...')
-    run('git stash push -m "yalc-gtm-update-autostash"')
+    run('git stash push -m "crossnode-gtm-update-autostash"')
   }
 
   try {
@@ -90,14 +90,14 @@ function runFromSourceUpdate(root: string) {
 }
 
 function runNpmUpdate() {
-  console.log('[update] Detected npm-installed YALC. Pulling the latest published version...')
+  console.log('[update] Detected npm-installed Crossnode GTM. Pulling the latest published version...')
   try {
-    execSync('npm update -g yalc-gtm-os', { stdio: 'inherit' })
+    execSync('npm update -g crossnode-gtm', { stdio: 'inherit' })
   } catch {
     // Some npm versions don't move the global pin with `npm update`. Fall back.
-    console.log('[update] Falling back to `npm install -g yalc-gtm-os@latest`...')
+    console.log('[update] Falling back to `npm install -g crossnode-gtm@latest`...')
     try {
-      execSync('npm install -g yalc-gtm-os@latest', { stdio: 'inherit' })
+      execSync('npm install -g crossnode-gtm@latest', { stdio: 'inherit' })
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err)
       console.error('[update] npm update failed.')

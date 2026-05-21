@@ -152,7 +152,7 @@ fi
 
 ### 3.1 Check gtm-os.yaml
 ```bash
-test -f gtm-os.yaml && echo "PASS: gtm-os.yaml exists" || echo "FAIL: gtm-os.yaml missing — run: yalc-gtm onboard"
+test -f gtm-os.yaml && echo "PASS: gtm-os.yaml exists" || echo "FAIL: gtm-os.yaml missing — run: crossnode-gtm onboard"
 ```
 
 ### 3.2 Validate YAML syntax

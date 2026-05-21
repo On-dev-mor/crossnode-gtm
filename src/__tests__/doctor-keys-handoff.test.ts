@@ -35,7 +35,7 @@ async function runDoctorCapture(): Promise<string> {
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-doctor-handoff-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-doctor-handoff-'))
   // Stub HOME so doctor reads from a sandboxed ~/.gtm-os.
   vi.stubEnv('HOME', TMP)
   // Wipe the handful of env vars doctor probes so the missing-key paths

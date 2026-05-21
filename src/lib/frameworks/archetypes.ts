@@ -3,7 +3,7 @@
  *
  * Every installed framework belongs to exactly one archetype (A/B/C/D).
  * The mapping is intentionally hard-coded: archetypes are spec-defined
- * in C1 and not user-extensible (a fifth archetype = a YALC version
+ * in C1 and not user-extensible (a fifth archetype = a Crossnode GTM version
  * bump, not a config tweak). New framework yaml files can join an
  * existing archetype by being added to `frameworks` below.
  */

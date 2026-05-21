@@ -1,5 +1,5 @@
 /**
- * `yalc-gtm provider:install <capability>/<provider>` — fetch a community
+ * `crossnode-gtm provider:install <capability>/<provider>` — fetch a community
  * manifest from the bundled providers/ directory (or a custom source), validate it
  * via `compileManifest`, write it under `~/.gtm-os/adapters/`, and
  * optionally amend the user's `~/.gtm-os/config.yaml` so the new
@@ -66,16 +66,16 @@ export interface ProviderInstallResult {
 }
 
 const DEFAULT_PROVIDERS_SOURCE =
-  'https://raw.githubusercontent.com/Othmane-Khadri/YALC-the-GTM-operating-system/main/providers/manifests'
+  'https://raw.githubusercontent.com/Othmane-Khadri/crossnode-gtm/main/providers/manifests'
 
 const ARG_PATTERN = /^([a-z][a-z0-9-]*)\/([a-z][a-z0-9-]*)$/i
 
 /**
  * Resolve the URL to fetch from. Priority:
  *   1. `--source <url>` (used verbatim — caller controls the path)
- *   2. `YALC_PROVIDERS_SOURCE` env var (treated as a base; we append
+ *   2. `CROSSNODE_GTM_PROVIDERS_SOURCE` env var (treated as a base; we append
  *      `/<capability>/<provider>.yaml`)
- *   3. The hard-coded YALC main-repo raw URL pointing at providers/manifests/
+ *   3. The hard-coded Crossnode GTM main-repo raw URL pointing at providers/manifests/
  */
 function resolveSourceUrl(
   capability: string,
@@ -83,7 +83,7 @@ function resolveSourceUrl(
   opts: ProviderInstallOptions,
 ): string {
   if (opts.sourceUrl) return opts.sourceUrl
-  const base = process.env.YALC_PROVIDERS_SOURCE ?? DEFAULT_PROVIDERS_SOURCE
+  const base = process.env.CROSSNODE_GTM_PROVIDERS_SOURCE ?? DEFAULT_PROVIDERS_SOURCE
   const trimmed = base.replace(/\/+$/, '')
   return `${trimmed}/${capability}/${provider}.yaml`
 }
@@ -170,8 +170,8 @@ export async function runProviderInstall(
     return {
       exitCode: 1,
       output:
-        'Usage: yalc-gtm provider:install <capability>/<provider>\n' +
-        'Example: yalc-gtm provider:install icp-company-search/apollo',
+        'Usage: crossnode-gtm provider:install <capability>/<provider>\n' +
+        'Example: crossnode-gtm provider:install icp-company-search/apollo',
     }
   }
   const capability = match[1]
@@ -351,8 +351,8 @@ export async function runProviderInstall(
 
   lines.push('')
   lines.push(
-    `Run \`yalc-gtm adapters:list\` to confirm the new entry, or ` +
-      `\`yalc-gtm adapters:smoke ${target}\` to verify against the live vendor.`,
+    `Run \`crossnode-gtm adapters:list\` to confirm the new entry, or ` +
+      `\`crossnode-gtm adapters:smoke ${target}\` to verify against the live vendor.`,
   )
 
   return { exitCode: 0, output: lines.join('\n') }

@@ -25,7 +25,7 @@ let prevHome: string | undefined
 
 beforeEach(() => {
   prevHome = process.env.HOME
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-routine-installer-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-routine-installer-'))
   process.env.HOME = TMP
   mkdirSync(join(TMP, '.gtm-os'), { recursive: true })
 })

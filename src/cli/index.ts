@@ -40,8 +40,8 @@ function readPackageVersion(): string {
 const program = new Command()
 
 program
-  .name('yalc-gtm')
-  .description('YALC — open-source AI-native GTM operating system')
+  .name('crossnode-gtm')
+  .description('Crossnode GTM — open-source AI-native GTM operating system')
   .version(readPackageVersion())
   .option('-c, --config <path>', 'Path to config YAML', '~/.gtm-os/config.yaml')
   .option('-t, --tenant <slug>', 'Tenant slug (overrides GTM_OS_TENANT env and .gtm-os-tenant file)')
@@ -49,8 +49,8 @@ program
   .addHelpText(
     'after',
     `
-Next: run \`yalc-gtm start\` to set up your GTM context, or \`yalc-gtm doctor\` to diagnose your environment.
-Docs: https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system#getting-started
+Next: run \`crossnode-gtm start\` to set up your GTM context, or \`crossnode-gtm doctor\` to diagnose your environment.
+Docs: https://github.com/Othmane-Khadri/crossnode-gtm#getting-started
 `,
   )
   .hook('preAction', (thisCommand) => {
@@ -59,9 +59,9 @@ Docs: https://github.com/Othmane-Khadri/YALC-the-GTM-operating-system#getting-st
     if (opts.verbose) {
       setVerbose(true)
       process.env.GTM_OS_VERBOSE = '1'
-      // YALC_DEBUG is the canonical opt-in for transport-level chatter
+      // CROSSNODE_GTM_DEBUG is the canonical opt-in for transport-level chatter
       // (e.g. MCP stdio child stderr). The MCP adapter reads it directly.
-      process.env.YALC_DEBUG = '1'
+      process.env.CROSSNODE_GTM_DEBUG = '1'
     }
 
     // Phase 1 / A3 — resolve once per invocation, cache on the program so
@@ -215,6 +215,38 @@ async function assertChannelEnabled(channel: 'email' | 'linkedin', commandTag: s
   }
 }
 
+// ─── leads:scrape-skool ─────────────────────────────────────────────────────
+program
+  .command('leads:scrape-skool')
+  .description('Fetch Skool leads via Firecrawl (default) or Apify fallback; imports into a result set')
+  .requiredOption('--url <url>', 'Skool community URL (e.g. https://www.skool.com/ki-automatisierung-n8n-5350)')
+  .option('--max-members <n>', 'Max leads to fetch', '200')
+  .option('--provider <name>', 'firecrawl (default) or apify', 'firecrawl')
+  .option('--actor <id>', 'Apify actor id only when --provider apify')
+  .option('--output <path>', 'Custom output JSON path')
+  .action(withDiagnostics(async (opts) => {
+    const config = loadConfig(program.opts().config.replace('~', homedir()))
+    const { scrapeSkoolCommunity } = await import('../lib/scraping/skool-scrape.js')
+    const provider = String(opts.provider ?? 'firecrawl').toLowerCase() as 'firecrawl' | 'apify'
+    const result = await scrapeSkoolCommunity({
+      config,
+      url: opts.url,
+      maxLeads: parseInt(opts.maxMembers, 10),
+      provider,
+      actorId: opts.actor,
+      output: opts.output,
+    })
+    console.log(`\n✓ Scraped ${result.leadCount} Skool leads via ${result.provider}`)
+    console.log(`  Community: ${result.communityUrl}`)
+    if (result.notionCreated != null) {
+      console.log(`  Notion Leads DB: ${result.notionCreated} created, ${result.notionFailed ?? 0} failed`)
+    }
+    console.log(`  Result set: ${result.resultSetId}`)
+    console.log(`  Local cache: ${result.outputPath}`)
+    console.log(`\nNext: crossnode-gtm leads:qualify --result-set ${result.resultSetId}`)
+    console.log('      crossnode-gtm notion:sync  # lifecycle updates after outreach')
+  }))
+
 // ─── leads:scrape-post ──────────────────────────────────────────────────────
 program
   .command('leads:scrape-post')
@@ -239,7 +271,7 @@ program
     console.log(`\n✓ Scraped ${result.totalEngagers} engagers (${result.reactorCount} reactors, ${result.commenterCount} commenters)`)
     console.log(`  Result set: ${result.resultSetId}`)
     console.log(`  Output: ${result.outputPath}`)
-    console.log(`\nNext: yalc-gtm leads:qualify --result-set ${result.resultSetId}`)
+    console.log(`\nNext: crossnode-gtm leads:qualify --result-set ${result.resultSetId}`)
   }))
 
 // ─── linkedin:answer-comments ───────────────────────────────────────────────
@@ -549,8 +581,36 @@ program
 // ─── email:accounts ────────────────────────────────────────────────────────
 program
   .command('email:accounts')
-  .description('List Instantly email sending accounts')
+  .description('List email sending accounts for the configured provider')
   .action(async () => {
+    let providerName = 'instantly'
+    try {
+      const cfg = loadConfig(program.opts().config.replace('~', homedir()))
+      providerName = cfg.email?.provider ?? 'instantly'
+    } catch {
+      // default
+    }
+
+    if (providerName === 'unipile') {
+      const { unipileService } = await import('../lib/services/unipile')
+      if (!unipileService.isAvailable()) {
+        console.error('UNIPILE_API_KEY / UNIPILE_DSN not set. Connect Unipile in the dashboard first.')
+        process.exit(1)
+      }
+      const accounts = await unipileService.listEmailAccounts()
+      if (accounts.length === 0) {
+        console.log('No email accounts found in Unipile. Connect Gmail/Outlook in the Unipile dashboard.')
+        return
+      }
+      console.log('\n── Unipile Email Accounts ──')
+      for (const acc of accounts) {
+        const label = acc.email ?? acc.name ?? '(no label)'
+        console.log(`  ${acc.id}  ${label}  [${acc.type ?? 'email'}]`)
+      }
+      console.log('\nUse --from <id> with email:send, or set unipile.email_account_id in ~/.gtm-os/config.yaml.')
+      return
+    }
+
     const { instantlyService } = await import('../lib/services/instantly')
     if (!instantlyService.isAvailable()) {
       const { INSTANTLY_SIGNUP_URL } = await import('../lib/constants')
@@ -1385,15 +1445,15 @@ program
 
 // ─── provider:install ───────────────────────────────────────────────────────
 //
-// Fetch a community manifest from the yalc-providers repo (or a custom
-// `--source <url>` / `YALC_PROVIDERS_SOURCE` env), validate via the
+// Fetch a community manifest from the crossnode-providers repo (or a custom
+// `--source <url>` / `CROSSNODE_GTM_PROVIDERS_SOURCE` env), validate via the
 // declarative compiler, write to `~/.gtm-os/adapters/`, and optionally
 // add the provider to `~/.gtm-os/config.yaml`'s priority list. No live
 // HTTP smoke is run — that's `adapters:smoke`.
 program
   .command('provider:install')
   .description(
-    'Install a declarative adapter manifest from the yalc-providers community repo.',
+    'Install a declarative adapter manifest from the crossnode-providers community repo.',
   )
   .argument(
     '<spec>',
@@ -1542,23 +1602,23 @@ program
     'after',
     `
 Recommended (no flags — single URL prompt + browser SPA):
-  $ yalc-gtm start
+  $ crossnode-gtm start
 
 Flag-driven (zero prompts, headless / CI):
-  $ yalc-gtm start --non-interactive --website https://your-company.com
+  $ crossnode-gtm start --non-interactive --website https://your-company.com
 
   Optional refinements:
-  $ yalc-gtm start --non-interactive \\
+  $ crossnode-gtm start --non-interactive \\
       --website https://your-company.com \\
       --linkedin https://linkedin.com/in/you \\
       --docs ./brand-deck.md \\
       --icp-summary "engineering leaders at Series A SaaS"
 
   Re-runs after editing a placeholder \`.env\`:
-  $ yalc-gtm start --non-interactive   # writes ~/.gtm-os/.env template
+  $ crossnode-gtm start --non-interactive   # writes ~/.gtm-os/.env template
 
   Legacy terminal interview (no SPA):
-  $ yalc-gtm start --review-in-chat
+  $ crossnode-gtm start --review-in-chat
 `,
   )
   .option('--non-interactive', 'Skip prompts (use env vars and defaults)')
@@ -1758,7 +1818,7 @@ program
     const { configureSkills } = await import('../lib/onboarding/skill-configurator')
     const framework = await loadFramework()
     if (!framework) {
-      console.log('No framework found. Run "yalc-gtm onboard" first.')
+      console.log('No framework found. Run "crossnode-gtm onboard" first.')
       return
     }
     const goals = await setGoals(framework)
@@ -1982,7 +2042,7 @@ program
 // ─── update ─────────────────────────────────────────────────────────────────
 program
   .command('update')
-  .description('Pull latest YALC updates without breaking your config')
+  .description('Pull latest Crossnode GTM updates without breaking your config')
   .action(async () => {
     const { runUpdate } = await import('./commands/update')
     await runUpdate()
@@ -2055,7 +2115,7 @@ program
       } catch { /* ignore */ }
 
       if (rows.length === 0) {
-        console.log('No skills installed. Run `yalc-gtm skills:create` for a markdown skill, or `skills:search <query>` for marketplace skills.')
+        console.log('No skills installed. Run `crossnode-gtm skills:create` for a markdown skill, or `skills:search <query>` for marketplace skills.')
         return
       }
 
@@ -2080,7 +2140,7 @@ program
       const stars = s.downloads ? `★ ${s.downloads}` : ''
       console.log(`  ${s.id.padEnd(30)} ${s.author.padEnd(16)} ${stars.padEnd(8)} ${s.description.slice(0, 60)}`)
     }
-    console.log(`\nInstall with: yalc-gtm skills:install --github <owner>/<repo>`)
+    console.log(`\nInstall with: crossnode-gtm skills:install --github <owner>/<repo>`)
   }))
 
 // ─── skills:search ────────────────────────────────────────────────────────
@@ -2102,7 +2162,7 @@ program
       const stars = s.downloads ? `★ ${s.downloads}` : ''
       console.log(`  ${s.id.padEnd(30)} ${s.author.padEnd(16)} ${stars.padEnd(8)} ${s.description.slice(0, 60)}`)
     }
-    console.log(`\nInstall with: yalc-gtm skills:install --github <owner>/<repo>`)
+    console.log(`\nInstall with: crossnode-gtm skills:install --github <owner>/<repo>`)
   }))
 
 // ─── skills:create ───────────────────────────────────────────────────────
@@ -2150,7 +2210,7 @@ program
     if (result.success) {
       console.log(`\n✓ ${result.message}`)
       console.log(`  Path: ${result.installPath}`)
-      console.log(`\nThe skill is now available. Run \`yalc-gtm skills:browse --installed\` to verify.`)
+      console.log(`\nThe skill is now available. Run \`crossnode-gtm skills:browse --installed\` to verify.`)
     } else {
       console.error(`\n✗ Installation failed: ${result.message}`)
       process.exit(1)
@@ -2212,7 +2272,7 @@ program
     }
 
     if (!skill) {
-      console.error(`Skill "${skillId}" not found. Run \`yalc-gtm skills:browse --installed\` to see installed skills.`)
+      console.error(`Skill "${skillId}" not found. Run \`crossnode-gtm skills:browse --installed\` to see installed skills.`)
       process.exit(1)
     }
 
@@ -2664,7 +2724,7 @@ program
     const input = String(opts.mcp)
 
     // Refuse Claude Code MCP locations — those are a different registry and
-    // editing them via YALC corrupts the host IDE's config. The two systems
+    // editing them via Crossnode GTM corrupts the host IDE's config. The two systems
     // are documented side-by-side at the top of docs/mcp.md.
     const claudeCodeMcpPaths = [
       '.mcp.json',
@@ -2681,13 +2741,13 @@ program
     })
     if (matchesClaudeCode) {
       console.error(
-        'Error: That path is a Claude Code MCP registry, not a YALC one.',
+        'Error: That path is a Claude Code MCP registry, not a Crossnode GTM one.',
       )
       console.error(
-        '  YALC MCP configs live in ~/.gtm-os/mcp/<name>.json — see docs/mcp.md for the side-by-side table.',
+        '  Crossnode GTM MCP configs live in ~/.gtm-os/mcp/<name>.json — see docs/mcp.md for the side-by-side table.',
       )
       console.error(
-        '  Run `yalc-gtm provider:add --mcp <template>` or pass a path inside ~/.gtm-os/mcp/.',
+        '  Run `crossnode-gtm provider:add --mcp <template>` or pass a path inside ~/.gtm-os/mcp/.',
       )
       process.exit(1)
     }
@@ -2797,7 +2857,7 @@ program
       }
       // Connect + verify configured tool name (best-effort — never blocks).
       await verifyMcpToolName(targetName, cfg, opts.tool as string | undefined)
-      console.log(`\nVerify with: yalc-gtm provider:test ${targetName}`)
+      console.log(`\nVerify with: crossnode-gtm provider:test ${targetName}`)
       return
     }
 
@@ -2859,7 +2919,7 @@ program
     }
 
     await verifyMcpToolName(input, config, opts.tool as string | undefined)
-    console.log('\nVerify with: yalc-gtm provider:test ' + input)
+    console.log('\nVerify with: crossnode-gtm provider:test ' + input)
   }))
 
 /**
@@ -3181,7 +3241,7 @@ program
     }
 
     if (status.status === 'failed') {
-      console.log(`\n  Resume with: yalc-gtm pipeline:resume --name "${status.pipelineName}"`)
+      console.log(`\n  Resume with: crossnode-gtm pipeline:resume --name "${status.pipelineName}"`)
     }
   })
 
@@ -3234,7 +3294,7 @@ program
 
     writeFileSync(outputPath, yaml.dump(template, { lineWidth: 120 }))
     console.log(`Pipeline created: ${outputPath}`)
-    console.log(`Edit the YAML, then run: yalc-gtm pipeline:run --file "${outputPath}" --dry-run`)
+    console.log(`Edit the YAML, then run: crossnode-gtm pipeline:run --file "${outputPath}" --dry-run`)
   })
 
 // ─── signals:watch ──────────────────────────────────────────────────────────
@@ -3294,7 +3354,7 @@ program
     }
 
     console.log(`\n[signals] Estimated daily credit cost: ${projectedCost} credits`)
-    console.log(`[signals] Run detection: yalc-gtm signals:detect`)
+    console.log(`[signals] Run detection: crossnode-gtm signals:detect`)
   }))
 
 // ─── signals:detect ─────────────────────────────────────────────────────────

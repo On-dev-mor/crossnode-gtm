@@ -13,7 +13,7 @@
  * shared prefix so users don't lose work on refresh.
  */
 
-const STORAGE_PREFIX = 'yalc:skills-form:'
+const STORAGE_PREFIX = 'crossnode:skills-form:'
 
 export interface SkillPropertySchema {
   type?: string

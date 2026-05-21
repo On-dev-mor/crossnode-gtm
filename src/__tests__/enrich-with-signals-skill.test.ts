@@ -40,7 +40,7 @@ describe('enrich-with-signals skill', () => {
   })
 
   it('triggers do not collide with siblings', () => {
-    const FORBIDDEN = ['list adapters', 'qualify these leads', 'find lookalikes', 'set up YALC']
+    const FORBIDDEN = ['list adapters', 'qualify these leads', 'find lookalikes', 'set up Crossnode GTM']
     for (const p of TRIGGER_PHRASES) {
       for (const f of FORBIDDEN) {
         expect(p.toLowerCase().includes(f.toLowerCase())).toBe(false)

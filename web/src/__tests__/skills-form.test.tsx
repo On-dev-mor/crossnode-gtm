@@ -267,7 +267,7 @@ describe('persistence', () => {
   })
 
   it('survives a malformed stored payload', () => {
-    localStorage.setItem('yalc:skills-form:broken', 'not-json')
+    localStorage.setItem('crossnode:skills-form:broken', 'not-json')
     expect(loadPersistedInputs('broken')).toEqual({})
   })
 })

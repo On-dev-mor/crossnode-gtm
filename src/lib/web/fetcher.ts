@@ -221,7 +221,7 @@ export class WebFetcher {
  * intercept and execute the fetch on our behalf. Two surfaces:
  *
  *   1. A stdout marker line —
- *      `<<<YALC_WEBFETCH_REQUEST:{"url": "...", ...}>>>` —
+ *      `<<<CROSSNODE_GTM_WEBFETCH_REQUEST:{"url": "...", ...}>>>` —
  *      pattern-matchable by CC.
  *   2. A JSON file written to `~/.gtm-os/_handoffs/<id>.json` so harnesses
  *      that prefer file-based watching can pick it up.
@@ -252,7 +252,7 @@ export function emitWebFetchHandoff(
   }
 
   // Stdout marker (single line — required for CC's regex pickup).
-  console.log(`<<<YALC_WEBFETCH_REQUEST:${JSON.stringify(payload)}>>>`)
+  console.log(`<<<CROSSNODE_GTM_WEBFETCH_REQUEST:${JSON.stringify(payload)}>>>`)
 
   // File mirror — best-effort, never throws on the caller path.
   try {

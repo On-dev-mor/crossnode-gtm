@@ -313,7 +313,7 @@ export function Today() {
         {isEmpty && (
           <p className="text-sm" data-testid="today-empty">
             No frameworks installed yet. Try{' '}
-            <code className="font-mono">yalc-gtm framework:list</code>.
+            <code className="font-mono">crossnode-gtm framework:list</code>.
           </p>
         )}
 

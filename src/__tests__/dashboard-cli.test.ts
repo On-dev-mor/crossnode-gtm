@@ -1,5 +1,5 @@
 /**
- * Tests for `yalc-gtm dashboard` (alias `ui`) — the SPA summon command (A2).
+ * Tests for `crossnode-gtm dashboard` (alias `ui`) — the SPA summon command (A2).
  *
  * The command:
  *   - Probes port 3847; if the server is already up, does NOT re-spawn it.
@@ -20,7 +20,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-dashboard-cli-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-dashboard-cli-'))
 })
 
 afterEach(() => {

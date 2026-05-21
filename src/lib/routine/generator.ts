@@ -1,7 +1,7 @@
 /**
  * Routine Generator — deterministic, rule-based proposal pipeline.
  *
- * Inputs (all already known at the end of `yalc-gtm start`):
+ * Inputs (all already known at the end of `crossnode-gtm start`):
  *   - capabilitiesAvailable: provider IDs that are registered + active
  *     (e.g. ['unipile', 'instantly']). The generator never makes network
  *     calls — caller resolves availability up front.
@@ -296,7 +296,7 @@ export function generateRoutine(input: RoutineGeneratorInput): Routine {
   // Edge case: only D available (no providers). Recommend provider:add.
   if (installed.size === 1 && installed.has('d')) {
     notes.push(
-      'Run `yalc-gtm provider:add unipile` (or instantly) to unlock A/B/C archetypes.',
+      'Run `crossnode-gtm provider:add unipile` (or instantly) to unlock A/B/C archetypes.',
     )
   }
 

@@ -134,7 +134,7 @@ th,td{text-align:left;padding:.5rem .75rem;border-bottom:1px solid #2a2a2a;font-
 th{background:#181818;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem}
 .empty{color:#888;font-style:italic}</style></head><body>`
   if (!run) {
-    return `${head}<h1>${escapeHtml(framework)}</h1><p class="empty">No runs yet. Trigger one with: <code>yalc-gtm framework:run ${escapeHtml(framework)}</code></p></body></html>`
+    return `${head}<h1>${escapeHtml(framework)}</h1><p class="empty">No runs yet. Trigger one with: <code>crossnode-gtm framework:run ${escapeHtml(framework)}</code></p></body></html>`
   }
   const cols = run.rows.length > 0 ? Object.keys(run.rows[0]) : []
   const head2 = cols.length > 0

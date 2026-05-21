@@ -132,7 +132,7 @@ function tsxScriptOnce(source) {
   return new Promise((resolveP, rejectP) => {
     // Each trial gets its own temp file so module cache between processes
     // is irrelevant — we measure cold-start exactly like a SKILL.md will.
-    const tmpFile = resolve(tmpdir(), `yalc-bench-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`)
+    const tmpFile = resolve(tmpdir(), `crossnode-bench-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`)
     writeFileSync(tmpFile, source)
     const start = process.hrtime.bigint()
     const child = spawn('npx', ['tsx', tmpFile], {

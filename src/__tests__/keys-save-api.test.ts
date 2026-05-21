@@ -18,7 +18,7 @@ import { join } from 'node:path'
 let TMP: string
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-keys-save-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-keys-save-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

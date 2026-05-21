@@ -40,7 +40,7 @@ describe('0.9.F retired frameworks', () => {
 
     beforeEach(() => {
       prevHome = process.env.HOME
-      tempHome = join(tmpdir(), `yalc-retired-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+      tempHome = join(tmpdir(), `crossnode-retired-${Date.now()}-${Math.random().toString(36).slice(2)}`)
       mkdirSync(tempHome, { recursive: true })
       process.env.HOME = tempHome
     })

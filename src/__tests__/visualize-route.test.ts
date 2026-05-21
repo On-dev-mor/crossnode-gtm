@@ -27,7 +27,7 @@ function seedVisualization(viewId: string, html: string, meta: Record<string, un
 }
 
 beforeEach(() => {
-  TMP = mkdtempSync(join(tmpdir(), 'yalc-viz-route-'))
+  TMP = mkdtempSync(join(tmpdir(), 'crossnode-viz-route-'))
   vi.stubEnv('HOME', TMP)
   vi.resetModules()
 })

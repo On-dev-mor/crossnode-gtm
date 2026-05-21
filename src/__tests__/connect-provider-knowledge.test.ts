@@ -31,7 +31,7 @@ const REQUIRED_BUNDLED = [
 
 describe('provider knowledge base — bundled lookup', () => {
   it('every required bundled provider is present and parses cleanly', () => {
-    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/yalc-nonexistent-user-dir' })
+    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/crossnode-nonexistent-user-dir' })
     for (const id of REQUIRED_BUNDLED) {
       const entry = map.get(id)
       expect(entry, `missing bundled provider: ${id}`).toBeDefined()
@@ -78,13 +78,13 @@ describe('provider knowledge base — bundled lookup', () => {
       install_steps: [],
     }
     expect(templateInstallStep('Sign up at $homepage', k)).toBe('Sign up at https://pappers.fr')
-    expect(templateInstallStep('Run: yalc-gtm connect-provider $id', k)).toBe('Run: yalc-gtm connect-provider pappers')
+    expect(templateInstallStep('Run: crossnode-gtm connect-provider $id', k)).toBe('Run: crossnode-gtm connect-provider pappers')
     expect(templateInstallStep('Connect $display_name now', k)).toBe('Connect Pappers now')
     expect(templateInstallStep('Get key from $key_acquisition_url', k)).toBe('Get key from https://www.pappers.fr/api/dashboard')
   })
 
   it('every bundled capabilities_supported entry references an adapter file that exists on disk', () => {
-    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/yalc-nonexistent-user-dir' })
+    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/crossnode-nonexistent-user-dir' })
     const seen: string[] = []
     for (const k of map.values()) {
       for (const cap of k.capabilities_supported) {
@@ -100,7 +100,7 @@ describe('provider knowledge base — bundled lookup', () => {
   })
 
   it('user override directory wins over bundled when ids match', () => {
-    const tmp = join(tmpdir(), `yalc-knowledge-user-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    const tmp = join(tmpdir(), `crossnode-knowledge-user-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tmp, { recursive: true })
     try {
       // Override `pappers` in the user dir with a different display name.
@@ -146,7 +146,7 @@ describe('connect-provider custom-provider yaml', () => {
     })
     expect(written.endsWith(`/_user/${id}.yaml`)).toBe(true)
 
-    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/yalc-nonexistent-user-dir' })
+    const map = loadProviderKnowledge({ bundledDir: BUNDLED_DIR, userDir: '/tmp/crossnode-nonexistent-user-dir' })
     const entry = map.get(id)
     expect(entry).toBeDefined()
     expect(entry!.integration_kind).toBe('rest')

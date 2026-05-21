@@ -2,7 +2,7 @@
  * Smoke-test runner for declarative manifests.
  *
  * Used by:
- *   - `yalc-gtm adapters:smoke <path>` — operator-facing CLI.
+ *   - `crossnode-gtm adapters:smoke <path>` — operator-facing CLI.
  *   - The provider-builder skill (B3) — automated pre-registration check.
  *
  * The runner compiles the manifest, invokes it with the manifest's
